@@ -18,7 +18,6 @@
  */
 
 #include "oled.h"
-#include "oled_font.h"
 
 oled::OLED::OLED(int scl_pin,
                  int sda_pin,
@@ -68,7 +67,8 @@ esp_err_t oled::OLED::init()
         ESP_LOGE(TAG, "config err");
         return 1;
     }
-    if (i2c_driver_install(this->i2c_port, this->config.mode, 0, 0, 0) != ESP_OK)
+    if (i2c_driver_install(this->i2c_port, this->config.mode, 0, 0, 0) !=
+        ESP_OK)
     {
         ESP_LOGE(TAG, "install err");
         return 2;
@@ -127,7 +127,7 @@ esp_err_t oled::OLED::flash_page(const uint8_t page)
 
 esp_err_t oled::OLED::show_string(uint8_t x,
                                   uint8_t y,
-                                  const std::string string,
+                                  const std::string &&string,
                                   const OLED_FONT_SIZE font_size)
 {
     uint8_t c = 0, j = 0;
@@ -141,11 +141,11 @@ esp_err_t oled::OLED::show_string(uint8_t x,
                 x = 0;
                 y += 2;
             }
-            std::copy(std::begin(F8X16) + c * 16,
-                      std::begin(F8X16) + c * 16 + 8,
+            std::copy(std::begin(font::F8X16) + c * 16,
+                      std::begin(font::F8X16) + c * 16 + 8,
                       std::begin(data_mapping[y]) + x + 1);
-            std::copy(std::begin(F8X16) + c * 16 + 8,
-                      std::begin(F8X16) + c * 16 + 16,
+            std::copy(std::begin(font::F8X16) + c * 16 + 8,
+                      std::begin(font::F8X16) + c * 16 + 16,
                       std::begin(data_mapping[y + 1]) + x + 1);
             x += 8;
             j++;
@@ -161,17 +161,67 @@ esp_err_t oled::OLED::show_string(uint8_t x,
                 x = 0;
                 y++;
             }
-            std::copy(std::begin(F6x8[c]) + 1,
-                      std::begin(F6x8[c]) + 6,
+            std::copy(std::begin(font::F6x8[c]) + 1,
+                      std::begin(font::F6x8[c]) + 6,
                       std::begin(data_mapping[y]) + x + 1);
             x += 6;
             j++;
         }
     }
-    // return ((font_size == OLED_FONT_SIZE::OLED_FONT_SIZE_16)
-    //             ? (flash_page(y) & flash_page(y + 1))
-    //             : flash_page(y));
-    return flash();
+    return ((font_size == OLED_FONT_SIZE::OLED_FONT_SIZE_16)
+                ? (flash_page(y) & flash_page(y + 1))
+                : flash_page(y));
+}
+
+esp_err_t oled::OLED::show_image(uint8_t x,
+                                 uint8_t y,
+                                 const uint8_t *begin,
+                                 const uint8_t split_size,
+                                 const uint8_t length)
+{
+    esp_err_t err = ESP_OK;
+
+    for (size_t line = 0; line < (length / split_size); line++)
+    {
+        std::copy(begin + (line * split_size),
+                  begin + ((line + 1) * split_size),
+                  std::begin(data_mapping[y + line]) + x + 1);
+
+        err = flash_page(line);
+    }
+    return err;
+}
+
+esp_err_t oled::OLED::show_image(uint8_t x,
+                                 uint8_t y,
+                                 const uint8_t index,
+                                 const OLED_IMAGE_SIZE image_size)
+{
+    if (image_size == OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_32)
+    {
+        std::copy(std::begin(font::H_Imag[index * 2]),
+                  std::begin(font::H_Imag[index * 2]) + 16,
+                  std::begin(data_mapping[y]) + x + 1);
+        std::copy(std::begin(font::H_Imag[index * 2 + 1]),
+                  std::begin(font::H_Imag[index * 2 + 1]) + 16,
+                  std::begin(data_mapping[y + 1]) + x + 1);
+    }
+    else if (image_size == OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_8)
+    {
+        std::copy(std::begin(font::H_Imag_8[index]),
+                  std::begin(font::H_Imag_8[index]) + 8,
+                  std::begin(data_mapping[y]) + x + 1);
+    }
+    else if (image_size == OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_4)
+    {
+        std::copy(std::begin(font::H_Imag_4[index]),
+                  std::begin(font::H_Imag_4[index]) + 4,
+                  std::begin(data_mapping[y]) + x + 1);
+    }
+
+    return ((image_size == OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_32)
+                ? (flash_page(y) & flash_page(y + 1))
+                : flash_page(y));
 }
 
 oled::OLED::~OLED()

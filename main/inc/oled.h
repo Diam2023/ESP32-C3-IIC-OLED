@@ -22,6 +22,7 @@
 #include "driver/i2c.h"
 #include <string>
 #include "esp_log.h"
+#include "oled_font.h"
 
 namespace oled
 {
@@ -68,6 +69,13 @@ enum OLED_FONT_SIZE
 {
     OLED_FONT_SIZE_6,
     OLED_FONT_SIZE_16,
+};
+
+enum OLED_IMAGE_SIZE
+{
+    OLED_IMAGE_SIZE_4,
+    OLED_IMAGE_SIZE_8,
+    OLED_IMAGE_SIZE_32
 };
 
 /**
@@ -209,16 +217,47 @@ class OLED
 
     /**
      * @brief  show string data on x,y.
-     * @param  x: page line
-     * @param  y: column
+     * @param  x: seg
+     * @param  y: page line
      * @param  string: string data
      * @param  font_size: font_size
      * @return esp_err_t: error code.
      */
-    esp_err_t show_string(uint8_t x,
-                          uint8_t y,
-                          const std::string string,
-                          const OLED_FONT_SIZE font_size = OLED_FONT_SIZE_16);
+    esp_err_t show_string(
+        uint8_t x,
+        uint8_t y,
+        const std::string &&string,
+        const OLED_FONT_SIZE font_size = OLED_FONT_SIZE::OLED_FONT_SIZE_16);
+
+    /**
+     * @brief  show image use begin data
+     * @param  x: seg.
+     * @param  y: page line.
+     * @param  begin: begin data.
+     * @param  split_size: data on one page.
+     * @param  length: if (length / split_size) > 1 it will show (begin +
+     * split_size * around) on (around + page).
+     * @return esp_err_t: error code.
+     */
+    esp_err_t show_image(uint8_t x,
+                         uint8_t y,
+                         const uint8_t *begin,
+                         const uint8_t split_size = 16,
+                         const uint8_t length = 32);
+
+    /**
+     * @brief  show H_Imag index image on x, y
+     * @param  x: seg
+     * @param  y: page line.
+     * @param  index: index of H_Image.
+     * @param  image_size: size of image
+     * @return esp_err_t: error code.
+     */
+    esp_err_t show_image(
+        uint8_t x,
+        uint8_t y,
+        const uint8_t index,
+        const OLED_IMAGE_SIZE image_size = OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_8);
 
     /**
      * @brief  Destroy the OLED object.
