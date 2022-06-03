@@ -19,34 +19,31 @@
 
 #include "oled.h"
 #include "oled_font.h"
-#include "esp_log.h"
-
-static const char *TAG = "OLED";
 
 oled::OLED::OLED(int scl_pin,
                  int sda_pin,
                  bool inner_pull,
                  const uint8_t oled_addr)
 {
-    config.mode = I2C_MODE_MASTER;
-    config.sda_io_num = sda_pin;
-    config.scl_io_num = scl_pin;
+    this->config.mode = I2C_MODE_MASTER;
+    this->config.sda_io_num = sda_pin;
+    this->config.scl_io_num = scl_pin;
     if (inner_pull)
     {
-        config.sda_pullup_en = GPIO_PULLUP_ENABLE;
-        config.scl_pullup_en = GPIO_PULLUP_ENABLE;
+        this->config.sda_pullup_en = GPIO_PULLUP_ENABLE;
+        this->config.scl_pullup_en = GPIO_PULLUP_ENABLE;
     }
     else
     {
-        config.sda_pullup_en = GPIO_PULLUP_DISABLE;
-        config.scl_pullup_en = GPIO_PULLUP_DISABLE;
+        this->config.sda_pullup_en = GPIO_PULLUP_DISABLE;
+        this->config.scl_pullup_en = GPIO_PULLUP_DISABLE;
     }
-    config.clk_flags = I2C_SCLK_SRC_FLAG_FOR_NOMAL;
-    config.master.clk_speed = oled::OLED::OLED_I2C_FREQ;
+    this->config.clk_flags = I2C_SCLK_SRC_FLAG_FOR_NOMAL;
+    this->config.master.clk_speed = oled::OLED::OLED_I2C_FREQ;
     this->i2c_port = I2C_NUM_0;
     this->oled_addr = oled_addr;
 
-    data_mapping = new uint8_t[MAX_PAGE][MAX_LINE_SEG];
+    this->data_mapping = new uint8_t[MAX_PAGE][MAX_LINE_SEG];
 
     for (size_t i = 0; i < MAX_PAGE; i++)
     {
@@ -54,11 +51,11 @@ oled::OLED::OLED(int scl_pin,
         {
             if (j == 0)
             {
-                data_mapping[i][0] = 0x40;
+                this->data_mapping[i][0] = 0x40;
             }
             else
             {
-                data_mapping[i][0] = 0x00;
+                this->data_mapping[i][j] = 0x00;
             }
         }
     }
@@ -71,7 +68,7 @@ esp_err_t oled::OLED::init()
         ESP_LOGE(TAG, "config err");
         return 1;
     }
-    if (i2c_driver_install(this->i2c_port, I2C_MODE_MASTER, 0, 0, 0) != ESP_OK)
+    if (i2c_driver_install(this->i2c_port, this->config.mode, 0, 0, 0) != ESP_OK)
     {
         ESP_LOGE(TAG, "install err");
         return 2;
@@ -92,7 +89,7 @@ esp_err_t oled::OLED::clear()
 
 esp_err_t oled::OLED::full(const uint8_t data)
 {
-    for (size_t i = 0; i <= MAX_PAGE; i++)
+    for (size_t i = 0; i < MAX_PAGE; i++)
     {
         for (size_t j = 1; j < MAX_LINE_SEG; j++)
         {
@@ -171,9 +168,10 @@ esp_err_t oled::OLED::show_string(uint8_t x,
             j++;
         }
     }
-    return ((font_size == OLED_FONT_SIZE::OLED_FONT_SIZE_16)
-                ? (flash_page(y) & flash_page(y + 1))
-                : flash_page(y));
+    // return ((font_size == OLED_FONT_SIZE::OLED_FONT_SIZE_16)
+    //             ? (flash_page(y) & flash_page(y + 1))
+    //             : flash_page(y));
+    return flash();
 }
 
 oled::OLED::~OLED()

@@ -18,6 +18,7 @@
  */
 #include "esp_log.h"
 #include "oled.h"
+#include <memory>
 
 static const char* TAG = "oled test main";
 
@@ -29,14 +30,16 @@ void oled_test()
     if (err == ESP_OK)
     {
         ESP_LOGI(TAG, "oled init succ");
-        i2c_oled->clear();
-
         i2c_oled->show_string(20,
                               0,
                               "2022-03-06",
                               oled::OLED_FONT_SIZE::OLED_FONT_SIZE_16);
+        i2c_oled->show_string(45,
+                              3,
+                              "DEMO",
+                              oled::OLED_FONT_SIZE::OLED_FONT_SIZE_16);
         i2c_oled->show_string(25,
-                              5,
+                              6,
                               "MONOLITHS",
                               oled::OLED_FONT_SIZE::OLED_FONT_SIZE_16);
     }

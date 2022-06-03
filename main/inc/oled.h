@@ -21,9 +21,11 @@
 
 #include "driver/i2c.h"
 #include <string>
+#include "esp_log.h"
 
 namespace oled
 {
+static const char *TAG = "OLED";
 
 // init cmmand
 static const uint8_t OLED_INIT_CMD[] = {
@@ -33,8 +35,8 @@ static const uint8_t OLED_INIT_CMD[] = {
     0x80, 0x40,  //--set start line address  Set Mapping RAM Display Start Line
     0x80, 0x81,  //--set contrast control register
     0x80, 0xCF,  // Set SEG Output Current Brightness
-    0x80, 0xA1,  //--Set SEG/Column Mapping     0xa0左右反置 0xa1正常
-    0x80, 0xC8,  // Set COM/Row Scan Direction   0xc0上下反置 0xc8正常
+    0x80, 0xA1,  //--Set SEG/Column Mapping
+    0x80, 0xC8,  // Set COM/Row Scan Direction
     0x80, 0xA6,  //--set normal display
     0x80, 0xA8,  //--set multiplex ratio(1 to 64)
     0x80, 0x3F,  //--1/64 duty
