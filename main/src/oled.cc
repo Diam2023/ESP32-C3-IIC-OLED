@@ -1,12 +1,32 @@
+/**
+ * @file oled.cc
+ *
+ * @brief OLED Class implementation
+ *
+ * @author monoliths (monoliths-uni@outlook.com)
+ * @version 1.0
+ * @date 2022-06-03
+ *
+ * *********************************************************************************
+ *
+ * @note version: 0.1
+ *
+ * b
+ * @description: none
+ *
+ * *********************************************************************************
+ */
+
 #include "oled.h"
 #include "oled_font.h"
 #include "esp_log.h"
 
-#include <cstring>
-
 static const char *TAG = "OLED";
 
-oled::OLED::OLED(int scl_pin, int sda_pin, bool inner_pull, const uint8_t oled_addr)
+oled::OLED::OLED(int scl_pin,
+                 int sda_pin,
+                 bool inner_pull,
+                 const uint8_t oled_addr)
 {
     config.mode = I2C_MODE_MASTER;
     config.sda_io_num = sda_pin;

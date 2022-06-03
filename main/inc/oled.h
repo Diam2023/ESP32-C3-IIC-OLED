@@ -1,3 +1,22 @@
+/**
+ * @file oled.h
+ *
+ * @brief  OLED Class
+ *
+ * @author monoliths (monoliths-uni@outlook.com)
+ * @version 1.0
+ * @date 2022-06-03
+ *
+ * *********************************************************************************
+ *
+ * @note version: 0.1
+ *
+ *
+ * @description: none
+ *
+ * *********************************************************************************
+ */
+
 #pragma once
 
 #include "driver/i2c.h"
@@ -142,7 +161,10 @@ class OLED
      * @param  inner_pull: mcu sda、scl inner pull up.
      * @param  oled_addr: oled iic address.
      */
-    OLED(int scl_pin, int sda_pin, bool inner_pull = false, uint8_t oled_addr = 0x3c);
+    OLED(int scl_pin,
+         int sda_pin,
+         bool inner_pull = false,
+         uint8_t oled_addr = 0x3c);
 
     /**
      * @brief  init driver and install it.
