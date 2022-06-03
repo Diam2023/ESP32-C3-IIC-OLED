@@ -1,8 +1,16 @@
 # A ESP32-C3 I2C OLED Project
 
-Using C++14 standard library
-
 ## It work with 0.96 i2c oled
+
+## Version
+* 0.1 it show with size 6 or 16 font on oled. 
+
+## Env
+* OS: Archlinux x86_64
+* Toolchannel: ESP-IDF V4.4.1
+* Board: ESP32-C3-12F 2M
+
+### Using C++14 standard library
 
 <!-- # _Sample project_
 

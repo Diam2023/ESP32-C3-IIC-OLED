@@ -6,7 +6,7 @@
 
 static const char *TAG = "OLED";
 
-oled::OLED::OLED(int scl_pin, int sda_pin, bool inner_pull)
+oled::OLED::OLED(int scl_pin, int sda_pin, bool inner_pull, const uint8_t oled_addr)
 {
     config.mode = I2C_MODE_MASTER;
     config.sda_io_num = sda_pin;
@@ -24,7 +24,7 @@ oled::OLED::OLED(int scl_pin, int sda_pin, bool inner_pull)
     config.clk_flags = I2C_SCLK_SRC_FLAG_FOR_NOMAL;
     config.master.clk_speed = oled::OLED::OLED_I2C_FREQ;
     this->i2c_port = I2C_NUM_0;
-    this->oled_addr = 0x3c;
+    this->oled_addr = oled_addr;
 
     data_mapping = new uint8_t[MAX_PAGE][MAX_LINE_SEG];
 

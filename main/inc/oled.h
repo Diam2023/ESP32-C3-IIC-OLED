@@ -140,8 +140,9 @@ class OLED
      * @param  int: oled iic scl pin.
      * @param  int: oled iic sda pin.
      * @param  inner_pull: mcu sda、scl inner pull up.
+     * @param  oled_addr: oled iic address.
      */
-    OLED(int scl_pin, int sda_pin, bool inner_pull = false);
+    OLED(int scl_pin, int sda_pin, bool inner_pull = false, uint8_t oled_addr = 0x3c);
 
     /**
      * @brief  init driver and install it.
