@@ -1,22 +1,3 @@
-/**
- * @file oled.cc
- *
- * @brief OLED Class implementation
- *
- * @author monoliths (monoliths-uni@outlook.com)
- * @version 1.0
- * @date 2022-06-03
- *
- * *********************************************************************************
- *
- * @note version: 0.1
- *
- * b
- * @description: none
- *
- * *********************************************************************************
- */
-
 #include "oled.h"
 
 oled::OLED::OLED(int scl_pin,

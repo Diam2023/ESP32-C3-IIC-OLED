@@ -4,15 +4,19 @@
  * @brief  OLED Class
  *
  * @author monoliths (monoliths-uni@outlook.com)
- * @version 1.0
+ * @version 0.2
  * @date 2022-06-03
  *
  * *********************************************************************************
  *
  * @note version: 0.1
  *
+ * @description: added base font operation
+ * 
+ * 
+ * @note version: 0.2
  *
- * @description: none
+ * @description: added image operation
  *
  * *********************************************************************************
  */
