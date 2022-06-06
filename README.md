@@ -1,9 +1,24 @@
 # A ESP32-C3 I2C OLED Project
 
-## It work with 0.96 i2c oled
+## This is Components Version, You can import It for your ESP-IDF project.
 
-## This is Components Version
-## You can import for your ESP-IDF project.
+---
+
+### How to use
+```
+cd components # if not exist, you should create it
+```
+
+```
+git clone https://github.com/monoliths-uni/ESP32-C3-IIC-OLED.git
+```
+
+```
+git checkout components
+```
+
+
+---
 
 ## Demo
 ![demo-v0.2](https://github.com/monoliths-uni/ESP32-C3-IIC-OLED/blob/dev/doc/demo-v0.2.jpg)
