@@ -41,7 +41,7 @@ oled::OLED::OLED(int scl_pin,
     }
 }
 
-esp_err_t oled::OLED::init()
+esp_err_t oled::OLED::init(bool forward, bool inverse)
 {
     if (i2c_param_config(this->i2c_port, &this->config) != ESP_OK)
     {
@@ -55,7 +55,45 @@ esp_err_t oled::OLED::init()
         return 2;
     }
 
-    if (i2c_master_write_slave(OLED_INIT_CMD, OLED_INIT_CMD_SIZE) != ESP_OK)
+    uint8_t cmd[56];
+
+    std::copy(std::begin(OLED_INIT_CMD), std::end(OLED_INIT_CMD), cmd);
+
+    if (!forward)
+    {
+        cmd[13] = 0xA0;
+        cmd[15] = 0xC0;
+    }
+
+    if (inverse)
+    {
+        cmd[53] = 0xA7;
+    }
+
+
+    if (i2c_master_write_slave(cmd, OLED_INIT_CMD_SIZE) != ESP_OK)
+    {
+        ESP_LOGE(TAG, "write err");
+        return 3;
+    }
+    return ESP_OK;
+}
+
+esp_err_t oled::OLED::init(const uint8_t *cmd, const uint8_t sizeof_cmd)
+{
+    if (i2c_param_config(this->i2c_port, &this->config) != ESP_OK)
+    {
+        ESP_LOGE(TAG, "config err");
+        return 1;
+    }
+    if (i2c_driver_install(this->i2c_port, this->config.mode, 0, 0, 0) !=
+        ESP_OK)
+    {
+        ESP_LOGE(TAG, "install err");
+        return 2;
+    }
+
+    if (i2c_master_write_slave(cmd, sizeof_cmd) != ESP_OK)
     {
         ESP_LOGE(TAG, "write err");
         return 3;

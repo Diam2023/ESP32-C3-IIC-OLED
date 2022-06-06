@@ -4,7 +4,7 @@
  * @brief  OLED Class
  *
  * @author monoliths (monoliths-uni@outlook.com)
- * @version 0.2
+ * @version 0.3
  * @date 2022-06-03
  *
  * *********************************************************************************
@@ -17,6 +17,11 @@
  * @note version: 0.2
  *
  * @description: added image operation
+ * 
+ * 
+ * @note version: 0.3
+ *
+ * @description: customize initialize screen
  *
  * *********************************************************************************
  */
@@ -182,8 +187,24 @@ class OLED
 
     /**
      * @brief  init driver and install it.
+     * @param  forward: forward display, It means signal line on top of screen.
+     * @param  inverse: if inverse on, It will inverse display color.
+     * @return esp_err_t: error code.
+     * 
+     * 
+     * @note forward and inverse option added in version 0.3
      */
-    esp_err_t init();
+    esp_err_t init(bool forward = true, bool inverse = false);
+
+    /**
+     * @brief  customize initialize use cmd.
+     * @param  cmd: customize data.
+     * @param  sizeof_cmd: customize data size.
+     * @return esp_err_t: error code.
+     * 
+     * @since 0.3
+     */
+    esp_err_t init(const uint8_t *cmd, const uint8_t sizeof_cmd);
 
     /**
      * @brief  set screen to 0x00

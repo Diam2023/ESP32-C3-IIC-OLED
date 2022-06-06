@@ -9,7 +9,7 @@
  *
  * *********************************************************************************
  *
- * @note version: 0.2
+ * @note version: 0.3
  *
  *
  * @description: none
@@ -26,7 +26,7 @@ void oled_test()
 {
     auto i2c_oled = std::make_unique<oled::OLED>(5, 6, true);
 
-    esp_err_t err = i2c_oled->init();
+    esp_err_t err = i2c_oled->init(false, true);
     if (err == ESP_OK)
     {
         uint8_t data[32] = {0x00, 0xC0, 0x80, 0x00, 0xC0, 0x30, 0x0C, 0x02,
