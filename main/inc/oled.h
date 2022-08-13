@@ -12,13 +12,13 @@
  * @note version: 0.1
  *
  * @description: added base font operation
- * 
- * 
+ *
+ *
  * @note version: 0.2
  *
  * @description: added image operation
- * 
- * 
+ *
+ *
  * @note version: 0.3
  *
  * @description: customize initialize screen
@@ -80,6 +80,9 @@ enum OLED_FONT_SIZE
     OLED_FONT_SIZE_16,
 };
 
+/**
+ * @brief show on oled image.
+ */
 enum OLED_IMAGE_SIZE
 {
     OLED_IMAGE_SIZE_4,
@@ -186,12 +189,23 @@ class OLED
          uint8_t oled_addr = 0x3c);
 
     /**
+     * @brief  Move Construct. 
+     * @param  oled: rvalue.
+     */
+    OLED(OLED &&oled) : data_mapping(oled.data_mapping)
+    {
+        i2c_port = oled.i2c_port;
+        oled_addr = oled.oled_addr;
+        config = oled.config;
+        oled.data_mapping = nullptr;
+    }
+
+    /**
      * @brief  init driver and install it.
      * @param  forward: forward display, It means signal line on top of screen.
      * @param  inverse: if inverse on, It will inverse display color.
      * @return esp_err_t: error code.
-     * 
-     * 
+     *
      * @note forward and inverse option added in version 0.3
      */
     esp_err_t init(bool forward = true, bool inverse = false);
@@ -201,7 +215,7 @@ class OLED
      * @param  cmd: customize data.
      * @param  sizeof_cmd: customize data size.
      * @return esp_err_t: error code.
-     * 
+     *
      * @since 0.3
      */
     esp_err_t init(const uint8_t *cmd, const uint8_t sizeof_cmd);
@@ -249,8 +263,8 @@ class OLED
      * @return esp_err_t: error code.
      */
     esp_err_t show_string(
-        uint8_t x,
-        uint8_t y,
+        const uint8_t x,
+        const uint8_t y,
         const std::string &&string,
         const OLED_FONT_SIZE font_size = OLED_FONT_SIZE::OLED_FONT_SIZE_16);
 
@@ -264,8 +278,8 @@ class OLED
      * split_size * around) on (around + page).
      * @return esp_err_t: error code.
      */
-    esp_err_t show_image(uint8_t x,
-                         uint8_t y,
+    esp_err_t show_image(const uint8_t x,
+                         const uint8_t y,
                          const uint8_t *begin,
                          const uint8_t split_size = 16,
                          const uint8_t length = 32);
@@ -279,8 +293,8 @@ class OLED
      * @return esp_err_t: error code.
      */
     esp_err_t show_image(
-        uint8_t x,
-        uint8_t y,
+        const uint8_t x,
+        const uint8_t y,
         const uint8_t index,
         const OLED_IMAGE_SIZE image_size = OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_8);
 
