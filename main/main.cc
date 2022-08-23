@@ -17,46 +17,100 @@
  * *********************************************************************************
  */
 #include "esp_log.h"
-#include "oled.h"
+#include "oled_device.h"
 #include <memory>
 
-static const char* TAG = "oled test main";
+#include "types.h"
+#include "page.h"
+#include "widget.h"
+#include "text_widget.h"
+#include "model.h"
+#include "window.h"
+#include "layout.h"
+
+static const char* TAG_MAIN = "oled test main";
+
+using namespace oled;
 
 void oled_test()
 {
-    auto i2c_oled = std::make_unique<oled::OLED>(5, 6, true);
+//    auto m_ = new oled::Model<std::string>();
 
-    esp_err_t err = i2c_oled->init(false, true);
+    auto i2c_oled = std::make_unique
+        <oled::OledDevice>(5, 6, true);
+
+    esp_err_t err = i2c_oled->init(false, false);
+
     if (err == ESP_OK)
     {
-        uint8_t data[32] = {0x00, 0xC0, 0x80, 0x00, 0xC0, 0x30, 0x0C, 0x02,
-                            0x04, 0x38, 0x60, 0x80, 0x00, 0x80, 0xC0, 0x00,
-                            0x1E, 0x63, 0x80, 0x01, 0x00, 0x40, 0xB8, 0x04,
-                            0x04, 0x88, 0x70, 0x00, 0x01, 0x80, 0x71, 0x0F};
-        ESP_LOGI(TAG, "oled init succ");
-        i2c_oled->clear();
-        i2c_oled->show_string(20,
-                              0,
-                              "2022-06-03",
-                              oled::OLED_FONT_SIZE::OLED_FONT_SIZE_16);
-        i2c_oled->show_string(45,
-                              3,
-                              "DEMO",
-                              oled::OLED_FONT_SIZE::OLED_FONT_SIZE_16);
-        i2c_oled->show_string(23,
-                              6,
-                              "MONOLITHS",
-                              oled::OLED_FONT_SIZE::OLED_FONT_SIZE_16);
-        // i2c_oled->show_image(0, 0, data, 16, 32);
-        i2c_oled->show_image(105, 3, 2, oled::OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_32);
-        i2c_oled->show_image(0, 0, 5, oled::OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_32);
+        auto window = std::make_unique<oled::Window>(
+            i2c_oled.get());
 
-        i2c_oled->show_string(105, 7, "V0.2", oled::OLED_FONT_SIZE::OLED_FONT_SIZE_6);
-        i2c_oled->show_image(97, 7, 5);
+        auto* textWidget = new TextWidget("Test Test");
+
+        Page* page = window->createPage();
+
+        textWidget->setPage(page);
+
+        auto* layout = new Layout();
+
+        layout->addWidget(textWidget, Point(20, 0));
+        page->addLayout(layout);
+        page->clear();
+        window->show();
+
+        while (1)
+        {
+            textWidget->updateText("Hello Monoliths");
+            vTaskDelay(200);
+
+            textWidget->updateText("Test From Oled");
+            vTaskDelay(200);
+        }
+
+        // printf("%s buffer get: %d\n", __func__, esp_get_free_heap_size());
+        // ESP_ERROR_CHECK(heap_trace_stop());
+        // heap_trace_dump();
+        // DataMap dataMap(i2c_oled->device_info->max_page,
+        //                            i2c_oled->device_info->max_line_seg);
+
+        // auto paint = new Paint(&dataMap);
+
+        // paint->clear();
+
+        // paint->writeString(20,
+        //                       0,
+        //                       "2022-08-15",
+        //                       oled::OLED_FONT_SIZE::OLED_FONT_SIZE_16);
+
+        // i2c_oled->flash(std::move(dataMap));
+
+        // ESP_LOGI(TAG_MAIN, "oled init succ");
+
+        // i2c_oled->show_string(20,
+        //                       0,
+        //                       "2022-06-03",
+        //                       oled::OLED_FONT_SIZE::OLED_FONT_SIZE_16);
+        // i2c_oled->show_string(45,
+        //                       3,
+        //                       "DEMO",
+        //                       oled::OLED_FONT_SIZE::OLED_FONT_SIZE_16);
+        // i2c_oled->show_string(23,
+        //                       6,
+        //                       "MONOLITHS",
+        //                       oled::OLED_FONT_SIZE::OLED_FONT_SIZE_16);
+        // i2c_oled->show_image(0, 0, data, 16, 32);
+        // i2c_oled->show_image(105, 3, 2,
+        // oled::OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_32); i2c_oled->show_image(0,
+        // 0, 5, oled::OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_32);
+
+        // i2c_oled->show_string(105, 7, "V0.2",
+        // oled::OLED_FONT_SIZE::OLED_FONT_SIZE_6); i2c_oled->show_image(97, 7,
+        // 5);
     }
     else
     {
-        ESP_LOGE(TAG, "oled init err, err code: %d", err);
+        ESP_LOGE(TAG_MAIN, "oled init err, err code: %d", err);
     }
 }
 
