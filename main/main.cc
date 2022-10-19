@@ -32,6 +32,8 @@ static const char* TAG_MAIN = "oled test main";
 
 using namespace oled;
 
+// TODO split debug code
+
 void oled_test()
 {
     auto i2c_oled = std::make_unique
