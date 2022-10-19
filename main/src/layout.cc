@@ -7,17 +7,17 @@
 #include "page.h"
 #include<algorithm>
 
-void oled::Layout::addWidget(oled::Widget *widget_)
-{
-
-    if (widget_ != nullptr)
-    {
-        this->m_widgets.push_back(widget_);
-        this->positions.emplace_back(Point());
-    } else {
-        OLED_D("Try to add a null widget in Layout!");
-    }
-}
+//void oled::Layout::addWidget(oled::Widget *widget_)
+//{
+//
+//    if (widget_ != nullptr)
+//    {
+//        this->m_widgets.push_back(widget_);
+//        this->positions.emplace_back(Point());
+//    } else {
+//        OLED_D("Try to add a null widget in Layout!");
+//    }
+//}
 
 void oled::Layout::addWidget(oled::Widget *widget_, const oled::Point &&point_)
 {

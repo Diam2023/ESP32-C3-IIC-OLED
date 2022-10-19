@@ -19,6 +19,7 @@ class Layout : public Object
     OLED_OBJECT
 protected:
     std::vector<Widget*> m_widgets;
+
     /**
      * Position for widgets
      */
@@ -30,22 +31,22 @@ protected:
     Page* m_pPage{};
 
 public:
-    void setPage(Page*);
-
-    void addWidget(Widget*);
     void addWidget(Widget*, const Point&&);
 
-    int indexOfWidget(Widget*);
+    void setPage(Page*);
 
     oled::Widget* getWidget(uint8_t);
 
     std::vector<Widget*>&& widgets();
-    void flash();
-    void flash(Widget*);
+
+    int indexOfWidget(Widget*);
 
     Layout() = default;
 
     ~Layout() = default;
+
+    void flash();
+    void flash(Widget*);
 
 };
 
