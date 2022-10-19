@@ -34,8 +34,6 @@ using namespace oled;
 
 void oled_test()
 {
-//    auto m_ = new oled::Model<std::string>();
-
     auto i2c_oled = std::make_unique
         <oled::OledDevice>(5, 6, true);
 
@@ -46,26 +44,46 @@ void oled_test()
         auto window = std::make_unique<oled::Window>(
             i2c_oled.get());
 
-        auto* textWidget = new TextWidget("Test Test");
-
         Page* page = window->createPage();
+        Page* page2 = window->createPage();
+        auto* textWidget = new TextWidget("Test Test", page);
 
-        textWidget->setPage(page);
+        auto* textWidget2 = new TextWidget("Test2", page2);
+
+        // textWidget->setPage(page);
 
         auto* layout = new Layout();
-
+        auto* layout2 = new Layout();
+        layout2->addWidget(textWidget2, Point(20, 0));
         layout->addWidget(textWidget, Point(20, 0));
+
         page->addLayout(layout);
+        page2->addLayout(layout2);
+
         page->clear();
+        page2->clear();
+
+        window->setPage(1);
+
+        // window->clear();
+
         window->show();
+        window->flash();
 
         while (1)
         {
-            textWidget->updateText("Hello Monoliths");
             vTaskDelay(200);
 
-            textWidget->updateText("Test From Oled");
+            // textWidget->updateText("Hello Monoliths");
+
+            window->setPage(1);
+            window->flash();
             vTaskDelay(200);
+
+            window->setPage(0);
+            window->flash();
+            textWidget->updateText("Test From Oled");
+            // vTaskDelay(200);
         }
 
         // printf("%s buffer get: %d\n", __func__, esp_get_free_heap_size());
