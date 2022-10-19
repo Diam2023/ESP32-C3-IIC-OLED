@@ -65,6 +65,7 @@ void oled::Window::flash()
     if (!this->m_pages.empty())
     {
         auto page = this->pages().at(this->m_nowPage);
+        page->flash();
         this->getOledDevice()->flash(page->dataMap());
     } else {
         OLED_D("page is empty!");
