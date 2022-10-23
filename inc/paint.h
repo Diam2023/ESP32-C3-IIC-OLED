@@ -2,7 +2,7 @@
 
 #include "data_map.h"
 #include "types.h"
-
+#include "oled.h"
 #include <string>
 
 namespace oled
