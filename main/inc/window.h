@@ -16,9 +16,9 @@ class Window : public Object
 
 private:
     // TODO Add event handler
-//    std::vector<oled::EVENT> eventQueue;
+    //    std::vector<oled::EVENT> eventQueue;
 
-    std::unique_ptr<OledDevice> device;
+    std::shared_ptr<OledDevice> device;
 
     // pages
     std::vector<Page*> m_pages;
@@ -36,19 +36,19 @@ public:
         return device.get();
     }
 
-    inline void setOledDevice(OledDevice* device_)
+    inline void setOledDevice(OledDevice* pDevice)
     {
-        this->device.reset(device_);
+        this->device.reset(pDevice);
     }
 
-    Page *getPage(const uint8_t index)
+    Page* getPage(const uint8_t index)
     {
         return this->pages().at(index);
     }
 
     void setPage(uint8_t);
 
-    // void deletePage(const uint8_t);
+    void deletePage(uint8_t index);
 
     // uint8_t indexOfPage(const Page&&);
 
@@ -62,8 +62,8 @@ public:
 
     ~Window() = default;
 
-    void addPage(Page* page_);
-    void flash(Page* page);
+    void addPage(Page* pPage);
+    void flash(const Page* page);
 };
 
 }    // namespace oled

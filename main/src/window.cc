@@ -2,11 +2,12 @@
 #include "esp_log.h"
 #include "page.h"
 
-oled::Window::Window(oled::OledDevice* device_)
+oled::Window::Window(oled::OledDevice* pDevice)
 {
-    this->device.reset(device_);
+    this->device.reset(pDevice);
 }
 
+// TODO Wait to Complete Event Module
 // void oled::Window::eventLoop(oled::Event event)
 // {
 // }
@@ -21,12 +22,14 @@ void oled::Window::setPage(const uint8_t index)
     this->m_nowPage = index;
 }
 
-void oled::Window::addPage(Page* page_)
+void oled::Window::addPage(Page* pPage)
 {
-    if (page_ != nullptr)
+    if (pPage != nullptr)
     {
-        this->pages().push_back(page_);
-    } else {
+        this->pages().push_back(pPage);
+    }
+    else
+    {
         ESP_LOGD("Debug", "debug message");
         ESP_LOGI(getObjectNameCStyle(), "info message");
         OLED_D("Try To add a nullptr to pages");
@@ -47,14 +50,18 @@ void oled::Window::show()
     {
         auto page = this->pages().at(this->m_nowPage);
         this->getOledDevice()->flash(page->dataMap());
-    } else {
+    }
+    else
+    {
         OLED_D("page is empty!");
     }
 }
 
-void oled::Window::flash(Page* page)
+void oled::Window::flash(const Page* pPage)
 {
-    if (this->pages().at(this->m_nowPage) == page)
+    // TODO BUG Fix should Find pPage in pages.
+    auto page = this->pages().at(this->m_nowPage);
+    if (page == pPage)
     {
         this->getOledDevice()->flash(page->dataMap());
     }
@@ -67,40 +74,20 @@ void oled::Window::flash()
         auto page = this->pages().at(this->m_nowPage);
         page->flash();
         this->getOledDevice()->flash(page->dataMap());
-    } else {
+    }
+    else
+    {
         OLED_D("page is empty!");
     }
 }
 
-// oled::Page* oled::Window::newPage()
-// {
-//     OledDevice* device = this->getOledDevice();
+void oled::Window::deletePage(const uint8_t index)
+{
+    auto page = this->pages().at(index);
 
-//     if (device == nullptr)
-//     {
-//         ESP_LOGI("Page", "oled_device error");
-//     }
-//     else
-//     {
-//         ESP_LOGI("Page", "oled_device pased");
-//     }
-
-//     Page* page = new Page(device);
-
-//     if (device == nullptr)
-//     {
-//         ESP_LOGI("Page", "page error");
-//     }
-//     else
-//     {
-//         ESP_LOGI("Page", "page pased");
-//     }
-//     this->addPage(page);
-
-//     return page;
-// }
-
-// void deletePage(const uint8_t)
-// {
-
-// }
+    if (page != nullptr)
+    {
+        // remove
+        std::remove(this->pages().begin(), this->pages().end(), page);
+    }
+}

@@ -2,47 +2,45 @@
 
 #include <cstring>
 
-
 static const char *TAG = "OledDevice";
 
 oled::OledDevice::OledDevice(int scl_pin,
                              int sda_pin,
                              bool inner_pull,
-                             const uint8_t oled_addr,
-                             const DeviceInfo *device_info)
+                             const uint8_t oledAddr,
+                             const DeviceInfo *deviceInfo)
 {
-    this->device_info = device_info;
-    this->config.mode = I2C_MODE_MASTER;
-    this->config.sda_io_num = sda_pin;
-    this->config.scl_io_num = scl_pin;
+    this->cm_pDeviceInfo = deviceInfo;
+    this->m_config.mode = I2C_MODE_MASTER;
+    this->m_config.sda_io_num = sda_pin;
+    this->m_config.scl_io_num = scl_pin;
     if (inner_pull)
     {
-        this->config.sda_pullup_en = GPIO_PULLUP_ENABLE;
-        this->config.scl_pullup_en = GPIO_PULLUP_ENABLE;
+        this->m_config.sda_pullup_en = GPIO_PULLUP_ENABLE;
+        this->m_config.scl_pullup_en = GPIO_PULLUP_ENABLE;
     }
     else
     {
-        this->config.sda_pullup_en = GPIO_PULLUP_DISABLE;
-        this->config.scl_pullup_en = GPIO_PULLUP_DISABLE;
+        this->m_config.sda_pullup_en = GPIO_PULLUP_DISABLE;
+        this->m_config.scl_pullup_en = GPIO_PULLUP_DISABLE;
     }
-    this->config.clk_flags = I2C_SCLK_SRC_FLAG_FOR_NOMAL;
+    this->m_config.clk_flags = I2C_SCLK_SRC_FLAG_FOR_NOMAL;
 
-    this->config.master.clk_speed = this->iic_freq;
-    this->i2c_port = I2C_NUM_0;
-    this->oled_addr = oled_addr;
-
+    this->m_config.master.clk_speed = oled::OledDevice::sc_I2C_FREQUENCY;
+    this->m_I2C_Port = I2C_NUM_0;
+    this->m_oledAddr = oledAddr;
 }
 
 esp_err_t oled::OledDevice::init(bool forward, bool inverse)
 {
     // ESP_ERROR_CHECK(this->data_mapping == NULL);
 
-    if (i2c_param_config(this->i2c_port, &this->config) != ESP_OK)
+    if (i2c_param_config(this->m_I2C_Port, &this->m_config) != ESP_OK)
     {
         ESP_LOGE(TAG, "config err");
         return 1;
     }
-    if (i2c_driver_install(this->i2c_port, this->config.mode, 0, 0, 0) !=
+    if (i2c_driver_install(this->m_I2C_Port, this->m_config.mode, 0, 0, 0) !=
         ESP_OK)
     {
         ESP_LOGE(TAG, "install err");
@@ -51,7 +49,7 @@ esp_err_t oled::OledDevice::init(bool forward, bool inverse)
 
     uint8_t cmd[56];
 
-    memmove(cmd, this->device_info->init_cmd, sizeof(cmd));
+    memmove(cmd, this->cm_pDeviceInfo->init_cmd, sizeof(cmd));
 
     if (!forward)
     {
@@ -64,7 +62,7 @@ esp_err_t oled::OledDevice::init(bool forward, bool inverse)
         cmd[53] = 0xA7;
     }
 
-    if (i2c_master_write_slave(cmd, this->device_info->init_size) != ESP_OK)
+    if (i2c_master_write_slave(cmd, this->cm_pDeviceInfo->init_size) != ESP_OK)
     {
         ESP_LOGE(TAG, "write err");
         return 3;
@@ -74,12 +72,12 @@ esp_err_t oled::OledDevice::init(bool forward, bool inverse)
 
 esp_err_t oled::OledDevice::init(const uint8_t *cmd, const uint8_t sizeof_cmd)
 {
-    if (i2c_param_config(this->i2c_port, &this->config) != ESP_OK)
+    if (i2c_param_config(this->m_I2C_Port, &this->m_config) != ESP_OK)
     {
         ESP_LOGE(TAG, "config err");
         return 1;
     }
-    if (i2c_driver_install(this->i2c_port, this->config.mode, 0, 0, 0) !=
+    if (i2c_driver_install(this->m_I2C_Port, this->m_config.mode, 0, 0, 0) !=
         ESP_OK)
     {
         ESP_LOGE(TAG, "install err");
@@ -111,25 +109,23 @@ esp_err_t oled::OledDevice::init(const uint8_t *cmd, const uint8_t sizeof_cmd)
 //     return flash_page(page);
 // }
 
-esp_err_t oled::OledDevice::flash(DataMap *data_mapping)
+esp_err_t oled::OledDevice::flashPage(DataMap *dataMapping, const uint8_t page)
 {
-    esp_err_t err = ESP_OK;
-    for (size_t i = 0; i < this->device_info->max_page; i++)
-    {
-        err = flash_page(data_mapping, i);
-    }
-    return err;
-}
-
-esp_err_t oled::OledDevice::flash_page(DataMap *data_mapping,
-                                       const uint8_t page)
-{
-    data_mapping->setData(page, 0, 0x40);
+    dataMapping->setData(page, 0, 0x40);
     this->oled_set_start_address(page, 0);
 
+    return this->i2c_master_write_slave(dataMapping->getDataMapping()[page],
+                                        this->cm_pDeviceInfo->max_line_seg);
+}
 
-    return this->i2c_master_write_slave(data_mapping->getDataMapping()[page],
-                                        this->device_info->max_line_seg);
+esp_err_t oled::OledDevice::flash(DataMap *dataMapping)
+{
+    esp_err_t err = ESP_OK;
+    for (size_t i = 0; i < this->cm_pDeviceInfo->max_page; i++)
+    {
+        err = this->flashPage(dataMapping, i);
+    }
+    return err;
 }
 
 // esp_err_t oled::OledDevice::show_string(uint8_t x,
@@ -158,7 +154,8 @@ esp_err_t oled::OledDevice::flash_page(DataMap *data_mapping,
 
 //             // std::copy(std::begin(font::F8X16) + c * 16,
 //             //           std::begin(font::F8X16) + c * 16 + 8,
-//             //           std::begin(this->data_mapping->getDataMapping()[y]) + x
+//             //           std::begin(this->data_mapping->getDataMapping()[y])
+//             + x
 //             //           + 1);
 //             // std::copy(std::begin(font::F8X16) + c * 16 + 8,
 //             //           std::begin(font::F8X16) + c * 16 + 16,

@@ -47,9 +47,8 @@ public:
 
     void flash();
     void flash(Widget*);
-
 };
 
-}
+}    // namespace oled
 
 #endif    // ESP32_C3_IIC_OLED_LAYOUT_H

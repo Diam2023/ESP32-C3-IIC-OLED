@@ -103,11 +103,10 @@ constexpr DeviceInfo DefautlDeviceInfo{
         0xAF    //
     }};
 
-constexpr auto getDefautlDeviceInfo()
+constexpr auto getDefaultDeviceInfo()
 {
     return &DefautlDeviceInfo;
 };
-
 
 /**
  * @brief  operation i2c oled.
@@ -118,20 +117,20 @@ private:
     /**
      * @brief  i2c configuration.
      */
-    i2c_config_t config;
+    i2c_config_t m_config{};
 
     /**
      * @brief oled communication i2c port number.
      */
-    i2c_port_t i2c_port;
+    i2c_port_t m_I2C_Port;
 
     /**
      * @brief oled device address.
      */
-    uint8_t oled_addr;
+    uint8_t m_oledAddr;
 
-    uint8_t iic_ack_check_en = 0x01;
-    uint32_t iic_freq = 400000;
+    static const uint8_t sc_I2C_ASK_CHECK_ENABLE = 0x01;
+    static const uint32_t sc_I2C_FREQUENCY = 400000;
 
     /**
      * @brief  send data for oled.
@@ -146,12 +145,13 @@ private:
         i2c_cmd_handle_t cmd = i2c_cmd_link_create();
         i2c_master_start(cmd);
         i2c_master_write_byte(cmd,
-                              (this->oled_addr << 1),
-                              this->iic_ack_check_en);
-        i2c_master_write(cmd, data_wr, size, this->iic_ack_check_en);
+                              (this->m_oledAddr << 1),
+                              sc_I2C_ASK_CHECK_ENABLE);
+        i2c_master_write(cmd, data_wr, size, sc_I2C_ASK_CHECK_ENABLE);
         i2c_master_stop(cmd);
-        esp_err_t ret =
-            i2c_master_cmd_begin(this->i2c_port, cmd, 1000 / portTICK_RATE_MS);
+        esp_err_t ret = i2c_master_cmd_begin(this->m_I2C_Port,
+                                             cmd,
+                                             1000 / portTICK_RATE_MS);
         i2c_cmd_link_delete(cmd);
         return ret;
     }
@@ -182,33 +182,31 @@ private:
     }
 
 public:
-    const DeviceInfo *device_info;
+    const DeviceInfo *cm_pDeviceInfo;
 
     /**
      * @brief  Construct a new OledDevice object.
      * @param  int: oled iic scl pin.
      * @param  int: oled iic sda pin.
-     * @param  inner_pull: mcu sda、scl inner pull up.
-     * @param  oled_addr: oled iic address.
+     * @param  innerPull: mcu sda、scl inner pull up.
+     * @param  oledAddress: oled iic address.
      */
     OledDevice(int scl_pin,
                int sda_pin,
-               bool inner_pull = false,
-               uint8_t oled_addr = 0x3c,
-               const DeviceInfo *device_info = getDefautlDeviceInfo());
+               bool innerPull = false,
+               uint8_t oledAddress = 0x3c,
+               const DeviceInfo *device_info = getDefaultDeviceInfo());
 
     /**
      * @brief  Move Construct.
      * @param  oled: rvalue.
      */
     OledDevice(OledDevice &&oled,
-               const DeviceInfo *device_info = getDefautlDeviceInfo())
-    {
-        this->i2c_port = oled.i2c_port;
-        this->oled_addr = oled.oled_addr;
-        this->config = oled.config;
-        this->device_info = device_info;
-    }
+               const DeviceInfo *deviceInfo = getDefaultDeviceInfo()) noexcept
+        : m_config(oled.m_config),
+          m_I2C_Port(oled.m_I2C_Port),
+          m_oledAddr(oled.m_oledAddr),
+          cm_pDeviceInfo(deviceInfo){};
 
     /**
      * @brief  init driver and install it.
@@ -223,12 +221,12 @@ public:
     /**
      * @brief  customize initialize use cmd.
      * @param  cmd: customize data.
-     * @param  sizeof_cmd: customize data size.
+     * @param  sizeofCmd: customize data size.
      * @return esp_err_t: error code.
      *
      * @since 0.3
      */
-    esp_err_t init(const uint8_t *cmd, const uint8_t sizeof_cmd);
+    esp_err_t init(const uint8_t *cmd, uint8_t sizeofCmd);
 
     // /**
     //  * @brief  set screen to 0x00
@@ -252,17 +250,17 @@ public:
     // esp_err_t full_page(const uint8_t page, const uint8_t data);
 
     /**
-     * @brief  flash data for oled use data_mapping.
-     * @return esp_err_t: error code.
-     */
-    esp_err_t flash(DataMap *);
-
-    /**
      * @brief  flash screen for page use data_mapping.
      * @param  page: page of oled.
      * @return esp_err_t: error code.
      */
-    esp_err_t flash_page(DataMap *, const uint8_t page);
+    esp_err_t flashPage(DataMap *, uint8_t page);
+
+    /**
+     * @brief  flash data for oled use data_mapping.
+     * @return esp_err_t: error code.
+     */
+    esp_err_t flash(DataMap *);
 
     // /**
     //  * @brief  show string data on x,y.

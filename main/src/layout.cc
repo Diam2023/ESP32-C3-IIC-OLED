@@ -5,19 +5,19 @@
 #include "esp_err.h"
 #include <vector>
 #include "page.h"
-#include<algorithm>
+#include <algorithm>
 
-//void oled::Layout::addWidget(oled::Widget *widget_)
+// void oled::Layout::addWidget(oled::Widget *widget_)
 //{
 //
-//    if (widget_ != nullptr)
-//    {
-//        this->m_widgets.push_back(widget_);
-//        this->positions.emplace_back(Point());
-//    } else {
-//        OLED_D("Try to add a null widget in Layout!");
-//    }
-//}
+//     if (widget_ != nullptr)
+//     {
+//         this->m_widgets.push_back(widget_);
+//         this->positions.emplace_back(Point());
+//     } else {
+//         OLED_D("Try to add a null widget in Layout!");
+//     }
+// }
 
 void oled::Layout::addWidget(oled::Widget *widget_, const oled::Point &&point_)
 {
@@ -25,19 +25,22 @@ void oled::Layout::addWidget(oled::Widget *widget_, const oled::Point &&point_)
     {
         this->m_widgets.emplace_back(widget_);
         this->positions.emplace_back(point_);
-    } else {
+    }
+    else
+    {
         OLED_D("Try to add a null widget in Layout!");
     }
 }
 
 int oled::Layout::indexOfWidget(oled::Widget *widget_)
 {
-//    auto result = std::find(this->widgets.begin(), this->widgets.end(), widget_);
-//
-//    if (result != this->widgets.end())
-//    {
-//        auto widget = *result;
-//    }
+    //    auto result = std::find(this->widgets.begin(), this->widgets.end(),
+    //    widget_);
+    //
+    //    if (result != this->widgets.end())
+    //    {
+    //        auto widget = *result;
+    //    }
     for (int i = 0; i <= this->m_widgets.size(); i++)
     {
         if (this->m_widgets.at(i) == widget_)
@@ -54,12 +57,10 @@ void oled::Layout::flash()
     for (size_t i = 0; i < this->m_widgets.size(); i++)
     {
         // ergodic widget and point to flash
-        this->m_widgets.at(i)->flash(
-            this->m_pPage->dataMap(),
-            this->positions.at(i));
+        this->m_widgets.at(i)->flash(this->m_pPage->dataMap(),
+                                     this->positions.at(i));
     }
 }
-
 
 void oled::Layout::flash(oled::Widget *widget_)
 {
@@ -68,13 +69,10 @@ void oled::Layout::flash(oled::Widget *widget_)
     {
         if (widget_ == this->m_widgets.at(i))
         {
-            widget_->flash(
-                this->m_pPage->dataMap(),
-                this->positions.at(i));
+            widget_->flash(this->m_pPage->dataMap(), this->positions.at(i));
         }
     }
 }
-
 
 void oled::Layout::setPage(oled::Page *page_)
 {
@@ -92,7 +90,7 @@ void oled::Layout::setPage(oled::Page *page_)
     }
 }
 
-oled::Widget* oled::Layout::getWidget(const uint8_t index_)
+oled::Widget *oled::Layout::getWidget(const uint8_t index_)
 {
     return this->m_widgets.at(index_);
 }

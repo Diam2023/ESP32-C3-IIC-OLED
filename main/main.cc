@@ -28,47 +28,90 @@
 #include "window.h"
 #include "layout.h"
 
-static const char* TAG_MAIN = "oled test main";
+static const char *TAG_MAIN = "oled test main";
 
 using namespace oled;
 
 // TODO split debug code
 
+class MyPage : public Page
+{
+private:
+    TextWidget *m_pTestTextWidget{};
+    TextWidget *m_pTest2TextWidget{};
+
+public:
+    void updateTesttext(std::string &&data);
+
+    inline void init()
+    {
+        auto ly = new Layout();
+
+        m_pTestTextWidget = new TextWidget("1", this);
+
+        m_pTest2TextWidget = new TextWidget("2", this);
+
+        m_pTest2TextWidget->setPage(this);
+        m_pTestTextWidget->setPage(this);
+
+        ly->addWidget(m_pTestTextWidget, Point(0, 1));
+        ly->addWidget(m_pTest2TextWidget, Point(0, 2));
+
+        ly->setPage(this);
+
+        addLayout(ly);
+    };
+
+    MyPage(OledDevice *pDevice) : Page(pDevice)
+    {
+        init();
+    };
+
+    MyPage(const oled::Window *pWindow) : Page(pWindow)
+    {
+        init();
+    };
+
+    ~MyPage(){};
+};
+
 void oled_test()
 {
-    auto i2c_oled = std::make_unique
-        <oled::OledDevice>(5, 6, true);
+    auto i2c_oled = new oled::OledDevice(5, 6, true);
 
     esp_err_t err = i2c_oled->init(false, false);
 
     if (err == ESP_OK)
     {
-        auto window = std::make_unique<oled::Window>(
-            i2c_oled.get());
+        auto window = new oled::Window(i2c_oled);
 
-        Page* page = window->createPage();
-        Page* page2 = window->createPage();
-        auto* textWidget = new TextWidget("Test Test", page);
+        //        Page* page = window->createPage();
+        //        Page* page2 = window->createPage();
+        //        auto* textWidget = new TextWidget("Test Test", page);
+        //
+        //        auto* textWidget2 = new TextWidget("Test2", page2);
+        //
+        //        // textWidget->setPage(page);
+        //
+        //        auto* layout = new Layout();
+        //        auto* layout2 = new Layout();
+        //        layout2->addWidget(textWidget2, Point(20, 0));
+        //        layout->addWidget(textWidget, Point(20, 0));
+        //
+        //        page->addLayout(layout);
+        //        page2->addLayout(layout2);
+        //
+        //        page->clear();
+        //        page2->clear();
+        auto page = new MyPage(window);
+        //        auto myPage = (MyPage*)page;
+        //        page->init();
 
-        auto* textWidget2 = new TextWidget("Test2", page2);
+        // page->bindWindow(window);
 
-        // textWidget->setPage(page);
-
-        auto* layout = new Layout();
-        auto* layout2 = new Layout();
-        layout2->addWidget(textWidget2, Point(20, 0));
-        layout->addWidget(textWidget, Point(20, 0));
-
-        page->addLayout(layout);
-        page2->addLayout(layout2);
+        window->addPage(page);
 
         page->clear();
-        page2->clear();
-
-        window->setPage(1);
-
-        // window->clear();
-
         window->show();
         window->flash();
 
@@ -78,13 +121,14 @@ void oled_test()
 
             // textWidget->updateText("Hello Monoliths");
 
-            window->setPage(1);
-            window->flash();
-            vTaskDelay(200);
-
-            window->setPage(0);
-            window->flash();
-            textWidget->updateText("Test From Oled");
+            //            window->setPage(1);
+            //            window->flash();
+            //            vTaskDelay(200);
+            //
+            //            window->setPage(0);
+            //            window->flash();
+            //
+            //            textWidget->updateText("Test From Oled");
             // vTaskDelay(200);
         }
 

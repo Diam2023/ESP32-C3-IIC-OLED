@@ -13,25 +13,24 @@ class Point;
 class Point
 {
 private:
-    uint8_t x;
-    uint8_t y;
+    uint8_t m_x;
+    uint8_t m_y;
 
 public:
     uint8_t getX() const
     {
-        return this->x;
+        return this->m_x;
     }
     uint8_t getY() const
     {
-        return this->y;
+        return this->m_y;
     }
 
-    Point() : x(0), y(0){};
+    Point() : m_x(0), m_y(0){};
 
+    Point(const uint8_t x, const uint8_t y) : m_x(x), m_y(y){};
 
-    Point(const uint8_t x, const uint8_t y) : x(x), y(y) {};
-
-    Point(const Point& point) : Point(point.x, point.y) {};
+    Point(const Point& point) : Point(point.m_x, point.m_y){};
 
     ~Point() = default;
 };
@@ -39,45 +38,53 @@ public:
 class Rectangle
 {
 private:
-    oled::Point start;
-    oled::Point end;
+    oled::Point m_start;
+    oled::Point m_end;
 
 public:
-    Rectangle()
-    {
-    }
+    Rectangle(Point&&, Point&&);
+    Rectangle(const Point&, const Point&);
 
-    Rectangle(const Point&&, const Point&&);
-
-    ~Rectangle()
-    {
-    }
+    Rectangle() : m_start({0, 0}), m_end({0, 0}){};
+    ~Rectangle() = default;
 };
 
-inline Rectangle::Rectangle(const Point&& start_, const Point&& end_)
-    : start(start_), end(end_)
+inline Rectangle::Rectangle(Point&& start, Point&& end)
+    : m_start(start), m_end(end)
+{
+}
+
+inline Rectangle::Rectangle(const Point& start, const Point& end)
+    : m_start(start), m_end(end)
 {
 }
 
 class Size
 {
 private:
-    uint8_t width;
-    uint8_t height;
+    uint8_t m_width;
+    uint8_t m_height;
 
 public:
-    Size() : width(0), height(0)
+    Size() : m_width(0), m_height(0)
     {
     }
 
     Size(const uint8_t& width, const uint8_t& height)
-        : width(width), height(height)
+        : m_width(width), m_height(height)
     {
     }
 
-    ~Size()
+    ~Size() = default;
+
+    inline uint8_t getWidth() const
     {
-    }
+        return m_width;
+    };
+    inline uint8_t getHeight() const
+    {
+        return m_height;
+    };
 };
 
 enum OLED_FONT_SIZE

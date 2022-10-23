@@ -2,10 +2,10 @@
 
 #include "window.h"
 
-oled::Page::Page(const OledDevice *device)
+oled::Page::Page(const OledDevice *pDevice)
 {
-    this->m_pDataMap = new DataMap(device->device_info->max_page,
-                                device->device_info->max_line_seg);
+    this->m_pDataMap = new DataMap(pDevice->cm_pDeviceInfo->max_page,
+                                   pDevice->cm_pDeviceInfo->max_line_seg);
 }
 
 oled::Page::Page(uint8_t page, uint8_t line_seg)
@@ -23,10 +23,10 @@ oled::Page::~Page()
     delete this->m_pDataMap;
 }
 
-void oled::Page::addLayout(Layout *layout_)
+void oled::Page::addLayout(Layout *pLayout)
 {
-    layout_->setPage(this);
-    this->m_layouts.emplace_back(layout_);
+    pLayout->setPage(this);
+    this->m_layouts.emplace_back(pLayout);
 }
 
 oled::DataMap *oled::Page::dataMap()
@@ -58,19 +58,27 @@ void oled::Page::flash()
     this->window()->flash(this);
 }
 
-void oled::Page::flash(oled::Widget *widget_)
+void oled::Page::flash(oled::Widget *pWidget)
 {
     for (auto layout : this->m_layouts)
     {
-        layout->flash(widget_);
+        layout->flash(pWidget);
     }
 
     this->window()->flash(this);
 }
 
-void oled::Page::bindWindow(oled::Window *window_)
+void oled::Page::bindWindow(const oled::Window *pWindow)
 {
-    this->m_pWindow = window_;
+    this->m_pWindow = const_cast<Window *>(pWindow);
+
+    // Fix Forget Bind DataMap.
+    if (this->m_pDataMap == nullptr)
+    {
+        this->m_pDataMap =
+            new DataMap(pWindow->getOledDevice()->cm_pDeviceInfo->max_page,
+                        pWindow->getOledDevice()->cm_pDeviceInfo->max_line_seg);
+    }
 }
 
 oled::Window *oled::Page::window()
@@ -78,3 +86,10 @@ oled::Window *oled::Page::window()
     return this->m_pWindow;
 }
 
+oled::Page::Page(const oled::Window *pWindow)
+{
+    this->m_pWindow = const_cast<Window *>(pWindow);
+    this->m_pDataMap =
+        new DataMap(pWindow->getOledDevice()->cm_pDeviceInfo->max_page,
+                    pWindow->getOledDevice()->cm_pDeviceInfo->max_line_seg);
+}

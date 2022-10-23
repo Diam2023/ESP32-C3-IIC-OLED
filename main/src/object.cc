@@ -4,13 +4,12 @@
 
 #include "object.h"
 
-
 const std::string&& oled::Object::getObjectName() const
 {
     return std::move(this->m_ObjectName);
 }
 
-const char * oled::Object::getObjectNameCStyle() const
+const char* oled::Object::getObjectNameCStyle() const
 {
     return this->m_ObjectName.c_str();
 }

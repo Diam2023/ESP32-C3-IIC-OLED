@@ -4,7 +4,7 @@
 
 oled::TextWidget::TextWidget() : Widget()
 {
-    auto *model_ = new Model<std::string>();
+    auto* model_ = new Model<std::string>();
     model_->bindWidget(this);
     this->bindModel(dynamic_cast<Object*>(model_));
 
@@ -13,7 +13,7 @@ oled::TextWidget::TextWidget() : Widget()
 
 oled::TextWidget::TextWidget(std::string&& text_) : Widget()
 {
-    auto *model_ = new Model<std::string>();
+    auto* model_ = new Model<std::string>();
     model_->bindWidget(this);
     this->bindModel(dynamic_cast<Object*>(model_));
 
@@ -23,7 +23,7 @@ oled::TextWidget::TextWidget(std::string&& text_) : Widget()
 oled::TextWidget::TextWidget(std::string&& text_, oled::Page* page_)
 {
     this->setPage(page_);
-    auto *model_ = new Model<std::string>();
+    auto* model_ = new Model<std::string>();
     model_->bindWidget(this);
     this->bindModel(dynamic_cast<Object*>(model_));
     this->setText(std::move(text_));
@@ -31,7 +31,8 @@ oled::TextWidget::TextWidget(std::string&& text_, oled::Page* page_)
 
 oled::TextWidget::TextWidget(std::string&& text_,
                              oled::Object* model_,
-                             oled::Page* page_) : Widget(model_, page_)
+                             oled::Page* page_)
+    : Widget(model_, page_)
 {
     ESP_ERROR_CHECK(this->model() == nullptr);
     this->model()->setData(text_);
@@ -64,7 +65,6 @@ oled::Model<std::string>* oled::TextWidget::model()
     return dynamic_cast<oled::Model<std::string>*>(this->m_pModel);
 }
 
-
 std::string&& oled::TextWidget::text()
 {
     // keep to lvalue
@@ -82,6 +82,3 @@ void oled::TextWidget::updateText(const std::string&& text_)
     ESP_ERROR_CHECK(this->model() == nullptr);
     this->model()->updateData(text_);
 }
-
-
-
