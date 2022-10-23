@@ -5,9 +5,7 @@
 #ifndef ESP32_C3_IIC_OLED_ABSOLUTELY_LAYOUT_H
 #define ESP32_C3_IIC_OLED_ABSOLUTELY_LAYOUT_H
 
-
 #include "layout.h"
-
 
 namespace oled
 {
@@ -15,13 +13,12 @@ namespace oled
 class AbsolutelyLayout : public Layout
 {
 private:
-    void addWidget(Widget *);
-
-    void removeWidget(Widget *);
 public:
-    AbsolutelyLayout();
+
+    void addWidget(Widget *pWidget, Point &&pPoint) override;
+//    AbsolutelyLayout();
 };
 
-}
+}    // namespace oled
 
 #endif    // ESP32_C3_IIC_OLED_ABSOLUTELY_LAYOUT_H

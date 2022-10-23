@@ -5,7 +5,7 @@
 #include "data_map.h"
 #include "paint.h"
 #include <memory>
-//#include "model.h"
+// #include "model.h"
 
 namespace oled
 {
@@ -24,9 +24,9 @@ protected:
     Object* m_pModel = nullptr;
 
     Page* m_pPage = nullptr;
-public:
 
-    void bindModel(Object*);
+public:
+    void bindModel(const Object* pModel);
 
     void setPage(Page*);
 
@@ -35,12 +35,13 @@ public:
     /**
      * Call By Model.
      */
-    virtual void modelUpdated() {};
+    virtual void modelUpdated(){};
 
     virtual void flash(DataMap*, const Point&){};
 
     Widget() = default;
-    explicit Widget(Object* model_, Page* page_) : m_pModel(model_), m_pPage(page_) {};
+    explicit Widget(Object* pModel, Page* pPage)
+        : m_pModel(pModel), m_pPage(pPage){};
 
     ~Widget() = default;
 };

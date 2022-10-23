@@ -3,39 +3,36 @@
 #include <cstring>
 #include "oled_font.h"
 
-void oled::Paint::full(DataMap* data_mapping, const uint8_t data)
+void oled::Paint::full(DataMap* pDataMapping, const uint8_t data)
 {
-    // data_mapping->setData(data);
-    for (size_t i = 0; i < data_mapping->getPage(); i++)
+    for (size_t i = 0; i < pDataMapping->getPage(); i++)
     {
-        this->full_page(data_mapping, i, data);
-        // data_mapping->setData(data);
-
-        /* code */
+        oled::Paint::full_page(pDataMapping, i, data);
     }
 }
 
-void oled::Paint::full_page(DataMap* data_mapping,
+void oled::Paint::full_page(DataMap* pDataMapping,
                             const uint8_t page,
                             const uint8_t data)
 {
-    data_mapping->setPageData(page, data);
-    data_mapping->setData(page, 0, 0x40);
+    pDataMapping->setPageData(page, data);
+    pDataMapping->setData(page, 0, 0x40);
 }
 
-void oled::Paint::clear(DataMap* data_mapping)
+void oled::Paint::clear(DataMap* pDataMapping)
 {
-    this->full(data_mapping, 0x00);
+    this->full(pDataMapping, 0x00);
 }
 
-void oled::Paint::writeString(DataMap* data_mapping,
+void oled::Paint::writeString(DataMap* pDataMapping,
                               uint8_t x,
                               uint8_t y,
                               const std::string&& string,
-                              const OLED_FONT_SIZE font_size)
+                              const OLED_FONT_SIZE fontSize)
 {
-    uint8_t c = 0, j = 0;
-    if (font_size == OLED_FONT_SIZE::OLED_FONT_SIZE_16)
+    uint8_t c;
+    uint8_t j = 0;
+    if (fontSize == OLED_FONT_SIZE::OLED_FONT_SIZE_16)
     {
         while (string[j] != '\0')
         {
@@ -46,10 +43,10 @@ void oled::Paint::writeString(DataMap* data_mapping,
                 y += 2;
             }
 
-            memmove(data_mapping->getDataMapping()[y] + x + 1,
+            memmove(pDataMapping->getDataMapping()[y] + x + 1,
                     oled::font::F8X16 + c * 16,
                     8);
-            memmove(data_mapping->getDataMapping()[y + 1] + x + 1,
+            memmove(pDataMapping->getDataMapping()[y + 1] + x + 1,
                     oled::font::F8X16 + c * 16 + 8,
                     8);
             // std::copy(std::begin(font::F8X16) + c * 16,
@@ -73,7 +70,7 @@ void oled::Paint::writeString(DataMap* data_mapping,
                 x = 0;
                 y++;
             }
-            memmove(data_mapping->getDataMapping()[y] + x + 1,
+            memmove(pDataMapping->getDataMapping()[y] + x + 1,
                     font::F6x8[c] + 1,
                     5);
             // std::copy(std::begin(font::F6x8[c]) + 1,
@@ -85,37 +82,37 @@ void oled::Paint::writeString(DataMap* data_mapping,
     }
 }
 
-void oled::Paint::writeImage(DataMap* data_mapping,
+void oled::Paint::writeImage(DataMap* pDataMapping,
                              uint8_t x,
                              uint8_t y,
                              const uint8_t* begin,
-                             const uint8_t split_size,
+                             const uint8_t splitSize,
                              const uint8_t length)
 {
-    for (size_t line = 0; line < (length / split_size); line++)
+    for (size_t line = 0; line < (length / splitSize); line++)
     {
-        memmove(data_mapping->getDataMapping()[y + line] + x + 1,
-                begin + (line * split_size),
-                split_size);
+        memmove(pDataMapping->getDataMapping()[y + line] + x + 1,
+                begin + (line * splitSize),
+                splitSize);
         // std::copy(begin + (line * split_size),
         //           begin + ((line + 1) * split_size),
         //           std::begin(data_mapping[y + line]) + x + 1);
     }
 }
 
-void oled::Paint::writeImage(DataMap* data_mapping,
+void oled::Paint::writeImage(DataMap* pDataMapping,
                              uint8_t x,
                              uint8_t y,
                              const uint8_t index,
-                             const OLED_IMAGE_SIZE image_size)
+                             const OLED_IMAGE_SIZE imageSize)
 {
-    if (image_size == OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_32)
+    if (imageSize == OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_32)
     {
-        memmove(data_mapping->getDataMapping()[y] + x + 1,
+        memmove(pDataMapping->getDataMapping()[y] + x + 1,
                 font::H_Imag[index * 2],
                 16);
 
-        memmove(data_mapping->getDataMapping()[y + 1] + x + 1,
+        memmove(pDataMapping->getDataMapping()[y + 1] + x + 1,
                 font::H_Imag[index * 2 + 1],
                 16);
         // std::copy(std::begin(font::H_Imag[index * 2]),
@@ -126,18 +123,18 @@ void oled::Paint::writeImage(DataMap* data_mapping,
         //           std::begin(font::H_Imag[index * 2 + 1]) + 16,
         //           std::begin(data_mapping[y + 1]) + x + 1);
     }
-    else if (image_size == OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_8)
+    else if (imageSize == OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_8)
     {
-        memmove(data_mapping->getDataMapping()[y] + x + 1,
+        memmove(pDataMapping->getDataMapping()[y] + x + 1,
                 font::H_Imag_8[index],
                 8);
         // std::copy(std::begin(font::H_Imag_8[index]),
         //           std::begin(font::H_Imag_8[index]) + 8,
         //           std::begin(data_mapping[y]) + x + 1);
     }
-    else if (image_size == OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_4)
+    else if (imageSize == OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_4)
     {
-        memmove(data_mapping->getDataMapping()[y] + x + 1,
+        memmove(pDataMapping->getDataMapping()[y] + x + 1,
                 font::H_Imag_4[index],
                 4);
         // std::copy(std::begin(font::H_Imag_4[index]),
@@ -146,10 +143,6 @@ void oled::Paint::writeImage(DataMap* data_mapping,
     }
 }
 
-oled::Paint::Paint()
-{
-}
+oled::Paint::Paint() = default;
 
-oled::Paint::~Paint()
-{
-}
+oled::Paint::~Paint() = default;

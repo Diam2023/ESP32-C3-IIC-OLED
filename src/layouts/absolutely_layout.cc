@@ -4,7 +4,9 @@
 
 #include "absolutely_layout.h"
 
-oled::AbsolutelyLayout::AbsolutelyLayout() : Layout()
-{
 
+void oled::AbsolutelyLayout::addWidget(oled::Widget *pWidget,
+                                       oled::Point &&pPoint)
+{
+    Layout::addWidget(pWidget, std::move(pPoint));
 }

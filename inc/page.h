@@ -15,19 +15,19 @@ class Window;
 
 class Page : public Object
 {
-OLED_OBJECT
+    OLED_OBJECT
 
 private:
     DataMap *m_pDataMap;
 
     std::vector<Layout *> m_layouts;
 
-    Window* m_pWindow{};
+    Window *m_pWindow{};
+
 public:
+    void bindWindow(const Window *);
 
-    void bindWindow(Window*);
-
-    Window* window();
+    Window *window();
 
     DataMap *dataMap();
 
@@ -41,10 +41,11 @@ public:
 
     void flash();
 
-    void flash(Widget*);
+    void flash(Widget *);
 
-    Page() : m_pDataMap(nullptr) {} ;
-    explicit Page(const OledDevice *device);
+    Page() : m_pDataMap(nullptr){};
+    explicit Page(const OledDevice *pDevice);
+    explicit Page(const Window *pWindow);
 
     Page(uint8_t page, uint8_t line_seg);
 

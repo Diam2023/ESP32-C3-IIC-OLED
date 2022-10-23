@@ -19,22 +19,26 @@ class Model : public Object
 protected:
     oled::Widget* m_pWidget = nullptr;
 
-    T m_data {};
-public:
+    T m_data{};
 
-    void bindWidget(oled::Widget* widget_) {
+public:
+    void bindWidget(oled::Widget* widget_)
+    {
         this->m_pWidget = widget_;
     };
 
-    oled::Widget* widget() {
+    oled::Widget* widget()
+    {
         return this->widget();
     };
 
-    virtual T&& data() {
+    virtual T&& data()
+    {
         return std::move(m_data);
     }
 
-    virtual void setData(const T& data_) {
+    virtual void setData(const T& data_)
+    {
         this->m_data = data_;
     };
 
@@ -42,21 +46,24 @@ public:
      * It will call page modelUpdated
      * @param data_
      */
-    virtual void updateData(const T& data_) {
+    virtual void updateData(const T& data_)
+    {
         this->m_data = data_;
         if (this->m_pWidget != nullptr)
         {
             this->m_pWidget->modelUpdated();
-        } else {
+        }
+        else
+        {
             OLED_I("widget null");
         }
     };
 
-    explicit Model(oled::Widget* widget_) : m_pWidget(widget_) {};
-    Model() : m_pWidget(nullptr) {};
+    explicit Model(oled::Widget* widget_) : m_pWidget(widget_){};
+    Model() : m_pWidget(nullptr){};
     ~Model() = default;
 };
 
 }    // namespace oled
 
-#endif // ESP32_C3_IIC_OLED_INC_MODEL_H_
+#endif    // ESP32_C3_IIC_OLED_INC_MODEL_H_
