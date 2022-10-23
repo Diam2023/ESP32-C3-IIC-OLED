@@ -87,22 +87,6 @@ public:
     };
 };
 
-enum OLED_FONT_SIZE
-{
-    OLED_FONT_SIZE_6,
-    OLED_FONT_SIZE_16,
-};
-
-/**
- * @brief show on oled image.
- */
-enum OLED_IMAGE_SIZE
-{
-    OLED_IMAGE_SIZE_4,
-    OLED_IMAGE_SIZE_8,
-    OLED_IMAGE_SIZE_32
-};
-
 struct DeviceInfo
 {
     uint8_t max_page;
