@@ -31,16 +31,19 @@ void oled::Page::addLayout(Layout *pLayout)
 
 oled::DataMap *oled::Page::dataMap()
 {
+#ifdef DEBUG
+
     if (this->m_pDataMap == nullptr)
     {
         OLED_D("Return a null DataMap pointer!");
     }
+#endif
     return this->m_pDataMap;
 }
 
 void oled::Page::full(uint8_t data)
 {
-    paint.full(dataMap(), data);
+    oled::Paint::full(dataMap(), data);
 }
 
 void oled::Page::clear()

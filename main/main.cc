@@ -41,7 +41,7 @@ private:
     TextWidget *m_pTest2TextWidget{};
 
 public:
-    void updateTesttext(std::string &&data);
+    void updateTestText(std::string &&data);
 
     inline void init()
     {
