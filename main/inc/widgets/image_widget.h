@@ -1,0 +1,8 @@
+//
+// Created by monoliths on 10/24/22.
+//
+
+#ifndef ESP32_C3_IIC_OLED_IMAGE_WIDGET_H
+#define ESP32_C3_IIC_OLED_IMAGE_WIDGET_H
+
+#endif //ESP32_C3_IIC_OLED_IMAGE_WIDGET_H

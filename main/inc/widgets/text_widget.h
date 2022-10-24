@@ -10,13 +10,13 @@ namespace oled {
         OLED_FONT_SIZE m_fontSize;
 
     public:
-        void setFontSize(OLED_FONT_SIZE oledFontSize);
+        void setFontSize(OLED_FONT_SIZE fontSize);
 
         void setModel(Model<std::string> *);
 
         Model<std::string> *model();
 
-        void setText(const std::string &&text_);
+        void setText(const std::string &&text);
 
         void updateText(const std::string &&);
 
@@ -26,11 +26,11 @@ namespace oled {
 
         void modelUpdated() override;
 
-        explicit TextWidget(std::string &&text, OLED_FONT_SIZE oledFontSize = OLED_FONT_SIZE_6);
+        explicit TextWidget(std::string &&text, OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
 
-        explicit TextWidget(std::string &&text, Page *, OLED_FONT_SIZE oledFontSize = OLED_FONT_SIZE_6);
+        explicit TextWidget(std::string &&text, Page *, OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
 
-        explicit TextWidget(std::string &&text, Object *, Page *, OLED_FONT_SIZE oledFontSize = OLED_FONT_SIZE_6);
+        explicit TextWidget(std::string &&text, Object *, Page *, OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
 
         explicit TextWidget(Object *model, Page *page) : Widget(model, page), m_fontSize(OLED_FONT_SIZE_6) {};
 
