@@ -103,7 +103,7 @@ void oled::Paint::writeImage(DataMap* pDataMapping,
 void oled::Paint::writeImage(DataMap* pDataMapping,
                              uint8_t x,
                              uint8_t y,
-                             const uint8_t index,
+                             const uint32_t index,
                              const OLED_IMAGE_SIZE imageSize)
 {
     if (imageSize == OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_32)
