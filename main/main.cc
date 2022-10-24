@@ -18,15 +18,14 @@
  */
 #include "esp_log.h"
 #include "oled_device.h"
-#include <memory>
 
 #include "types.h"
 #include "page.h"
 #include "widget.h"
 #include "text_widget.h"
-#include "model.h"
 #include "window.h"
 #include "layout.h"
+#include "image_widget.h"
 
 static const char *TAG_MAIN = "oled test main";
 
@@ -39,6 +38,7 @@ class MyPage : public Page
 private:
     TextWidget *m_pTestTextWidget{};
     TextWidget *m_pTest2TextWidget{};
+    ImageWidget *m_pImageTextWidget{};
 
 public:
     void updateTestText(std::string &&data);
@@ -47,15 +47,18 @@ public:
     {
         auto ly = new Layout();
 
-        m_pTestTextWidget = new TextWidget("1", this);
+        m_pTestTextWidget = new TextWidget("1", this, oled::OLED_FONT_SIZE_16);
 
         m_pTest2TextWidget = new TextWidget("2", this);
+        m_pImageTextWidget = new ImageWidget(1, this);
 
         m_pTest2TextWidget->setPage(this);
         m_pTestTextWidget->setPage(this);
+        m_pImageTextWidget->setPage(this);
 
         ly->addWidget(m_pTestTextWidget, Point(0, 1));
-        ly->addWidget(m_pTest2TextWidget, Point(0, 2));
+        ly->addWidget(m_pTest2TextWidget, Point(0, 3));
+        ly->addWidget(m_pImageTextWidget, Point(30, 5));
 
         ly->setPage(this);
 
