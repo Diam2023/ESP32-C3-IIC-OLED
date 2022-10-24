@@ -3,33 +3,40 @@
 #include "widget.h"
 #include "model.h"
 
-namespace oled
-{
+namespace oled {
 
-class TextWidget : public Widget
-{
-private:
+    class TextWidget : public Widget {
+    private:
+        OLED_FONT_SIZE m_fontSize;
 
-public:
-    void setModel(Model<std::string>*);
+    public:
+        void setFontSize(OLED_FONT_SIZE oledFontSize);
 
-    Model<std::string>* model();
+        void setModel(Model<std::string> *);
 
-    void setText(const std::string &&text_);
-    void updateText(const std::string&&);
+        Model<std::string> *model();
 
-    std::string&& text();
+        void setText(const std::string &&text_);
 
-    void flash(DataMap *, const Point &) override;
+        void updateText(const std::string &&);
 
-    void modelUpdated() override;
+        std::string &&text();
 
-    explicit TextWidget(std::string &&);
-    explicit TextWidget(std::string &&text_, Page*);
-    explicit TextWidget(std::string &&text_, Object*, Page*);
-    explicit TextWidget(Object* model_, Page* page_) : Widget(model_, page_) {};
-    TextWidget();
-    ~TextWidget() = default;
-};
+        void flash(DataMap *, const Point &) override;
+
+        void modelUpdated() override;
+
+        explicit TextWidget(std::string &&text, OLED_FONT_SIZE oledFontSize = OLED_FONT_SIZE_6);
+
+        explicit TextWidget(std::string &&text, Page *, OLED_FONT_SIZE oledFontSize = OLED_FONT_SIZE_6);
+
+        explicit TextWidget(std::string &&text, Object *, Page *, OLED_FONT_SIZE oledFontSize = OLED_FONT_SIZE_6);
+
+        explicit TextWidget(Object *model, Page *page) : Widget(model, page), m_fontSize(OLED_FONT_SIZE_6) {};
+
+        TextWidget();
+
+        ~TextWidget() = default;
+    };
 
 }    // namespace oled
