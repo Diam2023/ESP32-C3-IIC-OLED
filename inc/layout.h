@@ -53,7 +53,7 @@ public:
 
     explicit Layout(Page* pPage);
 
-    ~Layout() = default;
+    virtual ~Layout() = default;
 };
 
 }    // namespace oled
