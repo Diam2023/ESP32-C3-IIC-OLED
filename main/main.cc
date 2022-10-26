@@ -75,7 +75,11 @@ public:
         init();
     };
 
-    ~MyPage(){};
+    ~MyPage(){
+        delete m_pImageTextWidget;
+        delete m_pTest2TextWidget;
+        delete m_pTestTextWidget;
+    };
 };
 
 void oled_test()

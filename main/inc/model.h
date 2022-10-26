@@ -61,7 +61,7 @@ public:
 
     explicit Model(oled::Widget* widget_) : m_pWidget(widget_){};
     Model() : m_pWidget(nullptr){};
-    ~Model() = default;
+    virtual ~Model() = default;
 };
 
 }    // namespace oled

@@ -46,7 +46,7 @@ private:
 public:
     Object();
 
-    ~Object() = default;
+    virtual ~Object() = default;
 
     const std::string&& getObjectName() const;
     const char* getObjectNameCStyle() const;
