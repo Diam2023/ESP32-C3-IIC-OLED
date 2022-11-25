@@ -29,7 +29,6 @@ oled::TextWidget::TextWidget(oled::String &&text,
     this->setPage(page);
     auto *model_ = new Model<oled::String>();
     model_->bindWidget(this);
-    ESP_ERROR_CHECK(reinterpret_cast<Model<Object> *>(model_) == nullptr);
     this->bindModel(reinterpret_cast<Model<Object> *>(model_));
     this->setText(std::move(text));
 }
