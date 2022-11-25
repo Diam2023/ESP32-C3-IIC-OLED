@@ -2,47 +2,58 @@
 
 #include "page.h"
 
-oled::TextWidget::TextWidget() : Widget(), m_fontSize(OLED_FONT_SIZE_6) {
-    auto *model = new Model<std::string>();
+oled::TextWidget::TextWidget() : Widget(), m_fontSize(OLED_FONT_SIZE_6)
+{
+    auto *model = new Model<oled::String>();
     model->bindWidget(this);
-    this->bindModel(dynamic_cast<Object *>(model));
+    this->bindModel(reinterpret_cast<Model<Object> *>(model));
 
-    this->setText(this->getObjectName());
+    this->setText(static_cast<const oled::String &>(this->getObjectName()));
 }
 
-oled::TextWidget::TextWidget(std::string &&text, OLED_FONT_SIZE fontSize) : Widget(), m_fontSize(fontSize) {
-    auto *model_ = new Model<std::string>();
+oled::TextWidget::TextWidget(oled::String &&text, OLED_FONT_SIZE fontSize)
+    : Widget(), m_fontSize(fontSize)
+{
+    auto *model_ = new Model<oled::String>();
     model_->bindWidget(this);
-    this->bindModel(dynamic_cast<Object *>(model_));
+    this->bindModel(reinterpret_cast<Model<Object> *>(model_));
 
     this->setText(std::move(text));
 }
 
-oled::TextWidget::TextWidget(std::string &&text, oled::Page *page, OLED_FONT_SIZE fontSize)
-        : Widget(), m_fontSize(fontSize) {
+oled::TextWidget::TextWidget(oled::String &&text,
+                             oled::Page *page,
+                             OLED_FONT_SIZE fontSize)
+    : Widget(), m_fontSize(fontSize)
+{
     this->setPage(page);
-    auto *model_ = new Model<std::string>();
+    auto *model_ = new Model<oled::String>();
     model_->bindWidget(this);
-    this->bindModel(dynamic_cast<Object *>(model_));
+    ESP_ERROR_CHECK(reinterpret_cast<Model<Object> *>(model_) == nullptr);
+    this->bindModel(reinterpret_cast<Model<Object> *>(model_));
     this->setText(std::move(text));
 }
 
-oled::TextWidget::TextWidget(std::string &&text,
-                             oled::Object *model,
-                             oled::Page *page, OLED_FONT_SIZE fontSize)
-        : Widget(model, page), m_fontSize(fontSize) {
+oled::TextWidget::TextWidget(oled::String &&text,
+                             oled::Model<oled::String> *model,
+                             oled::Page *page,
+                             OLED_FONT_SIZE fontSize)
+    : Widget(model, page), m_fontSize(fontSize)
+{
     ESP_ERROR_CHECK(this->model() == nullptr);
     this->model()->setData(text);
 }
 
-void oled::TextWidget::modelUpdated() {
+void oled::TextWidget::modelUpdated()
+{
     ESP_ERROR_CHECK(this->page() == nullptr);
-
     // only flash this widget
-    this->page()->flash(this);
+    page()->flash(reinterpret_cast<oled::Widget *>(this));
+    //    this->page()->flash(this);
 }
 
-void oled::TextWidget::flash(DataMap *data_mapping, const Point &point) {
+void oled::TextWidget::flash(DataMap *data_mapping, const Point &point)
+{
     oled::Paint::writeString(data_mapping,
                              point.getX(),
                              point.getY(),
@@ -50,29 +61,56 @@ void oled::TextWidget::flash(DataMap *data_mapping, const Point &point) {
                              m_fontSize);
 }
 
-void oled::TextWidget::setModel(oled::Model<std::string> *model) {
-    this->bindModel(model);
+void oled::TextWidget::setModel(oled::Model<oled::String> *model)
+{
+    this->bindModel(reinterpret_cast<Model<Object> *>(model));
 }
 
-oled::Model<std::string> *oled::TextWidget::model() {
-    return dynamic_cast<oled::Model<std::string> *>(this->m_pModel);
+oled::Model<oled::String> *oled::TextWidget::model()
+{
+    ESP_ERROR_CHECK(this->m_pModel == nullptr);
+
+    auto result = reinterpret_cast<oled::Model<oled::String> *>(this->m_pModel);
+
+    ESP_ERROR_CHECK(result == nullptr);
+
+    return result;
 }
 
-std::string &&oled::TextWidget::text() {
+oled::String &&oled::TextWidget::text()
+{
     // keep to lvalue
     return std::move(this->model()->data());
 }
 
-void oled::TextWidget::setText(const std::string &&text) {
+void oled::TextWidget::setText(oled::String &&text)
+{
     ESP_ERROR_CHECK(this->model() == nullptr);
     this->model()->setData(text);
 }
 
-void oled::TextWidget::updateText(const std::string &&text) {
+void oled::TextWidget::setText(const oled::String &text)
+{
+    ESP_ERROR_CHECK(this->model() == nullptr);
+    this->model()->setData(text);
+}
+
+void oled::TextWidget::updateText(const oled::String &&text)
+{
     ESP_ERROR_CHECK(this->model() == nullptr);
     this->model()->updateData(text);
 }
 
-void oled::TextWidget::setFontSize(oled::OLED_FONT_SIZE oledFontSize) {
+void oled::TextWidget::setFontSize(oled::OLED_FONT_SIZE oledFontSize)
+{
     m_fontSize = oledFontSize;
+}
+
+oled::TextWidget::TextWidget(std::string &&text, oled::OLED_FONT_SIZE fontSize)
+{
+    auto *model_ = new Model<oled::String>();
+    model_->bindWidget(this);
+    this->bindModel(reinterpret_cast<Model<Object> *>(model_));
+
+    this->setText(static_cast<oled::String &&>(std::move(text)));
 }

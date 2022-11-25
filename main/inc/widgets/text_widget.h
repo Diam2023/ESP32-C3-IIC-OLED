@@ -3,40 +3,53 @@
 #include "widget.h"
 #include "model.h"
 
-namespace oled {
+#include "string_object.h"
 
-    class TextWidget : public Widget {
-    private:
-        OLED_FONT_SIZE m_fontSize;
+namespace oled
+{
 
-    public:
-        void setFontSize(OLED_FONT_SIZE fontSize);
+class TextWidget : public Widget
+{
+private:
+    OLED_FONT_SIZE m_fontSize;
 
-        void setModel(Model<std::string> *);
+public:
+    void setFontSize(OLED_FONT_SIZE fontSize);
 
-        Model<std::string> *model();
+    void setModel(Model<oled::String> *);
 
-        void setText(const std::string &&text);
+    Model<oled::String> *model();
 
-        void updateText(const std::string &&);
+    void setText(oled::String &&text);
 
-        std::string &&text();
+    void setText(const oled::String &text);
 
-        void flash(DataMap *, const Point &) override;
+    void updateText(const oled::String &&);
 
-        void modelUpdated() override;
+    oled::String &&text();
 
-        explicit TextWidget(std::string &&text, OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
+    void flash(DataMap *, const Point &) override;
 
-        explicit TextWidget(std::string &&text, Page *, OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
+    void modelUpdated() override;
 
-        explicit TextWidget(std::string &&text, Object *, Page *, OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
+    explicit TextWidget(oled::String &&text,
+                        OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
 
-        explicit TextWidget(Object *model, Page *page) : Widget(model, page), m_fontSize(OLED_FONT_SIZE_6) {};
+    explicit TextWidget(std::string &&text,
+                        OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
 
-        TextWidget();
+    explicit TextWidget(oled::String &&text,
+                        Page *,
+                        OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
 
-        ~TextWidget() = default;
-    };
+    explicit TextWidget(oled::String &&text,
+                        oled::Model<oled::String> *,
+                        Page *,
+                        OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
+
+    TextWidget();
+
+    ~TextWidget() override = default;
+};
 
 }    // namespace oled
