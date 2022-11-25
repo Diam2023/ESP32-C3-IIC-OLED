@@ -14,9 +14,25 @@ class AbsolutelyLayout : public Layout
 {
 private:
 public:
+    /**
+     * Add The Widget In Position pPoint
+     * @param pWidget widget
+     * @param pPoint position
+     */
+    void addWidget(Widget* pWidget, Point&& pPoint);
 
-    void addWidget(Widget *pWidget, Point &&pPoint) override;
-//    AbsolutelyLayout();
+    /**
+     * Remove Widget From Layout Container.
+     * @param pWidget widget
+     * @param pPoint position
+     */
+    void removeWidget(Widget* pWidget, Point&& pPoint);
+
+    AbsolutelyLayout();
+    explicit AbsolutelyLayout(Page* page) : Layout(page){};
+
+    ~AbsolutelyLayout() override = default;
+    ;
 };
 
 }    // namespace oled
