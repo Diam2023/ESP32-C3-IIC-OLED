@@ -26,6 +26,8 @@
 #include "window.h"
 #include "layout.h"
 #include "image_widget.h"
+#include "event.h"
+#include "absolutely_layout.h"
 
 static const char *TAG_MAIN = "oled test main";
 
@@ -45,12 +47,13 @@ public:
 
     inline void init()
     {
-        auto ly = new Layout();
+        auto ly = new AbsolutelyLayout();
 
-        m_pTestTextWidget = new TextWidget("1", this, oled::OLED_FONT_SIZE_16);
+        m_pTestTextWidget =
+            new TextWidget(ts("1"), this, oled::OLED_FONT_SIZE_16);
 
-        m_pTest2TextWidget = new TextWidget("2", this);
-        m_pImageTextWidget = new ImageWidget(1, this);
+        m_pTest2TextWidget = new TextWidget(ts("2"), this);
+        m_pImageTextWidget = new ImageWidget(4, this);
 
         m_pTest2TextWidget->setPage(this);
         m_pTestTextWidget->setPage(this);
@@ -75,68 +78,73 @@ public:
         init();
     };
 
-    ~MyPage(){
+    ~MyPage()
+    {
         delete m_pImageTextWidget;
         delete m_pTest2TextWidget;
         delete m_pTestTextWidget;
     };
 };
 
-void oled_test()
+[[noreturn]] void oled_test()
 {
     auto i2c_oled = new oled::OledDevice(5, 6, true);
 
-    esp_err_t err = i2c_oled->init(false, false);
+    esp_err_t err = i2c_oled->init(true, false);
 
     if (err == ESP_OK)
     {
-        auto window = new oled::Window(i2c_oled);
+        ESP_LOGD("test", "new window");
 
+        auto mpg = new MyPage(i2c_oled);
+
+        auto window = new oled::Window(i2c_oled);
+        //
         //        Page* page = window->createPage();
         //        Page* page2 = window->createPage();
-        //        auto* textWidget = new TextWidget("Test Test", page);
         //
-        //        auto* textWidget2 = new TextWidget("Test2", page2);
+        //        auto* textWidget = new TextWidget(ts("Test Test"), page);
+        //        auto* textWidget2 = new TextWidget(ts("Test2"), page2);
         //
-        //        // textWidget->setPage(page);
+        //        auto* layout = new AbsolutelyLayout(page);
+        //        auto* layout2 = new AbsolutelyLayout(page2);
         //
-        //        auto* layout = new Layout();
-        //        auto* layout2 = new Layout();
         //        layout2->addWidget(textWidget2, Point(20, 0));
         //        layout->addWidget(textWidget, Point(20, 0));
+        //        ESP_LOGD("test", "add widget");
         //
         //        page->addLayout(layout);
         //        page2->addLayout(layout2);
+        //        ESP_LOGD("test", "add layout");
         //
         //        page->clear();
         //        page2->clear();
-        auto page = new MyPage(window);
-        //        auto myPage = (MyPage*)page;
-        //        page->init();
 
-        // page->bindWindow(window);
+        mpg->bindWindow(window);
+        mpg->clear();
+        window->addPage(mpg);
+        mpg->init();
 
-        window->addPage(page);
+        // window->addPage(page);
 
-        page->clear();
+        //        page->clear();
+
         window->show();
         window->flash();
 
-        while (1)
+        while (true)
         {
             vTaskDelay(200);
-
-            // textWidget->updateText("Hello Monoliths");
-
+            //
             //            window->setPage(1);
             //            window->flash();
             //            vTaskDelay(200);
             //
             //            window->setPage(0);
             //            window->flash();
-            //
-            //            textWidget->updateText("Test From Oled");
-            // vTaskDelay(200);
+            //            //
+            //            textWidget->updateText(ts("Test From Oled"));
+            //            vTaskDelay(200);
         }
 
         // printf("%s buffer get: %d\n", __func__, esp_get_free_heap_size());
