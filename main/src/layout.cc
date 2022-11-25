@@ -19,21 +19,64 @@
 //     }
 // }
 
-void oled::Layout::addWidget(oled::Widget *pWidget, oled::Point &&pPoint)
+void oled::Layout::addWidget(oled::Widget *pWidget)
 {
     if (pWidget != nullptr)
     {
-        this->m_widgets.emplace_back(pWidget);
-        this->m_positions.emplace_back(pPoint);
+        m_widgets.emplace_back(pWidget);
     }
-#ifdef DEBUG
-
     else
     {
-        OLED_D("Try to add a null widget in Layout!");
+        OLED_W("Try to add a null widget in Layout!");
     }
-#endif
 }
+
+void oled::Layout::addPosition(oled::Point &&pPoint)
+{
+    m_positions.emplace_back(pPoint);
+}
+
+void oled::Layout::removeWidget(oled::Widget *pWidget)
+{
+    std::remove(m_widgets.begin(), m_widgets.end(), pWidget);
+
+    //     for (auto i = 0; i < m_widgets.size(); ++i)
+    //     {
+    //         if (m_widgets[i] == pWidget)
+    //         {
+    //             auto position = m_positions.at(i);
+    //
+    //             std::remove(m_positions.begin(), m_positions.end(),
+    //             position);
+    //
+    //         }
+    //     }
+
+    // m_positions.at(index);
+
+    // std::remove(m_positions.begin(), m_positions.end(),
+    //     m_positions.at(index);
+}
+
+void oled::Layout::removePosition(oled::Point &&point)
+{
+    //    for (auto i = 0; i < m_positions.size(); ++i)
+    //    {
+    //        if (m_positions[i] == point)
+    //        {
+    //            auto position = m_positions.at(i);
+
+    std::remove_if(m_positions.begin(),
+                   m_positions.end(),
+                   [&](const auto &item) -> bool { return item == point; });
+    //        }
+    //    }
+}
+
+// void oled::Layout::removeWidget(oled::Widget *pWidget)
+//{
+//
+// }
 
 int oled::Layout::indexOfWidget(const oled::Widget *pWidget)
 {
@@ -81,13 +124,10 @@ void oled::Layout::flash(const oled::Widget *pWidget)
 
 void oled::Layout::setPage(oled::Page *pPage)
 {
-#ifdef DEBUG
-
     if (pPage == nullptr)
     {
-        OLED_D("Try To set a nullptr for page")
+        OLED_W("Try To set a nullptr for page")
     }
-#endif
     this->m_pPage = pPage;
     for (auto widget : this->m_widgets)
     {
@@ -110,30 +150,6 @@ oled::Layout::Layout(oled::Page *pPage) : m_pPage(pPage)
 {
 }
 
-void oled::Layout::removeWidget(oled::Widget *pWidget)
+oled::Layout::Layout() : m_widgets(), m_pPage()
 {
 }
-
-// void oled::Layout::removeWidget(oled::Widget *pWidget)
-//{
-//     std::remove(m_widgets.begin(), m_widgets.end(), pWidget);
-//
-//     for (auto i = 0; i < m_widgets.size(); ++i)
-//     {
-//         if (m_widgets[i] == pWidget)
-//         {
-//             auto position = m_positions.at(i);
-//
-//             std::remove(m_positions.begin(), m_positions.end(), position);
-//
-//         }
-//     }
-//
-//
-//
-//     // m_positions.at(index);
-//
-//
-//     // std::remove(m_positions.begin(), m_positions.end(),
-//     m_positions.at(index));
-// }

@@ -19,7 +19,7 @@ class Layout : public Object
     OLED_OBJECT
 protected:
     /**
-     * widget
+     * widget EveryThing
      */
     std::vector<Widget*> m_widgets;
 
@@ -34,9 +34,17 @@ protected:
     Page* m_pPage;
 
 public:
-    virtual void addWidget(Widget* pWidget, Point&& pPoint);
+    //    virtual void addWidget(Widget<Object>* pWidget, Point&& pPoint);
 
-    virtual void removeWidget(Widget* pWidget);
+    /**
+     * Remove
+     * @param pWidget
+     */
+    void addWidget(Widget* pWidget);
+    void addPosition(Point&& pPoint);
+
+    void removeWidget(Widget* pWidget);
+    void removePosition(Point&& pPoint);
 
     void setPage(Page* pPoint);
 
@@ -49,11 +57,11 @@ public:
     void flash();
     void flash(const Widget* pWidget);
 
-    Layout() : m_widgets(), m_pPage(){};
+    Layout();;
 
     explicit Layout(Page* pPage);
 
-    virtual ~Layout() = default;
+    ~Layout() override = default;
 };
 
 }    // namespace oled

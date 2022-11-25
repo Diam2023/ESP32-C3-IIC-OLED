@@ -5,13 +5,15 @@
 #include "data_map.h"
 #include "paint.h"
 #include <memory>
-// #include "model.h"
 
 namespace oled
 {
 
 class Layout;
 class Page;
+
+template <typename M>
+class Model;
 
 /**
  * Abstract Widget
@@ -21,12 +23,23 @@ class Widget : public Object
     OLED_OBJECT
 protected:
     // Widget Model
-    Object* m_pModel = nullptr;
+    Model<Object>* m_pModel = nullptr;
 
     Page* m_pPage = nullptr;
 
 public:
-    void bindModel(const Object* pModel);
+    template <typename T>
+    Model<T>* getModel();
+
+//    template <typename T>
+//    void bindModel(const Model<T>*);
+//
+//    template <typename T>
+//    void bindModel(Model<T>* const);
+
+//    template <typename T>
+//    void bindModel(Model<T>*);
+    void bindModel(Model<Object>*);
 
     void setPage(Page*);
 
@@ -40,10 +53,12 @@ public:
     virtual void flash(DataMap*, const Point&){};
 
     Widget() = default;
-    explicit Widget(Object* pModel, Page* pPage)
-        : m_pModel(pModel), m_pPage(pPage){};
 
-    ~Widget() = default;
+    template <typename T>
+    explicit Widget(Model<T>* pModel, Page* pPage)
+        : m_pModel(reinterpret_cast<Model<Object>*>(pModel)), m_pPage(pPage){};
+
+    ~Widget() override = default;
 };
 
 }    // namespace oled

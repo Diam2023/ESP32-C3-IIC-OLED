@@ -27,15 +27,13 @@ void oled::Window::addPage(Page* pPage)
     if (pPage != nullptr)
     {
         this->pages().push_back(pPage);
+
+        OLED_D("window add page %d", this->pages().size());
     }
-#ifdef DEBUG
     else
     {
-        ESP_LOGD("Debug", "debug message");
-        ESP_LOGI(getObjectNameCStyle(), "info message");
-        OLED_D("Try To add a nullptr to pages");
+        OLED_W("Try To add a nullptr to pages");
     }
-#endif
 }
 
 oled::Page* oled::Window::createPage()
@@ -48,19 +46,18 @@ oled::Page* oled::Window::createPage()
 
 void oled::Window::show()
 {
+    OLED_D("showTag pages size%d", this->pages().size());
+
     if (!this->m_pages.empty())
     {
         auto page = this->pages().at(this->m_nowPage);
         page->flash();
         //        this->getOledDevice()->flash(page->dataMap());
     }
-#ifdef DEBUG
-
     else
     {
-        OLED_D("page is empty!");
+        OLED_W("page is empty!");
     }
-#endif
 }
 
 void oled::Window::flash(const Page* pPage)
@@ -75,18 +72,18 @@ void oled::Window::flash(const Page* pPage)
 
 void oled::Window::flash()
 {
+    OLED_D("flashTag pages size%d", this->pages().size());
+
     if (!this->m_pages.empty())
     {
         auto page = this->pages().at(this->m_nowPage);
         page->flash();
         //        this->getOledDevice()->flash(page->dataMap());
     }
-#ifdef DEBUG
     else
     {
-        OLED_D("page is empty!");
+        OLED_W("page is empty!");
     }
-#endif
 }
 
 void oled::Window::deletePage(const uint8_t index)
