@@ -175,7 +175,7 @@ void oled::Paint::offset(oled::DataMap* pDataMapping,
                     width);
         }
 
-        for (int i = 0; i < height; i++)
+        for (int i = 0; i < (height - offset); i++)
         {
             memmove(pDataMapping->getDataMapping()[y + offset + i] + x,
                     tempData[i] + 0,
@@ -185,6 +185,66 @@ void oled::Paint::offset(oled::DataMap* pDataMapping,
         for (int y_ = y; y_ < y + offset; y_++)
         {
             memset(pDataMapping->getDataMapping()[y_] + x, 0, width);
+        }
+    }
+}
+
+void oled::Paint::offsetLoop(oled::DataMap* pDataMapping,
+                             uint8_t x,
+                             uint8_t y,
+                             uint8_t width,
+                             uint8_t height,
+                             int16_t offset,
+                             oled::OLED_OFFSET_DIRECTION direction)
+{
+    // TODO Complete offset revers
+    // USE tempData To Save Da
+    uint8_t tempData[height][width];
+
+    if (direction == oled::OLED_OFFSET_HORIZONTAL)
+    {
+        for (int16_t i = 0; i < height; i++)
+        {
+            memmove(tempData[i] + 0,
+                    pDataMapping->getDataMapping()[y + i] + x + 1,
+                    width);
+        }
+
+        for (int i = 0; i < height; i++)
+        {
+            memmove(pDataMapping->getDataMapping()[y + i] + x + offset + 1,
+                    tempData[i] + 0,
+                    width - offset);
+        }
+
+        for (int i = 0; i < height; i++)
+        {
+            memmove(pDataMapping->getDataMapping()[y + i] + x + 1,
+                    tempData[i] + width - offset,
+                    offset);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < height; i++)
+        {
+            memmove(tempData[i] + 0,
+                    pDataMapping->getDataMapping()[y + i] + x,
+                    width);
+        }
+
+        for (int i = 0; i < (height - offset); i++)
+        {
+            memmove(pDataMapping->getDataMapping()[y + offset + i] + x,
+                    tempData[i] + 0,
+                    width);
+        }
+
+        for (int i = 0; i < offset; i++)
+        {
+            memmove(pDataMapping->getDataMapping()[i + y] + x,
+                    tempData[height - offset + i] + 0,
+                    width);
         }
     }
 }
