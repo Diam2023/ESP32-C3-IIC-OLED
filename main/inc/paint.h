@@ -24,6 +24,15 @@ namespace oled {
         OLED_IMAGE_SIZE_32
     };
 
+    /**
+     * Offset Size
+     */
+    enum OLED_OFFSET_DIRECTION
+    {
+        OLED_OFFSET_HORIZONTAL,
+        OLED_OFFSET_VERTICAL
+    };
+
     class Paint {
     private:
         // /**
@@ -69,6 +78,10 @@ namespace oled {
          * @brief  set screen to 0x00
          */
         void clear(DataMap *);
+
+        static void offset(DataMap *, uint8_t x, uint8_t y, uint8_t width, uint8_t height, int16_t offset, OLED_OFFSET_DIRECTION direction);
+
+        static void offsetLoop(DataMap *, uint8_t x, uint8_t y, uint8_t width, uint8_t height, int16_t offset, OLED_OFFSET_DIRECTION direction);
 
         // /**
         //  * @brief move pointer to position

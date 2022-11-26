@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include "oled_font.h"
+#include "esp_log.h"
 
 void oled::Paint::full(DataMap* pDataMapping, const uint8_t data)
 {
@@ -140,6 +141,51 @@ void oled::Paint::writeImage(DataMap* pDataMapping,
         // std::copy(std::begin(font::H_Imag_4[index]),
         //           std::begin(font::H_Imag_4[index]) + 4,
         //           std::begin(data_mapping[y]) + x + 1);
+    }
+}
+
+void oled::Paint::offset(oled::DataMap* pDataMapping,
+                         uint8_t x,
+                         uint8_t y,
+                         uint8_t width,
+                         uint8_t height,
+                         int16_t offset,
+                         oled::OLED_OFFSET_DIRECTION direction)
+{
+    //    pDataMapping
+    if (direction == oled::OLED_OFFSET_HORIZONTAL)
+    {
+        // height Must bigger than zero
+        for (int16_t y_ = y; y_ <= (y + height); y_++)
+        {
+            memmove(pDataMapping->getDataMapping()[y_] + x + 1 + offset,
+                    pDataMapping->getDataMapping()[y_] + x + 1,
+                    width - offset);
+
+            memset(pDataMapping->getDataMapping()[y_] + x + 1, 0, offset);
+        }
+    }
+    else
+    {
+        uint8_t tempData[height][width];
+        for (int i = 0; i < height; i++)
+        {
+            memmove(tempData[i] + 0,
+                    pDataMapping->getDataMapping()[y + i] + x,
+                    width);
+        }
+
+        for (int i = 0; i < height; i++)
+        {
+            memmove(pDataMapping->getDataMapping()[y + offset + i] + x,
+                    tempData[i] + 0,
+                    width);
+        }
+
+        for (int y_ = y; y_ < y + offset; y_++)
+        {
+            memset(pDataMapping->getDataMapping()[y_] + x, 0, width);
+        }
     }
 }
 

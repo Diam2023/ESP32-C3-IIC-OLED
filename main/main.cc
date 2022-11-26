@@ -29,6 +29,8 @@
 #include "event.h"
 #include "absolutely_layout.h"
 
+#include "graph_widget.h"
+
 static const char *TAG_MAIN = "oled test main";
 
 using namespace oled;
@@ -42,41 +44,55 @@ private:
     TextWidget *m_pTest2TextWidget{};
     ImageWidget *m_pImageTextWidget{};
 
+    ImageWidget *m_pImage2TextWidget{};
+
 public:
     void updateTestText(std::string &&data);
 
-    inline void init()
+    void slightFire()
+    {
+        if (m_pImage2TextWidget->model()->data() == 4)
+        {
+            m_pImage2TextWidget->updateIndex(3);
+        }
+        else
+        {
+            m_pImage2TextWidget->updateIndex(4);
+        }
+    }
+
+    void init()
     {
         auto ly = new AbsolutelyLayout();
 
-        m_pTestTextWidget =
-            new TextWidget(ts("1"), this, oled::OLED_FONT_SIZE_16);
+        m_pTestTextWidget = new TextWidget(ts("1Test Just For Width"),
+                                           this,
+                                           oled::OLED_FONT_SIZE_16);
 
-        m_pTest2TextWidget = new TextWidget(ts("2"), this);
+        m_pTest2TextWidget = new TextWidget(ts("Test Data"), this);
         m_pImageTextWidget = new ImageWidget(4, this);
+        m_pImage2TextWidget =
+            new ImageWidget(4, this, OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_32);
 
-        m_pTest2TextWidget->setPage(this);
-        m_pTestTextWidget->setPage(this);
-        m_pImageTextWidget->setPage(this);
+        //        m_pTest2TextWidget->setPage(this);
+        //        m_pTestTextWidget->setPage(this);
+        //        m_pImageTextWidget->setPage(this);
+        //        m_pImage2TextWidget->setPage()
 
-        ly->addWidget(m_pTestTextWidget, Point(0, 1));
-        ly->addWidget(m_pTest2TextWidget, Point(0, 3));
+        ly->addWidget(m_pTestTextWidget, Point(0, 0));
+        ly->addWidget(m_pTest2TextWidget, Point(60, 3));
         ly->addWidget(m_pImageTextWidget, Point(30, 5));
+
+        ly->addWidget(m_pImage2TextWidget, Point(80, 5));
 
         ly->setPage(this);
 
         addLayout(ly);
     };
 
-    MyPage(OledDevice *pDevice) : Page(pDevice)
-    {
-        init();
-    };
+    MyPage(OledDevice *pDevice) : Page(pDevice){};
 
-    MyPage(const oled::Window *pWindow) : Page(pWindow)
-    {
-        init();
-    };
+    MyPage(const oled::Window *pWindow) : Page(pWindow){};
 
     ~MyPage()
     {
@@ -132,10 +148,33 @@ public:
         window->show();
         window->flash();
 
+//        Paint::offset(mpg->dataMap(),
+//                      0,
+//                      0,
+//                      90,
+//                      2,
+//                      20,
+//                      OLED_OFFSET_DIRECTION::OLED_OFFSET_HORIZONTAL);
+
+        Paint::offset(mpg->dataMap(),
+                      0,
+                      0,
+                      90,
+                      4,
+                      2,
+                      OLED_OFFSET_DIRECTION::OLED_OFFSET_VERTICAL);
+
+        i2c_oled->flash(mpg->dataMap());
+
+
         while (true)
         {
-            vTaskDelay(200);
-            //
+            vTaskDelay(20);
+
+//            mpg->slightFire();
+
+//            vTaskDelay(20);
+
             //            window->setPage(1);
             //            window->flash();
             //            vTaskDelay(200);
