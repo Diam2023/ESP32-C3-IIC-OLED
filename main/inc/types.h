@@ -77,18 +77,18 @@ public:
     {
     }
 
-    Size(const uint8_t& width, const uint8_t& height)
+    Size(const uint8_t width, const uint8_t height)
         : m_width(width), m_height(height)
     {
     }
 
     ~Size() = default;
 
-    inline uint8_t getWidth() const
+    uint8_t getWidth() const
     {
         return m_width;
     };
-    inline uint8_t getHeight() const
+    uint8_t getHeight() const
     {
         return m_height;
     };
