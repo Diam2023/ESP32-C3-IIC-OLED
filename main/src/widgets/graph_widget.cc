@@ -5,7 +5,7 @@
 #include "model.h"
 #include "page.h"
 
-oled::GraphWidget::GraphWidget(Func &&function, Page *pPage)
+oled::GraphWidget::GraphWidget(Func &&function, Page *pPage) : m_size({0, 0})
 {
     this->setPage(pPage);
     auto *model_ = new Model<Func>();
@@ -14,7 +14,7 @@ oled::GraphWidget::GraphWidget(Func &&function, Page *pPage)
     this->bindModel(reinterpret_cast<Model<Object> *>(model_));
 }
 
-oled::GraphWidget::GraphWidget() : Widget()
+oled::GraphWidget::GraphWidget() : Widget(), m_size({0, 0})
 {
 }
 
@@ -30,7 +30,7 @@ void oled::GraphWidget::flash(oled::DataMap *pDataMapping,
     auto callBack = reinterpret_cast<oled::Model<Func> *>(this->m_pModel);
     if (callBack != nullptr)
     {
-        callBack->data()(pDataMapping, point);
+        callBack->data()(this, pDataMapping, point);
     }
     else
     {
@@ -54,4 +54,24 @@ void oled::GraphWidget::modelUpdated()
 void oled::GraphWidget::setFunction(oled::GraphWidget::Func &&function)
 {
     reinterpret_cast<oled::Model<Func> *>(this->m_pModel)->setData(function);
+}
+
+uint8_t oled::GraphWidget::getWidth()
+{
+    return m_size.getWidth();
+}
+
+uint8_t oled::GraphWidget::getHeight()
+{
+    return m_size.getHeight();
+}
+
+oled::Size oled::GraphWidget::getSize()
+{
+    return m_size;
+}
+
+void oled::GraphWidget::setSize(const oled::Size &size)
+{
+    m_size = size;
 }

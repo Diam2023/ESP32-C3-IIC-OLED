@@ -113,3 +113,20 @@ oled::TextWidget::TextWidget(std::string &&text, oled::OLED_FONT_SIZE fontSize)
 
     this->setText(static_cast<oled::String &&>(std::move(text)));
 }
+
+uint8_t oled::TextWidget::getWidth()
+{
+    return (m_fontSize == OLED_FONT_SIZE::OLED_FONT_SIZE_6)
+               ? (this->model()->data().size() * 6)
+               : (this->model()->data().size() * 8);
+}
+
+uint8_t oled::TextWidget::getHeight()
+{
+    return (m_fontSize == OLED_FONT_SIZE::OLED_FONT_SIZE_6) ? 8 : 16;
+}
+
+oled::Size oled::TextWidget::getSize()
+{
+    return Widget::getSize();
+}

@@ -13,9 +13,17 @@ namespace oled
 
 class GraphWidget : public Widget
 {
-public:
+private:
+    Size m_size;
 
-    using Func = std::function<void(DataMap*, const Point &)>;
+public:
+    uint8_t getWidth() override;
+    uint8_t getHeight() override;
+    Size getSize() override;
+
+    void setSize(const Size &size);
+
+    using Func = std::function<void(GraphWidget *, DataMap *, const Point &)>;
 
     void setModel(Model<Func> *);
 

@@ -31,14 +31,14 @@ public:
     template <typename T>
     Model<T>* getModel();
 
-//    template <typename T>
-//    void bindModel(const Model<T>*);
-//
-//    template <typename T>
-//    void bindModel(Model<T>* const);
+    //    template <typename T>
+    //    void bindModel(const Model<T>*);
 
-//    template <typename T>
-//    void bindModel(Model<T>*);
+    //    template <typename T>
+    //    void bindModel(Model<T>* const);
+
+    //    template <typename T>
+    //    void bindModel(Model<T>*);
     void bindModel(Model<Object>*);
 
     void setPage(Page*);
@@ -51,6 +51,27 @@ public:
     virtual void modelUpdated(){};
 
     virtual void flash(DataMap*, const Point&){};
+
+    // TODO To Add Widget And Height Calculator For Derived Classes
+    virtual uint8_t getWidth()
+    {
+        return 0;
+    };
+
+    virtual uint8_t getHeight()
+    {
+        return 0;
+    };
+
+    virtual Size getSize()
+    {
+        return {getWidth(), getHeight()};
+    };
+
+    virtual Rectangle getArea()
+    {
+        return {};
+    };
 
     Widget() = default;
 

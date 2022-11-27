@@ -37,7 +37,7 @@ public:
 
     Point(Point& point) : Point(point.m_x, point.m_y){};
 
-    Point(const Point &point) : Point(point.m_x, point.m_y){};
+    Point(const Point& point) : Point(point.m_x, point.m_y){};
 
     ~Point() = default;
 };
@@ -91,6 +91,13 @@ public:
     uint8_t getHeight() const
     {
         return m_height;
+    };
+
+    Size& operator=(const Size& size)
+    {
+        this->m_height = size.getHeight();
+        this->m_width = size.getWidth();
+        return *this;
     };
 };
 

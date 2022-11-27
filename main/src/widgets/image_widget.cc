@@ -97,3 +97,22 @@ void oled::ImageWidget::setImageSize(oled::OLED_IMAGE_SIZE imageSize)
 {
     m_imageSize = imageSize;
 }
+
+uint8_t oled::ImageWidget::getWidth()
+{
+    return (m_imageSize == OLED_IMAGE_SIZE_4)
+               ? 4
+               : ((m_imageSize == OLED_IMAGE_SIZE_8) ? 8 : 16);
+}
+
+uint8_t oled::ImageWidget::getHeight()
+{
+    return (m_imageSize == OLED_IMAGE_SIZE_4)
+               ? 8
+               : ((m_imageSize == OLED_IMAGE_SIZE_8) ? 8 : 16);
+}
+
+oled::Size oled::ImageWidget::getSize()
+{
+    return Widget::getSize();
+}

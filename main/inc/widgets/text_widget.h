@@ -14,6 +14,10 @@ private:
     OLED_FONT_SIZE m_fontSize;
 
 public:
+    uint8_t getWidth() override;
+    uint8_t getHeight() override;
+    Size getSize() override;
+
     void setFontSize(OLED_FONT_SIZE fontSize);
 
     void setModel(Model<oled::String> *);

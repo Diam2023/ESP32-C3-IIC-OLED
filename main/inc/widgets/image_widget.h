@@ -18,6 +18,10 @@ namespace oled {
         OLED_IMAGE_SIZE m_imageSize;
 
     public:
+        uint8_t getWidth() override;
+        uint8_t getHeight() override;
+        Size getSize() override;
+
         void setImageSize(OLED_IMAGE_SIZE imageSize);
 
         void setModel(Model<uint32_t> *);
