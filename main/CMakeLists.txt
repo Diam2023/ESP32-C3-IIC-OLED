@@ -11,6 +11,7 @@ set(
         ${WIDGET_FOLDER}text_widget.cc
         ${WIDGET_FOLDER}image_widget.cc
         ${WIDGET_FOLDER}list_widget.cc
+        ${WIDGET_FOLDER}graph_widget.cc
 )
 
 idf_component_register(
