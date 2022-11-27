@@ -223,7 +223,9 @@ auto a = [](oled::DataMap *a, const oled::Point &b) -> void {
         auto textWidget = new TextWidget(ts("Test Test"), page);
 
         auto graphWidget = new GraphWidget(
-            [](oled::DataMap *a, const oled::Point &b) -> void {
+            [](GraphWidget *this_,
+               oled::DataMap *a,
+               const oled::Point &b) -> void {
                 ESP_LOGD("graphWidget", "graph callback");
 
                 // Test Hor Line
