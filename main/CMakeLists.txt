@@ -7,11 +7,22 @@ set(
 )
 
 set(
+        LAYOUT_FOLDER
+        "./src/layouts/"
+)
+
+
+set(
         WIDGETS
         ${WIDGET_FOLDER}text_widget.cc
         ${WIDGET_FOLDER}image_widget.cc
-        ${WIDGET_FOLDER}list_widget.cc
         ${WIDGET_FOLDER}graph_widget.cc
+)
+
+set(
+        LAYOUTS
+        ${LAYOUT_FOLDER}absolutely_layout.cc
+        ${LAYOUT_FOLDER}list_layout.cc
 )
 
 idf_component_register(
@@ -24,8 +35,7 @@ idf_component_register(
         "./src/window.cc"
         "./src/layout.cc"
         "./src/widget.cc"
-        "./src/layouts/absolutely_layout.cc"
-        "./src/layouts/list_layout.cc"
+        ${LAYOUTS}
         ${WIDGETS}
         INCLUDE_DIRS
         "./inc"
