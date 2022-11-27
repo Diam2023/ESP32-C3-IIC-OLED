@@ -83,6 +83,16 @@ namespace oled {
 
         static void offsetLoop(DataMap *, uint8_t x, uint8_t y, uint8_t width, uint8_t height, int16_t offset, OLED_OFFSET_DIRECTION direction);
 
+        /**
+         *
+         * @param start Start Point
+         * @param s_y start Point slight line it must less than 8
+         * @param end end of line
+         * @param s_x_ end Point slight line
+         */
+        static void drawLine(DataMap *, const Point& start, const Point& slight_start, const Point& end, const Point& slight_end);
+
+//        static void drawLine(DataMap*, uint8_t x, uint8_t y, uint8_t x_, uint8_t y_, uint8_t width);
         // /**
         //  * @brief move pointer to position
         //  * @param position:

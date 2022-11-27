@@ -249,6 +249,67 @@ void oled::Paint::offsetLoop(oled::DataMap* pDataMapping,
     }
 }
 
+void oled::Paint::drawLine(oled::DataMap* pDataMapping,
+                           const Point& start,
+                           const Point& slight_start,
+                           const Point& end,
+                           const Point& slight_end)
+{
+    // if s_x equal 0 is First Line for x
+    if (start.getY() == end.getY())
+    {
+        for (int i = start.getX(); i < end.getX(); ++i)
+        {
+            *(pDataMapping->getDataMapping()[end.getY()] + i + 1) =
+                (*(pDataMapping->getDataMapping()[end.getY()] + i + 1)) |
+                (0x01 << slight_start.getY());
+        }
+    }
+    else if (start.getX() == end.getX())
+    {
+        auto offset = 0;
+        for (int i = 1; i < (slight_start.getY() + 1); i++)
+        {
+            offset |= (0x01 << i);
+        }
+
+        for (int i = start.getY(); i < end.getY(); ++i)
+        {
+            *(pDataMapping->getDataMapping()[i] + start.getX() + 1) =
+                ((*(pDataMapping->getDataMapping()[i] + start.getX() + 1)) |
+                 ((i == (end.getY() - 1)) ? (0x01 | offset) : 0xFF));
+        }
+    }
+}
+
+// void oled::Paint::drawLine(oled::DataMap* pDataMapping,
+//                            uint8_t x,
+//                            uint8_t y,
+//                            uint8_t x_,
+//                            uint8_t y_,
+//                            uint8_t width)
+//{
+//     for (int i = 0; i < 50; ++i)
+//     {
+//         *(pDataMapping->getDataMapping()[6] + 10 + i) =
+//             (*(pDataMapping->getDataMapping()[6] + 10 + i)) | 0x81;
+//     }
+// }
+//
+// void oled::Paint::drawLine(oled::DataMap* pDataMapping,
+//                            uint8_t s_x,
+//                            uint8_t s_y,
+//                            uint8_t s_x_,
+//                            uint8_t s_y_)
+//{
+//     for (int x_ = s_x; x_ < s_x_; x_++)
+//     {
+//         *(pDataMapping->getDataMapping()[s_y] + x_) =
+//             (*(pDataMapping->getDataMapping()[s_y] + x_)) | (0x01 << (s_x %
+//             8));
+//     }
+// }
+
 oled::Paint::Paint() = default;
 
 oled::Paint::~Paint() = default;

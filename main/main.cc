@@ -115,7 +115,7 @@ public:
         auto mpg = new MyPage(i2c_oled);
 
         auto window = new oled::Window(i2c_oled);
-        //
+
         //        Page* page = window->createPage();
         //        Page* page2 = window->createPage();
         //
@@ -148,32 +148,92 @@ public:
         window->show();
         window->flash();
 
-//        Paint::offset(mpg->dataMap(),
-//                      0,
-//                      0,
-//                      90,
-//                      2,
-//                      20,
-//                      OLED_OFFSET_DIRECTION::OLED_OFFSET_HORIZONTAL);
+        //        Paint::offset(mpg->dataMap(),
+        //                      0,
+        //                      0,
+        //                      90,
+        //                      2,
+        //                      20,
+        //                      OLED_OFFSET_DIRECTION::OLED_OFFSET_HORIZONTAL);
 
-        Paint::offset(mpg->dataMap(),
-                      0,
-                      0,
-                      90,
-                      4,
-                      2,
-                      OLED_OFFSET_DIRECTION::OLED_OFFSET_VERTICAL);
+        //        Paint::offset(mpg->dataMap(),
+        //                      0,
+        //                      0,
+        //                      90,
+        //                      4,
+        //                      2,
+        //                      OLED_OFFSET_DIRECTION::OLED_OFFSET_VERTICAL);
+
+        //        i2c_oled->flash(mpg->dataMap());
+
+        // Test Hor Line
+        Paint::drawLine(mpg->dataMap(),
+                        Point(0, 0),
+                        Point(0, 2),
+                        Point(127, 0),
+                        Point(0, 0));
+
+        Paint::drawLine(mpg->dataMap(),
+                        Point(0, 0),
+                        Point(0, 6),
+                        Point(127, 0),
+                        Point(0, 0));
+
+        // Test Vec Line
+        Paint::drawLine(mpg->dataMap(),
+                        Point(40, 2),
+                        Point(0, 4),
+                        Point(40, 5),
+                        Point(0, 0));
+
+        Paint::drawLine(mpg->dataMap(),
+                        Point(40, 1),
+                        Point(0, 7),
+                        Point(40, 7),
+                        Point(0, 0));
+
+        Paint::drawLine(mpg->dataMap(),
+                        Point(42, 1),
+                        Point(0, 5),
+                        Point(42, 7),
+                        Point(0, 0));
 
         i2c_oled->flash(mpg->dataMap());
 
-
         while (true)
         {
-            vTaskDelay(20);
+            //            vTaskDelay(20);
+            vTaskDelay(200);
 
-//            mpg->slightFire();
+            //            if (l >= 10)
+            //            {
+            //            Paint::offsetLoop(mpg->dataMap(),
+            //                              0,
+            //                              0,
+            //                              mpg->dataMap()->getLineSeg() - 1,
+            //                              mpg->dataMap()->getPage(),
+            //                              1,
+            //                              OLED_OFFSET_DIRECTION::OLED_OFFSET_VERTICAL);
+            //                l = 0;
+            //            }
+            //            else
+            //            {
+            //                l++;
+            //            }
 
-//            vTaskDelay(20);
+            //            Paint::offsetLoop(mpg->dataMap(),
+            //                              0,
+            //                              0,
+            //                              mpg->dataMap()->getLineSeg() - 1,
+            //                              mpg->dataMap()->getPage(),
+            //                              5,    // 增量
+            //                              OLED_OFFSET_DIRECTION::OLED_OFFSET_HORIZONTAL);
+            //
+            //            i2c_oled->flash(mpg->dataMap());
+
+            //            mpg->slightFire();
+
+            //            vTaskDelay(20);
 
             //            window->setPage(1);
             //            window->flash();
