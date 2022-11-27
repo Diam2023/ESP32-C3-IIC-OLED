@@ -28,6 +28,7 @@
 #include "image_widget.h"
 #include "event.h"
 #include "absolutely_layout.h"
+#include "graph_widget.h"
 
 #include "graph_widget.h"
 
@@ -102,6 +103,109 @@ public:
     };
 };
 
+void testPaint(Page *mpg, OledDevice *i2c_oled)
+{
+    // Test Hor Line
+    Paint::drawLine(
+        mpg->dataMap(), Point(0, 0), Point(0, 2), Point(127, 0), Point(0, 0));
+
+    Paint::drawLine(
+        mpg->dataMap(), Point(0, 0), Point(0, 6), Point(127, 0), Point(0, 0));
+
+    // Test Vec Line
+    Paint::drawLine(
+        mpg->dataMap(), Point(40, 2), Point(0, 4), Point(40, 5), Point(0, 0));
+
+    Paint::drawLine(
+        mpg->dataMap(), Point(40, 1), Point(0, 7), Point(40, 7), Point(0, 0));
+
+    Paint::drawLine(
+        mpg->dataMap(), Point(42, 1), Point(0, 5), Point(42, 7), Point(0, 0));
+
+    //        Paint::offset(mpg->dataMap(),
+    //                      0,
+    //                      0,
+    //                      90,
+    //                      2,
+    //                      20,
+    //                      OLED_OFFSET_DIRECTION::OLED_OFFSET_HORIZONTAL);
+
+    //        Paint::offset(mpg->dataMap(),
+    //                      0,
+    //                      0,
+    //                      90,
+    //                      4,
+    //                      2,
+    //                      OLED_OFFSET_DIRECTION::OLED_OFFSET_VERTICAL);
+
+    //        i2c_oled->flash(mpg->dataMap());
+    i2c_oled->flash(mpg->dataMap());
+
+    //            if (l >= 10)
+    //            {
+    //            Paint::offsetLoop(mpg->dataMap(),
+    //                              0,
+    //                              0,
+    //                              mpg->dataMap()->getLineSeg() - 1,
+    //                              mpg->dataMap()->getPage(),
+    //                              1,
+    //                              OLED_OFFSET_DIRECTION::OLED_OFFSET_VERTICAL);
+    //                l = 0;
+    //            }
+    //            else
+    //            {
+    //                l++;
+    //            }
+
+    //            Paint::offsetLoop(mpg->dataMap(),
+    //                              0,
+    //                              0,
+    //                              mpg->dataMap()->getLineSeg() - 1,
+    //                              mpg->dataMap()->getPage(),
+    //                              5,    // 增量
+    //                              OLED_OFFSET_DIRECTION::OLED_OFFSET_HORIZONTAL);
+    //
+    //            i2c_oled->flash(mpg->dataMap());
+
+    //            mpg->slightFire();
+
+    //            vTaskDelay(20);
+
+    //            window->setPage(1);
+    //            window->flash();
+    //            vTaskDelay(200);
+    //
+    //            window->setPage(0);
+    //            window->flash();
+    //            //
+    //            textWidget->updateText(ts("Test From Oled"));
+    //            vTaskDelay(200);
+}
+
+void testPage(OledDevice *i2c_oled)
+{
+    auto mpg = new MyPage(i2c_oled);
+
+    auto window = new oled::Window(i2c_oled);
+
+    mpg->bindWindow(window);
+    mpg->clear();
+    window->addPage(mpg);
+    mpg->init();
+
+    mpg->bindWindow(window);
+    mpg->clear();
+    window->addPage(mpg);
+    mpg->init();
+}
+
+auto a = [](oled::DataMap *a, const oled::Point &b) -> void {
+    // Test Hor Line
+    Paint::drawLine(a, b, Point(0, 2), Point(127, 0), b);
+
+    Paint::drawLine(a, b, Point(0, 6), Point(127, 0), b);
+};
+
 [[noreturn]] void oled_test()
 {
     auto i2c_oled = new oled::OledDevice(5, 6, true);
@@ -112,138 +216,54 @@ public:
     {
         ESP_LOGD("test", "new window");
 
-        auto mpg = new MyPage(i2c_oled);
-
         auto window = new oled::Window(i2c_oled);
 
-        //        Page* page = window->createPage();
-        //        Page* page2 = window->createPage();
-        //
-        //        auto* textWidget = new TextWidget(ts("Test Test"), page);
+        Page *page = window->createPage();
+
+        auto textWidget = new TextWidget(ts("Test Test"), page);
+
+        auto graphWidget = new GraphWidget(
+            [](oled::DataMap *a, const oled::Point &b) -> void {
+                ESP_LOGD("graphWidget", "graph callback");
+
+                // Test Hor Line
+                Paint::drawLine(a, b, Point(0, 2), Point(127, 0), b);
+
+                Paint::drawLine(a, b, Point(0, 6), Point(127, 0), b);
+
+                //                ESP_LOGD("graphWidget", "graph callback");
+            },
+            page);
+
         //        auto* textWidget2 = new TextWidget(ts("Test2"), page2);
-        //
-        //        auto* layout = new AbsolutelyLayout(page);
+
+        auto *layout = new AbsolutelyLayout(page);
         //        auto* layout2 = new AbsolutelyLayout(page2);
-        //
+
         //        layout2->addWidget(textWidget2, Point(20, 0));
-        //        layout->addWidget(textWidget, Point(20, 0));
+        layout->addWidget(graphWidget, Point(0, 0));
+        layout->addWidget(textWidget, Point(20, 0));
+
         //        ESP_LOGD("test", "add widget");
-        //
-        //        page->addLayout(layout);
+
+        page->addLayout(layout);
         //        page2->addLayout(layout2);
         //        ESP_LOGD("test", "add layout");
         //
-        //        page->clear();
+        page->clear();
         //        page2->clear();
 
-        mpg->bindWindow(window);
-        mpg->clear();
-        window->addPage(mpg);
-        mpg->init();
-
-        // window->addPage(page);
+        //        window->addPage(page);
 
         //        page->clear();
 
         window->show();
         window->flash();
 
-        //        Paint::offset(mpg->dataMap(),
-        //                      0,
-        //                      0,
-        //                      90,
-        //                      2,
-        //                      20,
-        //                      OLED_OFFSET_DIRECTION::OLED_OFFSET_HORIZONTAL);
-
-        //        Paint::offset(mpg->dataMap(),
-        //                      0,
-        //                      0,
-        //                      90,
-        //                      4,
-        //                      2,
-        //                      OLED_OFFSET_DIRECTION::OLED_OFFSET_VERTICAL);
-
-        //        i2c_oled->flash(mpg->dataMap());
-
-        // Test Hor Line
-        Paint::drawLine(mpg->dataMap(),
-                        Point(0, 0),
-                        Point(0, 2),
-                        Point(127, 0),
-                        Point(0, 0));
-
-        Paint::drawLine(mpg->dataMap(),
-                        Point(0, 0),
-                        Point(0, 6),
-                        Point(127, 0),
-                        Point(0, 0));
-
-        // Test Vec Line
-        Paint::drawLine(mpg->dataMap(),
-                        Point(40, 2),
-                        Point(0, 4),
-                        Point(40, 5),
-                        Point(0, 0));
-
-        Paint::drawLine(mpg->dataMap(),
-                        Point(40, 1),
-                        Point(0, 7),
-                        Point(40, 7),
-                        Point(0, 0));
-
-        Paint::drawLine(mpg->dataMap(),
-                        Point(42, 1),
-                        Point(0, 5),
-                        Point(42, 7),
-                        Point(0, 0));
-
-        i2c_oled->flash(mpg->dataMap());
-
         while (true)
         {
             //            vTaskDelay(20);
             vTaskDelay(200);
-
-            //            if (l >= 10)
-            //            {
-            //            Paint::offsetLoop(mpg->dataMap(),
-            //                              0,
-            //                              0,
-            //                              mpg->dataMap()->getLineSeg() - 1,
-            //                              mpg->dataMap()->getPage(),
-            //                              1,
-            //                              OLED_OFFSET_DIRECTION::OLED_OFFSET_VERTICAL);
-            //                l = 0;
-            //            }
-            //            else
-            //            {
-            //                l++;
-            //            }
-
-            //            Paint::offsetLoop(mpg->dataMap(),
-            //                              0,
-            //                              0,
-            //                              mpg->dataMap()->getLineSeg() - 1,
-            //                              mpg->dataMap()->getPage(),
-            //                              5,    // 增量
-            //                              OLED_OFFSET_DIRECTION::OLED_OFFSET_HORIZONTAL);
-            //
-            //            i2c_oled->flash(mpg->dataMap());
-
-            //            mpg->slightFire();
-
-            //            vTaskDelay(20);
-
-            //            window->setPage(1);
-            //            window->flash();
-            //            vTaskDelay(200);
-            //
-            //            window->setPage(0);
-            //            window->flash();
-            //            //
-            //            textWidget->updateText(ts("Test From Oled"));
-            //            vTaskDelay(200);
         }
 
         // printf("%s buffer get: %d\n", __func__, esp_get_free_heap_size());
