@@ -26,16 +26,27 @@ public:
         return this->m_y;
     }
 
-    bool operator==(Point& point) const
+    bool operator==(const Point& point) const
     {
         return ((point.getX() == m_x) && (point.getX() == m_y));
+    };
+
+    // If Use map It Have To reload < symbol
+    bool operator<(const Point& point) const
+    {
+        return ((point.getX() < m_x) && (point.getX() < m_y));
+    };
+
+    bool operator!=(const Point& point) const
+    {
+        return !((point.getX() == m_x) && (point.getX() == m_y));
     };
 
     Point() : m_x(0), m_y(0){};
 
     Point(const uint8_t x, const uint8_t y) : m_x(x), m_y(y){};
 
-    Point(Point& point) : Point(point.m_x, point.m_y){};
+    Point(Point&& point) noexcept : Point(point.m_x, point.m_y){};
 
     Point(const Point& point) : Point(point.m_x, point.m_y){};
 
@@ -120,4 +131,19 @@ struct InputEvent : public Event
 
 using EventHandler_t = std::function<void*(struct EVENT)>;
 
+// Define Position And MicroPoint
+using Position = Point;
+using MicroPoint = Point;
+
 }    // namespace oled
+
+template <>
+struct std::hash<oled::Point>
+{
+    std::size_t operator()(oled::Point const& point) const noexcept
+    {
+        std::size_t h1 = std::hash<uint8_t>{}(point.getX());
+        std::size_t h2 = std::hash<uint8_t>{}(point.getY());
+        return h1 ^ (h2 << 1);    // or use boost::hash_combine
+    }
+};
