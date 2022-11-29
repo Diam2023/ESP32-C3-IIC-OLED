@@ -37,9 +37,8 @@ void oled::ListLayout::addWidget(oled::Widget *pWidget, uint16_t space)
             // Horizon
             OLED_D("Horizon");
             auto last = m_objects[m_objects.size() - 1];
-            if (auto start_x =
-                    last.first.getX() + last.second->getWidth() + space;
-                (start_x + pWidget->getWidth()) <=          // added space
+            auto start_x = last.first.getX() + last.second->getWidth() + space;
+            if ((start_x + pWidget->getWidth()) <=          // added space
                 (m_position.getX() + m_size.getWidth()))    // widget space
             {
                 Position position(start_x, last.first.getY());
@@ -47,7 +46,9 @@ void oled::ListLayout::addWidget(oled::Widget *pWidget, uint16_t space)
             }
             else
             {    // next page
-                Position position(last.first.getX(), last.first.getY() + 1);
+                Position position(last.first.getX(),
+                                  last.first.getY() +
+                                      (last.second->getHeight() / 8));
                 m_objects.emplace_back(std::make_pair(position, pWidget));
             }
         }
@@ -57,11 +58,15 @@ void oled::ListLayout::addWidget(oled::Widget *pWidget, uint16_t space)
 
             OLED_D("VERTICAL");
 
-            OLED_D("x: %d, y: %d", last.first.getX(), last.first.getY() + 1);
+            OLED_D("x: %d, y: %d",
+                   last.first.getX(),
+                   last.first.getY() + (last.second->getHeight() / 8));
 
             // VERTICAL
             m_objects.emplace_back(std::make_pair(
-                Position(last.first.getX(), last.first.getY() + 1), pWidget));
+                Position(last.first.getX(),
+                         last.first.getY() + (last.second->getHeight() / 8)),
+                pWidget));
         }
     }
 }

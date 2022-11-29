@@ -221,7 +221,7 @@ auto a = [](oled::DataMap *a, const oled::Point &b) -> void {
 
         Page *page = window->createPage();
 
-        auto textWidget = new TextWidget(ts("Test Test"), page);
+        auto textWidget = new TextWidget(ts("Test Test"), page, oled::OLED_FONT_SIZE_16);
         //        auto text2Widget = new TextWidget(ts("Test Test2"), page);
 
         auto graphWidget = new GraphWidget(
@@ -231,23 +231,25 @@ auto a = [](oled::DataMap *a, const oled::Point &b) -> void {
                 ESP_LOGD("graphWidget", "graph callback");
 
                 // Test Hor Line
-                Paint::drawLine(a, start_point, Point(0, 2), Point(127, 1), start_point);
+                Paint::drawLine(
+                    a, start_point, Point(0, 2), Point(127, start_point.getY()), start_point);
 
-                Paint::drawLine(a, start_point, Point(0, 6), Point(127, 1), start_point);
+                Paint::drawLine(
+                    a, start_point, Point(0, 6), Point(127, start_point.getY()), start_point);
 
                 //                ESP_LOGD("graphWidget", "graph
                 //                        callback");
             },
             page);
 
-        graphWidget->setSize({126, 1});
+        graphWidget->setSize({126, 8});
 
         ESP_LOGD("main",
                  "Graph size w: %d, h: %d",
                  graphWidget->getWidth(),
                  graphWidget->getHeight());
 
-        //        auto* textWidget2 = new TextWidget(ts("Test2"), page2);
+        auto *textWidget2 = new TextWidget(ts("Test2"), page);
 
         //        auto *layout = new AbsolutelyLayout(page);
         auto *listLayout = new ListLayout(page);
@@ -257,6 +259,7 @@ auto a = [](oled::DataMap *a, const oled::Point &b) -> void {
         //        layout2->addWidget(textWidget2, Point(20, 0));
         listLayout->addWidget(textWidget);
         listLayout->addWidget(graphWidget);
+        listLayout->addWidget(textWidget2);
         //        listLayout->addWidget(text2Widget);
         //        ESP_LOGD("layout", );
         //        layout->addWidget(graphWidget, Point(0, 0));
