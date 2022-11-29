@@ -31,13 +31,10 @@ void oled::Page::addLayout(Layout *pLayout)
 
 oled::DataMap *oled::Page::dataMap()
 {
-#ifdef DEBUG
-
     if (this->m_pDataMap == nullptr)
     {
-        OLED_D("Return a null DataMap pointer!");
+        OLED_W("Return a null DataMap pointer!");
     }
-#endif
     return this->m_pDataMap;
 }
 

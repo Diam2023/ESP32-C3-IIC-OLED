@@ -15,9 +15,15 @@ class Window : public Object
     OLED_OBJECT
 
 private:
-    // TODO Add event handler
+    // TODO Add event Pool Class to handle event
     //    std::vector<oled::EVENT> eventQueue;
+    //    std::map<std::string, std::function<void*(void*)>> event;
 
+    // 目前两种方案
+    /**
+     * 1.传入指针 使用智能指针传入
+     * 2.使用移动构造函数
+     */
     std::shared_ptr<OledDevice> device;
 
     // pages
@@ -26,17 +32,29 @@ private:
     uint8_t m_nowPage{0};
 
 public:
-    std::vector<Page*>&& pages()
+    /**
+     * 获取page的副本
+     * @return
+     */
+    std::vector<Page*> &pages()
     {
-        return std::move(this->m_pages);
+        return this->m_pages;
     }
 
-    inline OledDevice* getOledDevice() const
+    /**
+     * 隐式内联
+     * @return OledDevice Pointer
+     */
+    OledDevice* getOledDevice() const
     {
         return device.get();
     }
 
-    inline void setOledDevice(OledDevice* pDevice)
+    /**
+     * 隐式内联
+     * @param pDevice
+     */
+    void setOledDevice(OledDevice* pDevice)
     {
         this->device.reset(pDevice);
     }

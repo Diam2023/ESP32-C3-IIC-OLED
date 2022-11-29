@@ -8,15 +8,43 @@ using namespace oled;
 
 void oled::Widget::setPage(oled::Page* pPage)
 {
-    this->m_pPage = pPage;
+    m_pPage = pPage;
 }
 
 oled::Page* oled::Widget::page()
 {
-    return this->m_pPage;
+    return m_pPage;
 }
 
-void oled::Widget::bindModel(const oled::Object* pModel)
+// template <typename T>
+// void Widget::bindModel(const Model<T>* pModel)
+//{
+//     this->m_pModel =
+//         reinterpret_cast<Model<Object>*>(const_cast<Model<Object>*>(pModel));
+// }
+
+template <typename T>
+Model<T>* Widget::getModel()
 {
-    this->m_pModel = const_cast<oled::Object*>(pModel);
+    return reinterpret_cast<Model<T>*>(m_pModel);
+}
+
+// template <typename T>
+// void Widget::bindModel(const Model<T>* const pModel)
+//{
+//     this->m_pModel =
+//         reinterpret_cast<Model<Object>*>(const_cast<Model<Object>*>(pModel));
+// }
+
+// template <typename T>
+// void Widget::bindModel(Model<T>* pModel)
+//{
+//     this->m_pModel = reinterpret_cast<Model<Object>*>(pModel);
+//     //    this->m_pModel = pModel;
+// }
+
+void Widget::bindModel(Model<Object>* pModel)
+{
+    this->m_pModel = reinterpret_cast<Model<Object>*>(pModel);
+    //    this->m_pModel = pModel;
 }

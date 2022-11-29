@@ -49,7 +49,7 @@ public:
 
     Page(uint8_t page, uint8_t line_seg);
 
-    ~Page();
+    ~Page() override;
 };
 
 }    // namespace oled

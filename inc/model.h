@@ -24,7 +24,7 @@ protected:
 public:
     void bindWidget(oled::Widget* widget_)
     {
-        this->m_pWidget = widget_;
+        m_pWidget = widget_;
     };
 
     oled::Widget* widget()
@@ -32,12 +32,12 @@ public:
         return this->widget();
     };
 
-    virtual T&& data()
+    T&& data()
     {
         return std::move(m_data);
     }
 
-    virtual void setData(const T& data_)
+    void setData(const T& data_)
     {
         this->m_data = data_;
     };
@@ -46,7 +46,7 @@ public:
      * It will call page modelUpdated
      * @param data_
      */
-    virtual void updateData(const T& data_)
+    void updateData(const T& data_)
     {
         this->m_data = data_;
         if (this->m_pWidget != nullptr)
@@ -61,7 +61,7 @@ public:
 
     explicit Model(oled::Widget* widget_) : m_pWidget(widget_){};
     Model() : m_pWidget(nullptr){};
-    virtual ~Model() = default;
+    ~Model() override = default;
 };
 
 }    // namespace oled

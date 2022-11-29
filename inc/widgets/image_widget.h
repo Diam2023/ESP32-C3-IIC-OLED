@@ -18,6 +18,10 @@ namespace oled {
         OLED_IMAGE_SIZE m_imageSize;
 
     public:
+        uint8_t getWidth() override;
+        uint8_t getHeight() override;
+        Size getSize() override;
+
         void setImageSize(OLED_IMAGE_SIZE imageSize);
 
         void setModel(Model<uint32_t> *);
@@ -38,13 +42,11 @@ namespace oled {
 
         explicit ImageWidget(uint32_t index, Page *, OLED_IMAGE_SIZE imageSize = OLED_IMAGE_SIZE_8);
 
-        explicit ImageWidget(uint32_t index, Object *, Page *, OLED_IMAGE_SIZE imageSize = OLED_IMAGE_SIZE_8);
-
-        explicit ImageWidget(Object *model, Page *page) : Widget(model, page), m_imageSize(OLED_IMAGE_SIZE_8) {};
+        explicit ImageWidget(uint32_t index, oled::Model<uint32_t> *, Page *, OLED_IMAGE_SIZE imageSize = OLED_IMAGE_SIZE_8);
 
         ImageWidget();
 
-        ~ImageWidget() = default;
+        ~ImageWidget() override = default;
     };
 
 };

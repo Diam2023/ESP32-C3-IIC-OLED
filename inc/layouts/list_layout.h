@@ -7,30 +7,67 @@
 
 #include "layout.h"
 
+#include <utility>
+
 namespace oled
 {
 
-
+enum Direction
+{
+    HORIZON,
+    VERTICAL
+};
 
 class ListLayout : public Layout
 {
-OLED_OBJECT
+    OLED_OBJECT
+
+private:
+    Direction m_direction;
+
+    /**
+     * index -> <Position, Widget*>
+     */
+    std::vector<std::pair<Point, Widget*>> m_objects;
+
 public:
-    void addWidget(Widget*);
+    void addWidget(Widget* pWidget, uint16_t space = 0);
 
-    void addWidget(Widget*, const Point&&);
+    std::pair<Position, Widget*> getWidget(uint16_t);
 
-    int indexOfWidget(Widget*);
+    void flash() override;
+    void flash(const Widget*) override;
 
-    oled::Widget* getWidget(uint8_t);
+    void setDirection(Direction direction)
+    {
+        m_direction = direction;
+    };
 
-    std::vector<Widget*>&& widgets();
-    void flash();
-    void flash(Widget*);
+    Direction getDirection()
+    {
+        return m_direction;
+    };
 
+    ListLayout() : Layout(), m_direction(Direction::VERTICAL), m_objects(){};
 
+    explicit ListLayout(Page* pPage)
+        : Layout(pPage), m_direction(Direction::VERTICAL), m_objects(){};
+
+    explicit ListLayout(Direction direction)
+        : Layout(), m_direction(direction), m_objects(){};
+
+    explicit ListLayout(Page* pPage, Direction direction)
+        : Layout(pPage), m_direction(direction), m_objects(){};
+
+    explicit ListLayout(Page* pPage,
+                        Direction direction,
+                        Position position,
+                        Size size)
+        : Layout(pPage, std::move(position), size),
+          m_direction(direction),
+          m_objects(){};
 };
 
-}
+}    // namespace oled
 
 #endif    // ESP32_C3_IIC_OLED_LIST_LAYOUT_H

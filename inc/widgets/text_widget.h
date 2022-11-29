@@ -3,40 +3,57 @@
 #include "widget.h"
 #include "model.h"
 
-namespace oled {
+#include "string_object.h"
 
-    class TextWidget : public Widget {
-    private:
-        OLED_FONT_SIZE m_fontSize;
+namespace oled
+{
 
-    public:
-        void setFontSize(OLED_FONT_SIZE fontSize);
+class TextWidget : public Widget
+{
+private:
+    OLED_FONT_SIZE m_fontSize;
 
-        void setModel(Model<std::string> *);
+public:
+    uint8_t getWidth() override;
+    uint8_t getHeight() override;
+    Size getSize() override;
 
-        Model<std::string> *model();
+    void setFontSize(OLED_FONT_SIZE fontSize);
 
-        void setText(const std::string &&text);
+    void setModel(Model<oled::String> *);
 
-        void updateText(const std::string &&);
+    Model<oled::String> *model();
 
-        std::string &&text();
+    void setText(oled::String &&text);
 
-        void flash(DataMap *, const Point &) override;
+    void setText(const oled::String &text);
 
-        void modelUpdated() override;
+    void updateText(const oled::String &&);
 
-        explicit TextWidget(std::string &&text, OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
+    oled::String &&text();
 
-        explicit TextWidget(std::string &&text, Page *, OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
+    void flash(DataMap *, const Point &) override;
 
-        explicit TextWidget(std::string &&text, Object *, Page *, OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
+    void modelUpdated() override;
 
-        explicit TextWidget(Object *model, Page *page) : Widget(model, page), m_fontSize(OLED_FONT_SIZE_6) {};
+    explicit TextWidget(oled::String &&text,
+                        OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
 
-        TextWidget();
+    explicit TextWidget(std::string &&text,
+                        OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
 
-        ~TextWidget() = default;
-    };
+    explicit TextWidget(oled::String &&text,
+                        Page *,
+                        OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
+
+    explicit TextWidget(oled::String &&text,
+                        oled::Model<oled::String> *,
+                        Page *,
+                        OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);
+
+    TextWidget();
+
+    ~TextWidget() override = default;
+};
 
 }    // namespace oled

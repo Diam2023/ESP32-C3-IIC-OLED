@@ -13,6 +13,13 @@
 namespace oled
 {
 
+
+#define OLED_W(format, ...)                          \
+    ESP_LOG_LEVEL_LOCAL(ESP_LOG_WARN,               \
+                        this->getObjectNameCStyle(), \
+                        format,                      \
+                        ##__VA_ARGS__);
+
 #define OLED_D(format, ...)                          \
     ESP_LOG_LEVEL_LOCAL(ESP_LOG_DEBUG,               \
                         this->getObjectNameCStyle(), \
@@ -48,7 +55,7 @@ public:
 
     virtual ~Object() = default;
 
-    const std::string&& getObjectName() const;
+    const std::string& getObjectName() const;
     const char* getObjectNameCStyle() const;
 
     // call move construction
