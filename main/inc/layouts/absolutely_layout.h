@@ -17,7 +17,7 @@ private:
     /**
      * Use Unordered Multi Map For Save Point And Widget
      */
-    std::unordered_multimap<Point, Widget*> m_objects;
+    std::unordered_multimap<Position, Widget*> m_objects;
 
 public:
     /**
@@ -51,7 +51,10 @@ public:
     void removeWidget(Widget* pWidget);
 
     AbsolutelyLayout();
-    explicit AbsolutelyLayout(Page* page);
+    explicit AbsolutelyLayout(Page* pPage) : Layout(pPage), m_objects(){};
+
+    explicit AbsolutelyLayout(Page* pPage, Position position, Size size)
+        : Layout(pPage, std::move(position), size) {};
 
     ~AbsolutelyLayout() override = default;
     ;

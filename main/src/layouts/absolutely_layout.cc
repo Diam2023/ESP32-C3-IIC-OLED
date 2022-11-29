@@ -8,12 +8,7 @@
 void oled::AbsolutelyLayout::addWidget(oled::Widget *pWidget,
                                        oled::Position &&point)
 {
-    if (point.getX() >= this->m_position.getX() &&    // X in rang
-        ((pWidget->getWidth() + point.getX()) <=      // left in rang
-         (this->m_position.getX() + this->m_size.getWidth())) &&
-        (point.getY() >= this->m_position.getY() &&    // Exec
-         ((pWidget->getHeight() + point.getY()) <=
-          (this->m_position.getY() + this->m_size.getHeight()))))
+    if (checkInArea(point, pWidget))
     {
         m_objects.emplace(std::make_pair(point, pWidget));
     }
@@ -29,11 +24,6 @@ void oled::AbsolutelyLayout::removeWidget(oled::Widget *pWidget)
             break;
         }
     }
-}
-
-oled::AbsolutelyLayout::AbsolutelyLayout(oled::Page *page)
-    : Layout(page), m_objects()
-{
 }
 
 oled::AbsolutelyLayout::AbsolutelyLayout() : m_objects()
@@ -56,7 +46,11 @@ void oled::AbsolutelyLayout::flash()
 {
     for (auto object : this->m_objects)
     {
-        object.second->flash(this->m_pPage->dataMap(), object.first);
+        // check position
+        if (checkInArea(object.first, object.second))
+        {
+            object.second->flash(this->m_pPage->dataMap(), object.first);
+        }
     }
 }
 
