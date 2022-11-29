@@ -21,6 +21,7 @@ public:
     {
         return this->m_x;
     }
+
     uint8_t getY() const
     {
         return this->m_y;
@@ -40,6 +41,13 @@ public:
     bool operator!=(const Point& point) const
     {
         return !((point.getX() == m_x) && (point.getX() == m_y));
+    };
+
+    Point& operator=(const Point& point)
+    {
+        m_x = point.getX();
+        m_y = point.getY();
+        return *this;
     };
 
     Point() : m_x(0), m_y(0){};
