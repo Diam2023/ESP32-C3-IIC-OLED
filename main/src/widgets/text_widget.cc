@@ -134,3 +134,13 @@ oled::Size oled::TextWidget::getSize()
 {
     return Widget::getSize();
 }
+
+void oled::TextWidget::setText(std::string &&text)
+{
+    TextWidget::setText(String(std::move(text)));
+}
+
+void oled::TextWidget::setText(const std::string &text)
+{
+    TextWidget::setText(String(text));
+}
