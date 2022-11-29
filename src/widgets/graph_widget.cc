@@ -27,6 +27,10 @@ void oled::GraphWidget::setModel(oled::Model<Func> *pModel)
 void oled::GraphWidget::flash(oled::DataMap *pDataMapping,
                               const oled::Point &point)
 {
+    if (!visible())
+    {
+        return;
+    }
     auto callBack = reinterpret_cast<oled::Model<Func> *>(this->m_pModel);
     if (callBack != nullptr)
     {

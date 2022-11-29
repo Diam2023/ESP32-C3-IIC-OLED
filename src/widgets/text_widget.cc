@@ -53,6 +53,10 @@ void oled::TextWidget::modelUpdated()
 
 void oled::TextWidget::flash(DataMap *data_mapping, const Point &point)
 {
+    if (!visible())
+    {
+        return;
+    }
     oled::Paint::writeString(data_mapping,
                              point.getX(),
                              point.getY(),
@@ -129,4 +133,14 @@ uint8_t oled::TextWidget::getHeight()
 oled::Size oled::TextWidget::getSize()
 {
     return Widget::getSize();
+}
+
+void oled::TextWidget::setText(std::string &&text)
+{
+    TextWidget::setText(String(std::move(text)));
+}
+
+void oled::TextWidget::setText(const std::string &text)
+{
+    TextWidget::setText(String(text));
 }

@@ -56,6 +56,10 @@ void oled::ImageWidget::modelUpdated()
 
 void oled::ImageWidget::flash(DataMap *dataMapping, const Point &point)
 {
+    if (!visible())
+    {
+        return;
+    }
     oled::Paint::writeImage(
         dataMapping, point.getX(), point.getY(), this->index(), m_imageSize);
 }

@@ -24,6 +24,10 @@ public:
 
     Model<oled::String> *model();
 
+    void setText(std::string &&text);
+
+    void setText(const std::string &text);
+
     void setText(oled::String &&text);
 
     void setText(const oled::String &text);
