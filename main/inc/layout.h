@@ -5,9 +5,12 @@
 #ifndef ESP32_C3_IIC_OLED_LAYOUT_H
 #define ESP32_C3_IIC_OLED_LAYOUT_H
 
+#include <utility>
 #include <vector>
 #include "widget.h"
 #include "object.h"
+
+#include <map>
 
 namespace oled
 {
@@ -18,48 +21,80 @@ class Layout : public Object
 {
     OLED_OBJECT
 protected:
-    /**
-     * widget EveryThing
-     */
-    std::vector<Widget*> m_widgets;
+    // TODO Wait Change Structure For Save Widget Or Position
+    //    /**
+    //     * widget EveryThing
+    //     */
+    //    std::vector<Widget*> m_widgets;
+    //
+    //    /**
+    //     * Position for widgets
+    //     */
+    //    std::vector<Position> m_positions;
 
-    /**
-     * Position for widgets
-     */
-    std::vector<Point> m_positions;
+    // std::map<Widget*, Position> m_compose;
 
     /**
      * parent page pointer
      */
     Page* m_pPage;
 
-public:
-    //    virtual void addWidget(Widget<Object>* pWidget, Point&& pPoint);
+    /**
+     * Position For Layout
+     */
+    Position m_position;
 
     /**
-     * Remove
-     * @param pWidget
+     * Save Layout Size
      */
-    void addWidget(Widget* pWidget);
-    void addPosition(Point&& pPoint);
+    Size m_size;
 
-    void removeWidget(Widget* pWidget);
-    void removePosition(Point&& pPoint);
+public:
+    bool checkInArea(const Position& point, Widget* pWidget)
+    {
+        return ((point.getX() >= this->m_position.getX()) &&    // X in rang
+                ((pWidget->getWidth() + point.getX()) <=        // left in rang
+                 (this->m_position.getX() + this->m_size.getWidth())) &&
+                ((point.getY() >= this->m_position.getY()) &&    // Exec
+                 (((pWidget->getHeight() / 8) + point.getY()) <=
+                  (this->m_position.getY() + this->m_size.getHeight()))));
+    };
 
-    void setPage(Page* pPoint);
+    //    virtual void addWidget(Widget*) {};
+    //    virtual void addWidget(Widget*, const Point&) {};
 
-    oled::Widget* getWidget(uint8_t index);
+    //    void addCompose(const std::pair<Widget*, Position>&);
 
-    std::vector<Widget*>&& widgets();
+    //    void removeCompose(const std::pair<Widget*, Position>&);
 
-    int indexOfWidget(const Widget* pWidget);
+    //    void removeCompose(Widget* pWidget);
+    //    void removeCompose(Point&& pPoint);
 
-    void flash();
-    void flash(const Widget* pWidget);
+    virtual void setPage(Page* pPage);
 
-    Layout();;
+    /**
+     * Set Position
+     * @param position Position For Layout
+     */
+    void setPosition(const Position& position)
+    {
+        m_position = position;
+    };
+
+    void setSize(const Size&);
+
+    //    int indexOfWidget(const Widget* pWidget);
+
+    virtual void flash(){};
+
+    virtual void flash(const Widget* pWidget){};
+
+    Layout() : m_pPage(), m_position(), m_size(){};
 
     explicit Layout(Page* pPage);
+
+    explicit Layout(Page* pPage, Position position, Size size)
+        : m_pPage(pPage), m_position(std::move(position)), m_size(size){};
 
     ~Layout() override = default;
 };
