@@ -46,9 +46,18 @@ void oled::ListLayout::addWidget(oled::Widget *pWidget, uint16_t space)
             }
             else
             {    // next page
-                Position position(last.first.getX(),
-                                  last.first.getY() +
-                                      (last.second->getHeight() / 8));
+                auto max_height =
+                    std::max_element(m_objects.begin(),
+                                     m_objects.end(),
+                                     [](const std::pair<Point, Widget *> &a,
+                                        const std::pair<Point, Widget *> &b)
+                                         -> bool {
+                                         return (a.second->getHeight() <
+                                                 b.second->getHeight());
+                                     })
+                        ->second->getHeight();
+                Position position(m_position.getX(),
+                                  last.first.getY() + (max_height / 8));
                 m_objects.emplace_back(std::make_pair(position, pWidget));
             }
         }
