@@ -53,6 +53,10 @@ void oled::TextWidget::modelUpdated()
 
 void oled::TextWidget::flash(DataMap *data_mapping, const Point &point)
 {
+    if (!visible())
+    {
+        return;
+    }
     oled::Paint::writeString(data_mapping,
                              point.getX(),
                              point.getY(),

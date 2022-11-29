@@ -27,6 +27,8 @@ protected:
 
     Page* m_pPage = nullptr;
 
+    bool m_visible = true;
+
 public:
     template <typename T>
     Model<T>* getModel();
@@ -42,6 +44,16 @@ public:
     void bindModel(Model<Object>*);
 
     void setPage(Page*);
+
+    void setVisible(bool visible)
+    {
+        m_visible = visible;
+    };
+
+    bool visible() const
+    {
+        return m_visible;
+    };
 
     Page* page();
 
