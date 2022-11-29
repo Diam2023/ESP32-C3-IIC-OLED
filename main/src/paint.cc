@@ -251,9 +251,9 @@ void oled::Paint::offsetLoop(oled::DataMap* pDataMapping,
 
 void oled::Paint::drawLine(oled::DataMap* pDataMapping,
                            const Point& start,
-                           const Point& slight_start,
+                           const oled::MicroPoint& slight_start,
                            const Point& end,
-                           const Point& slight_end)
+                           const oled::MicroPoint& slight_end)
 {
     // if s_x equal 0 is First Line for x
     if (start.getY() == end.getY())

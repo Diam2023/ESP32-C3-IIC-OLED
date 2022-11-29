@@ -108,9 +108,9 @@ public:
      */
     static void drawLine(DataMap *,
                          const Point &start,
-                         const Point &slight_start,
+                         const MicroPoint &slight_start,
                          const Point &end,
-                         const Point &slight_end);
+                         const MicroPoint &slight_end);
 
     //        static void drawLine(DataMap*, uint8_t x, uint8_t y, uint8_t x_,
     //        uint8_t y_, uint8_t width);
