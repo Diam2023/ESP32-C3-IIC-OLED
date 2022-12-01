@@ -32,22 +32,7 @@ public:
 
     void setText(const oled::String &text);
 
-    /**
-     * It will set update Flag true
-     */
     void updateText(const oled::String &&);
-
-    /**
-     * It will set update Flag true
-     * @param text
-     */
-    void updateText(const std::string &text);
-
-    /**
-     * It will set update Flag true
-     * @param text
-     */
-    void updateText(std::string &&text);
 
     oled::String &&text();
 

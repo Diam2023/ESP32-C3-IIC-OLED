@@ -144,13 +144,3 @@ void oled::TextWidget::setText(const std::string &text)
 {
     TextWidget::setText(String(text));
 }
-
-void oled::TextWidget::updateText(const std::string &text)
-{
-    TextWidget::updateText(String(text));
-}
-
-void oled::TextWidget::updateText(std::string &&text)
-{
-    TextWidget::updateText(String(std::move(text)));
-}
