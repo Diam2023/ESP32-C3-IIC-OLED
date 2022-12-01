@@ -5,13 +5,14 @@
 #include "absolutely_layout.h"
 #include "page.h"
 
-void oled::AbsolutelyLayout::addWidget(oled::Widget *pWidget,
+std::pair<oled::Widget*, oled::Position> oled::AbsolutelyLayout::addWidget(oled::Widget *pWidget,
                                        oled::Position &&point)
 {
     if (checkInArea(point, pWidget))
     {
         m_objects.emplace(std::make_pair(point, pWidget));
     }
+    return std::make_pair(pWidget, point);
 }
 
 void oled::AbsolutelyLayout::removeWidget(oled::Widget *pWidget)
