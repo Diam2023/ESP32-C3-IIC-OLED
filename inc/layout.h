@@ -89,6 +89,8 @@ public:
 
     virtual void flash(const Widget* pWidget){};
 
+    virtual void update() {};
+
     Layout() : m_pPage(), m_position(), m_size(){};
 
     explicit Layout(Page* pPage);

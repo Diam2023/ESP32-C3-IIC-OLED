@@ -46,13 +46,13 @@ oled::ImageWidget::ImageWidget(uint32_t index,
     this->model()->setData(index);
 }
 
-void oled::ImageWidget::modelUpdated()
-{
-    ESP_ERROR_CHECK(this->page() == nullptr);
-
-    // only flash this widget
-    this->page()->flash(reinterpret_cast<oled::Widget *>(this));
-}
+// void oled::ImageWidget::modelUpdated()
+//{
+//     ESP_ERROR_CHECK(this->page() == nullptr);
+//
+//     // only flash this widget
+//     this->page()->flash(reinterpret_cast<oled::Widget *>(this));
+// }
 
 void oled::ImageWidget::flash(DataMap *dataMapping, const Point &point)
 {

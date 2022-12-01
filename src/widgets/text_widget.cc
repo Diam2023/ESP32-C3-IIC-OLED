@@ -43,13 +43,13 @@ oled::TextWidget::TextWidget(oled::String &&text,
     this->model()->setData(text);
 }
 
-void oled::TextWidget::modelUpdated()
-{
-    ESP_ERROR_CHECK(this->page() == nullptr);
-    // only flash this widget
-    page()->flash(reinterpret_cast<oled::Widget *>(this));
-    //    this->page()->flash(this);
-}
+// void oled::TextWidget::modelUpdated()
+//{
+//     ESP_ERROR_CHECK(this->page() == nullptr);
+//     // only flash this widget
+//     page()->flash(reinterpret_cast<oled::Widget *>(this));
+//     //    this->page()->flash(this);
+// }
 
 void oled::TextWidget::flash(DataMap *data_mapping, const Point &point)
 {
