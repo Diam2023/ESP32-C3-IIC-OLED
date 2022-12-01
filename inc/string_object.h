@@ -19,9 +19,6 @@ public:
     String() = default;
 
     explicit String(const char* string_) : std::string(string_){};
-    explicit String(const std::string& string_) : std::string(string_){};
-    explicit String(std::string& string_) : std::string(string_){};
-    explicit String(std::string&& string_) : std::string(string_){};
 };
 
 };    // namespace oled

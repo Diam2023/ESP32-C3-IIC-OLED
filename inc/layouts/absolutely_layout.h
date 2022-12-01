@@ -37,14 +37,12 @@ public:
      */
     void flash(const Widget* pWidget) override;
 
-    void update() override;
-
     /**
      * Add The Widget In Position pPoint
      * @param pWidget widget
      * @param pPoint position
      */
-    std::pair<Widget*, Position> addWidget(Widget* pWidget, Position&& position);
+    void addWidget(Widget* pWidget, Position&& position);
 
     /**
      * Remove Widget From Layout Container.

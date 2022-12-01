@@ -19,18 +19,16 @@
 ////    }
 //
 //}
-std::pair<oled::Widget *, oled::Position> oled::ListLayout::addWidget(
-    oled::Widget *pWidget,
-    uint16_t space)
+void oled::ListLayout::addWidget(oled::Widget *pWidget, uint16_t space)
 {
-    Position p;
     if (m_objects.empty())
     {
         OLED_D("First");
 
         OLED_D("x: %d, y: %d", m_position.getX(), m_position.getY());
-        p = {m_position.getX(), m_position.getY()};
-        m_objects.emplace_back(std::make_pair(p, pWidget));
+        m_objects.emplace_back(
+            std::make_pair(oled::Position(m_position.getX(), m_position.getY()),
+                           pWidget));
     }
     else
     {
@@ -39,13 +37,12 @@ std::pair<oled::Widget *, oled::Position> oled::ListLayout::addWidget(
             // Horizon
             OLED_D("Horizon");
             auto last = m_objects[m_objects.size() - 1];
-            uint8_t start_x =
-                last.first.getX() + last.second->getWidth() + space;
+            auto start_x = last.first.getX() + last.second->getWidth() + space;
             if ((start_x + pWidget->getWidth()) <=          // added space
                 (m_position.getX() + m_size.getWidth()))    // widget space
             {
-                p = {start_x, last.first.getY()};
-                m_objects.emplace_back(std::make_pair(p, pWidget));
+                Position position(start_x, last.first.getY());
+                m_objects.emplace_back(std::make_pair(position, pWidget));
             }
             else
             {    // next page
@@ -59,11 +56,9 @@ std::pair<oled::Widget *, oled::Position> oled::ListLayout::addWidget(
                                                  b.second->getHeight());
                                      })
                         ->second->getHeight();
-
-                p = {m_position.getX(),
-                     static_cast<uint8_t>(last.first.getY() +
-                                          (max_height / 8))};
-                m_objects.emplace_back(std::make_pair(p, pWidget));
+                Position position(m_position.getX(),
+                                  last.first.getY() + (max_height / 8));
+                m_objects.emplace_back(std::make_pair(position, pWidget));
             }
         }
         else
@@ -77,14 +72,12 @@ std::pair<oled::Widget *, oled::Position> oled::ListLayout::addWidget(
                    last.first.getY() + (last.second->getHeight() / 8));
 
             // VERTICAL
-
-            p = {last.first.getX(),
-                 static_cast<uint8_t>(last.first.getY() +
-                                      (last.second->getHeight() / 8))};
-            m_objects.emplace_back(std::make_pair(p, pWidget));
+            m_objects.emplace_back(std::make_pair(
+                Position(last.first.getX(),
+                         last.first.getY() + (last.second->getHeight() / 8)),
+                pWidget));
         }
     }
-    return std::make_pair(pWidget, p);
 }
 std::pair<oled::Position, oled::Widget *> oled::ListLayout::getWidget(
     uint16_t index)
@@ -122,17 +115,6 @@ void oled::ListLayout::flash(const oled::Widget *pWidget)
         if (pWidget == object.second)
         {
             object.second->flash(this->m_pPage->dataMap(), object.first);
-        }
-    }
-}
-
-void oled::ListLayout::update()
-{
-    for (auto object : this->m_objects)
-    {
-        if (checkInArea(object.first, object.second))
-        {
-            object.second->update(this->m_pPage->dataMap(), object.first);
         }
     }
 }

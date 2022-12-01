@@ -93,12 +93,3 @@ oled::Page::Page(const oled::Window *pWindow)
         new DataMap(pWindow->getOledDevice()->cm_pDeviceInfo->max_page,
                     pWindow->getOledDevice()->cm_pDeviceInfo->max_line_seg);
 }
-void oled::Page::update()
-{
-    for (auto layout : this->m_layouts)
-    {
-        layout->update();
-    }
-
-    this->window()->flash(this);
-}
