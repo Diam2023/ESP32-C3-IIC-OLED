@@ -43,16 +43,20 @@ oled::TextWidget::TextWidget(oled::String &&text,
     this->model()->setData(text);
 }
 
-void oled::TextWidget::modelUpdated()
-{
-    ESP_ERROR_CHECK(this->page() == nullptr);
-    // only flash this widget
-    page()->flash(reinterpret_cast<oled::Widget *>(this));
-    //    this->page()->flash(this);
-}
+// void oled::TextWidget::modelUpdated()
+//{
+//     ESP_ERROR_CHECK(this->page() == nullptr);
+//     // only flash this widget
+//     page()->flash(reinterpret_cast<oled::Widget *>(this));
+//     //    this->page()->flash(this);
+// }
 
 void oled::TextWidget::flash(DataMap *data_mapping, const Point &point)
 {
+    if (!visible())
+    {
+        return;
+    }
     oled::Paint::writeString(data_mapping,
                              point.getX(),
                              point.getY(),
@@ -129,4 +133,14 @@ uint8_t oled::TextWidget::getHeight()
 oled::Size oled::TextWidget::getSize()
 {
     return Widget::getSize();
+}
+
+void oled::TextWidget::setText(std::string &&text)
+{
+    TextWidget::setText(String(std::move(text)));
+}
+
+void oled::TextWidget::setText(const std::string &text)
+{
+    TextWidget::setText(String(text));
 }

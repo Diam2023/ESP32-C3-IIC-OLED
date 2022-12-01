@@ -27,6 +27,10 @@ void oled::GraphWidget::setModel(oled::Model<Func> *pModel)
 void oled::GraphWidget::flash(oled::DataMap *pDataMapping,
                               const oled::Point &point)
 {
+    if (!visible())
+    {
+        return;
+    }
     auto callBack = reinterpret_cast<oled::Model<Func> *>(this->m_pModel);
     if (callBack != nullptr)
     {
@@ -38,18 +42,18 @@ void oled::GraphWidget::flash(oled::DataMap *pDataMapping,
     }
 }
 
-void oled::GraphWidget::modelUpdated()
-{
-    // only flash this widget
-    if (this->page() != nullptr)
-    {
-        this->page()->flash(reinterpret_cast<oled::Widget *>(this));
-    }
-    else
-    {
-        OLED_D("Page is null!");
-    }
-}
+//void oled::GraphWidget::modelUpdated()
+//{
+//    // only flash this widget
+//    if (this->page() != nullptr)
+//    {
+//        this->page()->flash(reinterpret_cast<oled::Widget *>(this));
+//    }
+//    else
+//    {
+//        OLED_D("Page is null!");
+//    }
+//}
 
 void oled::GraphWidget::setFunction(oled::GraphWidget::Func &&function)
 {

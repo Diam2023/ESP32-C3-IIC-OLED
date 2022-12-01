@@ -24,6 +24,10 @@ public:
 
     Model<oled::String> *model();
 
+    void setText(std::string &&text);
+
+    void setText(const std::string &text);
+
     void setText(oled::String &&text);
 
     void setText(const oled::String &text);
@@ -34,7 +38,7 @@ public:
 
     void flash(DataMap *, const Point &) override;
 
-    void modelUpdated() override;
+//    void modelUpdated() override;
 
     explicit TextWidget(oled::String &&text,
                         OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);

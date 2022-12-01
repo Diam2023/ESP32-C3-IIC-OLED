@@ -36,7 +36,7 @@ namespace oled {
 
         void flash(DataMap *, const Point &) override;
 
-        void modelUpdated() override;
+//        void modelUpdated() override;
 
         explicit ImageWidget(uint32_t index, OLED_IMAGE_SIZE imageSize = OLED_IMAGE_SIZE_8);
 
