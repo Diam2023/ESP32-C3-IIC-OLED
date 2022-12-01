@@ -30,6 +30,10 @@ namespace oled {
 
         void setIndex(uint32_t index);
 
+        /**
+         * It will set update Flag true
+         * @param index
+         */
         void updateIndex(uint32_t index);
 
         uint32_t index();
