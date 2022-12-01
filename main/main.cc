@@ -65,9 +65,9 @@ public:
 
     void init()
     {
-        auto ly = new AbsolutelyLayout();
+        auto ly = new AbsolutelyLayout(this);
 
-        m_pTestTextWidget = new TextWidget(ts("1Test Just For Width"),
+        m_pTestTextWidget = new TextWidget(ts("Just For Test"),
                                            this,
                                            oled::OLED_FONT_SIZE_16);
 
@@ -86,8 +86,6 @@ public:
         ly->addWidget(m_pImageTextWidget, Point(30, 5));
 
         ly->addWidget(m_pImage2TextWidget, Point(80, 5));
-
-        ly->setPage(this);
 
         addLayout(ly);
     };
@@ -274,27 +272,23 @@ auto a = [](oled::DataMap *a, const oled::Point &b) -> void {
         //        //
         //        page->clear();
 
-        auto myPage = new MyPage(i2c_oled);
+        auto myPage = new MyPage(window);
+        window->addPage(myPage);
 
-        myPage->bindWindow(window);
-
-        //        page2->clear();
-
-        //        window->addPage(page);
-
-        //                page->clear();
         myPage->clear();
 
-        window->addPage(myPage);
         myPage->init();
 
         window->show();
-        window->flash();
 
         while (true)
         {
             //            vTaskDelay(20);
-            vTaskDelay(200);
+            vTaskDelay(10);
+
+            myPage->slightFire();
+
+            myPage->update();
         }
 
         // printf("%s buffer get: %d\n", __func__, esp_get_free_heap_size());

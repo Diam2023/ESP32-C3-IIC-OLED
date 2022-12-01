@@ -29,6 +29,11 @@ protected:
 
     bool m_visible = true;
 
+    /**
+     * updateFlag for update
+     */
+    bool m_upDateFlag = false;
+
 public:
     template <typename T>
     Model<T>* getModel();
@@ -45,6 +50,11 @@ public:
 
     void setPage(Page*);
 
+    void setUpdateFlag(bool flag)
+    {
+        m_upDateFlag = flag;
+    };
+
     void setVisible(bool visible)
     {
         m_visible = visible;
@@ -55,14 +65,34 @@ public:
         return m_visible;
     };
 
+    bool updateFlag() const
+    {
+        return m_upDateFlag;
+    }
+
     Page* page();
 
     /**
      * Call By Model.
+     *
+     * setUpdate Flag For true , It mean Is Widget Flashed When System Call
+     * update() function.
      */
-    virtual void modelUpdated(){};
+    void modelUpdated()
+    {
+        setUpdateFlag(true);
+    };
 
     virtual void flash(DataMap*, const Point&){};
+
+    void update(DataMap* pDataMap, const Point& point)
+    {
+        if (m_upDateFlag)
+        {
+            flash(pDataMap, point);
+            m_upDateFlag = !m_upDateFlag;
+        }
+    };
 
     // TODO To Add Widget And Height Calculator For Derived Classes
     virtual uint8_t getWidth()

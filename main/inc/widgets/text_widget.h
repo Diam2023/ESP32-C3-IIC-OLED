@@ -38,7 +38,7 @@ public:
 
     void flash(DataMap *, const Point &) override;
 
-    void modelUpdated() override;
+//    void modelUpdated() override;
 
     explicit TextWidget(oled::String &&text,
                         OLED_FONT_SIZE fontSize = OLED_FONT_SIZE_6);

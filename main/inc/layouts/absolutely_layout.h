@@ -37,6 +37,8 @@ public:
      */
     void flash(const Widget* pWidget) override;
 
+    void update() override;
+
     /**
      * Add The Widget In Position pPoint
      * @param pWidget widget

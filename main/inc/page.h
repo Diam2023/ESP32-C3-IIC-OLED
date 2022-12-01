@@ -43,6 +43,8 @@ public:
 
     void flash(Widget *);
 
+    void update();
+
     Page() : m_pDataMap(nullptr){};
     explicit Page(const OledDevice *pDevice);
     explicit Page(const Window *pWindow);

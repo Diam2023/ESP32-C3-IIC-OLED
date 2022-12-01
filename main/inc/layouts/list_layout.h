@@ -38,6 +38,8 @@ public:
     void flash() override;
     void flash(const Widget*) override;
 
+    void update() override;
+
     void setDirection(Direction direction)
     {
         m_direction = direction;

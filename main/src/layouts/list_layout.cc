@@ -125,3 +125,14 @@ void oled::ListLayout::flash(const oled::Widget *pWidget)
         }
     }
 }
+
+void oled::ListLayout::update()
+{
+    for (auto object : this->m_objects)
+    {
+        if (checkInArea(object.first, object.second))
+        {
+            object.second->update(this->m_pPage->dataMap(), object.first);
+        }
+    }
+}
