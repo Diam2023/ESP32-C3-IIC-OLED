@@ -1,0 +1,129 @@
+#ifndef ESP32_C3_IIC_OLED_INC_WIDGET_H_
+#define ESP32_C3_IIC_OLED_INC_WIDGET_H_
+
+#include "object.h"
+#include "data_map.h"
+#include "paint.h"
+#include <memory>
+
+namespace oled
+{
+
+class Layout;
+class Page;
+
+template <typename M>
+class Model;
+
+/**
+ * Abstract Widget
+ */
+class Widget : public Object
+{
+    OLED_OBJECT
+protected:
+    // Widget Model
+    Model<Object>* m_pModel = nullptr;
+
+    Page* m_pPage = nullptr;
+
+    bool m_visible = true;
+
+    /**
+     * updateFlag for update
+     */
+    bool m_upDateFlag = false;
+
+public:
+    template <typename T>
+    Model<T>* getModel();
+
+    //    template <typename T>
+    //    void bindModel(const Model<T>*);
+
+    //    template <typename T>
+    //    void bindModel(Model<T>* const);
+
+    //    template <typename T>
+    //    void bindModel(Model<T>*);
+    void bindModel(Model<Object>*);
+
+    void setPage(Page*);
+
+    void setUpdateFlag(bool flag)
+    {
+        m_upDateFlag = flag;
+    };
+
+    void setVisible(bool visible)
+    {
+        m_visible = visible;
+    };
+
+    bool visible() const
+    {
+        return m_visible;
+    };
+
+    bool updateFlag() const
+    {
+        return m_upDateFlag;
+    }
+
+    Page* page();
+
+    /**
+     * Call By Model.
+     *
+     * setUpdate Flag For true , It mean Is Widget Flashed When System Call
+     * update() function.
+     */
+    void modelUpdated()
+    {
+        setUpdateFlag(true);
+    };
+
+    virtual void flash(DataMap*, const Point&){};
+
+    void update(DataMap* pDataMap, const Point& point)
+    {
+        if (m_upDateFlag)
+        {
+            flash(pDataMap, point);
+            m_upDateFlag = !m_upDateFlag;
+        }
+    };
+
+    // TODO To Add Widget And Height Calculator For Derived Classes
+    virtual uint8_t getWidth()
+    {
+        return 0;
+    };
+
+    virtual uint8_t getHeight()
+    {
+        return 0;
+    };
+
+    virtual Size getSize()
+    {
+        return {getWidth(), getHeight()};
+    };
+
+    virtual Rectangle getArea()
+    {
+        return {};
+    };
+
+    Widget() = default;
+
+    template <typename T>
+    explicit Widget(Model<T>* pModel, Page* pPage)
+        : m_pModel(reinterpret_cast<Model<Object>*>(pModel)), m_pPage(pPage){};
+
+    ~Widget() override = default;
+};
+
+}    // namespace oled
+
+#endif    // ESP32_C3_IIC_OLED_INC_WIDGET_H_
