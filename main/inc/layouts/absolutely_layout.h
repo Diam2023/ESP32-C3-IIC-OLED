@@ -39,6 +39,8 @@ public:
 
     void update() override;
 
+    void sendEvent(oled::Event event) override;
+
     /**
      * Add The Widget In Position pPoint
      * @param pWidget widget

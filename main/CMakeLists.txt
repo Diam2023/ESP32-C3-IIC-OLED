@@ -29,6 +29,7 @@ idf_component_register(
         SRCS
         "main.cc"
         "./src/oled_device.cc"
+        "./src/event_listener.cc"
         "./src/object.cc"
         "./src/paint.cc"
         "./src/page.cc"

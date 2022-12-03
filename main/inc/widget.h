@@ -4,7 +4,8 @@
 #include "object.h"
 #include "data_map.h"
 #include "paint.h"
-#include <memory>
+
+#include "event_listener.h"
 
 namespace oled
 {
@@ -30,13 +31,35 @@ protected:
     bool m_visible = true;
 
     /**
+     * Event Listener For Widget.
+     */
+    oled::EventListener m_eventListener;
+
+    /**
      * updateFlag for update
      */
     bool m_upDateFlag = false;
 
 public:
+    /**
+     * module For Data
+     * @tparam T
+     * @return
+     */
     template <typename T>
     Model<T>* getModel();
+
+    /**
+     * Event Listener For Widget
+     * @param eventListener
+     */
+    void addEventListener(const EventListener& eventListener);
+
+    /**
+     * Send Event To Handler It
+     * @param event Event For Listener
+     */
+    void sendEvent(oled::Event event);
 
     //    template <typename T>
     //    void bindModel(const Model<T>*);

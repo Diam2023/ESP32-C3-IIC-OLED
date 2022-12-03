@@ -91,6 +91,8 @@ public:
 
     virtual void update() {};
 
+    virtual void sendEvent(Event event) {};
+
     Layout() : m_pPage(), m_position(), m_size(){};
 
     explicit Layout(Page* pPage);

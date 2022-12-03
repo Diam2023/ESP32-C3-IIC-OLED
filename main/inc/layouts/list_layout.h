@@ -31,6 +31,9 @@ private:
     std::vector<std::pair<Point, Widget*>> m_objects;
 
 public:
+
+    void sendEvent(oled::Event event) override;
+
     std::pair<Widget*, oled::Position> addWidget(Widget* pWidget, uint16_t space = 0);
 
     std::pair<Position, Widget*> getWidget(uint16_t);

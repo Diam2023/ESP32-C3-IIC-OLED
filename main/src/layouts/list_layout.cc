@@ -136,3 +136,11 @@ void oled::ListLayout::update()
         }
     }
 }
+
+void oled::ListLayout::sendEvent(oled::Event event)
+{
+    for (auto object : this->m_objects)
+    {
+        object.second->sendEvent(event);
+    }
+}

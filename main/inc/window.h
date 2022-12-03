@@ -1,7 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <queue>
 #include <vector>
+
 #include "page.h"
 #include "types.h"
 #include "oled_device.h"
@@ -15,9 +17,6 @@ class Window : public Object
     OLED_OBJECT
 
 private:
-    // TODO Add event Pool Class to handle event
-    //    std::vector<oled::EVENT> eventQueue;
-    //    std::map<std::string, std::function<void*(void*)>> event;
 
     // 目前两种方案
     /**
@@ -29,9 +28,26 @@ private:
     // pages
     std::vector<Page*> m_pages;
 
+    /**
+     * Event QueueFor Data
+     */
+    std::queue<Event> m_eventQueue;
+
     uint8_t m_nowPage{0};
 
 public:
+
+    /**
+     * Push Event To Queue For Widget handler.
+     * @param event
+     */
+    void pushEvent(const Event& event);
+
+    /**
+     * New Task For Dispatch Event.
+     */
+    void eventDispatch();
+
     /**
      * 获取page的副本
      * @return

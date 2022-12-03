@@ -46,5 +46,18 @@ Model<T>* Widget::getModel()
 void Widget::bindModel(Model<Object>* pModel)
 {
     this->m_pModel = reinterpret_cast<Model<Object>*>(pModel);
-    //    this->m_pModel = pModel;
 }
+
+void Widget::addEventListener(const EventListener& eventListener)
+{
+    m_eventListener = eventListener;
+}
+
+void Widget::sendEvent(oled::Event event)
+{
+    if (*m_eventListener)
+    {
+        m_eventListener.handler(event);
+    }
+}
+

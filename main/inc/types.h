@@ -129,15 +129,73 @@ struct DeviceInfo
     uint8_t init_cmd[];
 };
 
-struct Event
+/**
+ * Event For something happen.
+ */
+class Event
 {
+protected:
+    /**
+     * Event Id for Event Class to find Event Type.
+     */
+    uint16_t m_eventId;
+
+public:
+    /**
+     * Get Event Unique Id
+     * @return unique id
+     */
+    uint16_t getEventId() const
+    {
+        return m_eventId;
+    }
+
+    /**
+     * set EventID
+     * @param eventId
+     */
+    void setEventId(uint16_t eventId)
+    {
+        m_eventId = eventId;
+    };
+
+    /**
+     * Use Event Id to compare
+     * @param event event data
+     * @return true for eventId Equ
+     */
+    bool operator==(const Event& event) const
+    {
+        return (event.m_eventId == m_eventId);
+    };
+
+    Event& operator=(const Event& event)
+    {
+        m_eventId = event.getEventId();
+        return *this;
+    };
+
+    /**
+     * use 0 to initialize event id.
+     */
+    Event()
+    {
+        m_eventId = 0;
+    };
+
+    /**
+     * add Event id for construction class
+     * @param eventId
+     */
+    explicit Event(uint16_t eventId)
+    {
+        m_eventId = eventId;
+    };
+
+    ~Event() = default;
 };
 
-struct InputEvent : public Event
-{
-};
-
-using EventHandler_t = std::function<void*(struct EVENT)>;
+using EventHandler = std::function<void(Event)>;
 
 // Define Position And MicroPoint
 using Position = Point;

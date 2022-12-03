@@ -26,7 +26,6 @@
 #include "window.h"
 #include "layout.h"
 #include "image_widget.h"
-#include "event.h"
 #include "absolutely_layout.h"
 #include "graph_widget.h"
 
@@ -67,19 +66,23 @@ public:
     {
         auto ly = new AbsolutelyLayout(this);
 
-        m_pTestTextWidget = new TextWidget(ts("Just For Test"),
-                                           this,
-                                           oled::OLED_FONT_SIZE_16);
+        m_pTestTextWidget =
+            new TextWidget(ts("Just For Test"), this, oled::OLED_FONT_SIZE_16);
 
         m_pTest2TextWidget = new TextWidget(ts("Test Data"), this);
         m_pImageTextWidget = new ImageWidget(4, this);
         m_pImage2TextWidget =
             new ImageWidget(4, this, OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_32);
 
-        //        m_pTest2TextWidget->setPage(this);
-        //        m_pTestTextWidget->setPage(this);
-        //        m_pImageTextWidget->setPage(this);
-        //        m_pImage2TextWidget->setPage()
+        m_pTestTextWidget->addEventListener(
+            EventListener([](const Event &event) -> void {
+                ESP_LOGI("event", "Text1 event Handler %d", event.getEventId());
+            }));
+
+        m_pTest2TextWidget->addEventListener(
+            EventListener([](const Event &event) -> void {
+                ESP_LOGI("event", "Text2 event Handler %d", event.getEventId());
+            }));
 
         ly->addWidget(m_pTestTextWidget, Point(0, 0));
         ly->addWidget(m_pTest2TextWidget, Point(60, 3));
@@ -200,6 +203,16 @@ auto a = [](oled::DataMap *a, const oled::Point &b) -> void {
     Paint::drawLine(a, b, Point(0, 6), Point(127, 0), b);
 };
 
+[[noreturn]] void eventLoopTask(void *arg)
+{
+    auto window = reinterpret_cast<Window *>(arg);
+    for (;;)
+    {
+        window->eventDispatch();
+        vTaskDelay(100);
+    }
+}
+
 [[noreturn]] void oled_test()
 {
     auto i2c_oled = new oled::OledDevice(5, 6, true);
@@ -280,6 +293,11 @@ auto a = [](oled::DataMap *a, const oled::Point &b) -> void {
         myPage->init();
 
         window->show();
+        xTaskCreate(eventLoopTask, "eventLoopTask", 4096, window, 4, nullptr);
+
+        window->pushEvent(Event(10));
+        window->pushEvent(Event(2));
+        window->pushEvent(Event(5));
 
         while (true)
         {
