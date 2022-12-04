@@ -30,7 +30,7 @@
 #include "graph_widget.h"
 
 #include "graph_widget.h"
-#include "list_layout.h"
+#include "list_widget.h"
 
 static const char *TAG_MAIN = "oled test main";
 
@@ -64,7 +64,10 @@ public:
 
     void init()
     {
-        auto ly = new AbsolutelyLayout(this);
+        auto ly = new ListWidget(this,
+                                 oled::Direction::VERTICAL,
+                                 Position(0, 0),
+                                 Size(127, 7));
 
         m_pTestTextWidget =
             new TextWidget(ts("Just For Test"), this, oled::OLED_FONT_SIZE_16);
@@ -84,11 +87,16 @@ public:
                 ESP_LOGI("event", "Text2 event Handler %d", event.getEventId());
             }));
 
-        ly->addWidget(m_pTestTextWidget, Point(0, 0));
-        ly->addWidget(m_pTest2TextWidget, Point(60, 3));
-        ly->addWidget(m_pImageTextWidget, Point(30, 5));
+        //        ly->addWidget(m_pTestTextWidget, Point(0, 0));
+        //        ly->addWidget(m_pTest2TextWidget, Point(60, 3));
+        //        ly->addWidget(m_pImageTextWidget, Point(30, 5));
+        //
+        //        ly->addWidget(m_pImage2TextWidget, Point(80, 5));
 
-        ly->addWidget(m_pImage2TextWidget, Point(80, 5));
+        ly->addWidget(m_pTestTextWidget);
+        ly->addWidget(m_pTest2TextWidget);
+        ly->addWidget(m_pImageTextWidget);
+        ly->addWidget(m_pImage2TextWidget);
 
         addLayout(ly);
     };
