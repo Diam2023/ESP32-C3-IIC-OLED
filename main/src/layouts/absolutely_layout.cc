@@ -87,6 +87,22 @@ void oled::AbsolutelyLayout::sendEvent(oled::Event event)
     }
 }
 
+oled::Position oled::AbsolutelyLayout::getPosition(const oled::Widget *pWidget)
+{
+    if (pWidget == m_objects.end()->second)
+    {
+        return m_objects.end()->first;
+    }
+    else
+    {
+        return std::find_if(m_objects.begin(),
+                            m_objects.end(),
+                            [&](const std::pair<const Position, Widget *> &data)
+                                -> bool { return (data.second == pWidget); })
+            ->first;
+    }
+}
+
 // void oled::Layout::flash()
 //{
 //     for (auto compose : this->m_compose)

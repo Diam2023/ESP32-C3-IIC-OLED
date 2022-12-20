@@ -85,13 +85,18 @@ public:
 
     //    int indexOfWidget(const Widget* pWidget);
 
+    virtual Position getPosition(const Widget* pWidget)
+    {
+        return {};
+    };
+
     virtual void flash(){};
 
     virtual void flash(const Widget* pWidget){};
 
-    virtual void update() {};
+    virtual void update(){};
 
-    virtual void sendEvent(Event event) {};
+    virtual void sendEvent(Event event){};
 
     Layout() : m_pPage(), m_position(), m_size(){};
 

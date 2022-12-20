@@ -41,6 +41,8 @@ public:
 
     void sendEvent(oled::Event event) override;
 
+    Position getPosition(const Widget *pWidget) override;
+
     /**
      * Add The Widget In Position pPoint
      * @param pWidget widget

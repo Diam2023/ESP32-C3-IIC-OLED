@@ -93,6 +93,7 @@ oled::Page::Page(const oled::Window *pWindow)
         new DataMap(pWindow->getOledDevice()->cm_pDeviceInfo->max_page,
                     pWindow->getOledDevice()->cm_pDeviceInfo->max_line_seg);
 }
+
 void oled::Page::update()
 {
     for (auto layout : this->m_layouts)
@@ -102,3 +103,11 @@ void oled::Page::update()
 
     this->window()->flash(this);
 }
+
+//std::pair<oled::Layout *, oled::Position> oled::Page::getPosition(oled::Widget *pWidget)
+//{
+////    std::find_if(m_layouts.begin(), m_layouts.end(), [&](Layout *layout) -> bool{
+////        return (pWidget == layout->getPosition())
+////    });
+////    return std::make_pair()
+//}

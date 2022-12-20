@@ -25,6 +25,10 @@ private:
     Window *m_pWindow{};
 
 public:
+
+    // TODO Resolve Position!
+//    std::pair<Layout *, Position> getPosition(Widget *pWidget);
+
     void bindWindow(const Window *);
 
     Window *window();
