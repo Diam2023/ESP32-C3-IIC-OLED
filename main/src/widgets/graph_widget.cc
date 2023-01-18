@@ -42,18 +42,18 @@ void oled::GraphWidget::flash(oled::DataMap *pDataMapping,
     }
 }
 
-//void oled::GraphWidget::modelUpdated()
+// void oled::GraphWidget::modelUpdated()
 //{
-//    // only flash this widget
-//    if (this->page() != nullptr)
-//    {
-//        this->page()->flash(reinterpret_cast<oled::Widget *>(this));
-//    }
-//    else
-//    {
-//        OLED_D("Page is null!");
-//    }
-//}
+//     // only flash this widget
+//     if (this->page() != nullptr)
+//     {
+//         this->page()->flash(reinterpret_cast<oled::Widget *>(this));
+//     }
+//     else
+//     {
+//         OLED_D("Page is null!");
+//     }
+// }
 
 void oled::GraphWidget::setFunction(oled::GraphWidget::Func &&function)
 {

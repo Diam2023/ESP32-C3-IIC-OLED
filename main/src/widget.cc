@@ -60,4 +60,3 @@ void Widget::sendEvent(oled::Event event)
         m_eventListener.handler(event);
     }
 }
-

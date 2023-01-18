@@ -65,7 +65,8 @@ void oled::TextWidget::flash(DataMap *data_mapping, const Point &point)
 }
 
 void oled::TextWidget::setModel(oled::Model<oled::String> *model)
-{    this->bindModel(reinterpret_cast<Model<Object> *>(model));
+{
+    this->bindModel(reinterpret_cast<Model<Object> *>(model));
 }
 
 oled::Model<oled::String> *oled::TextWidget::model()

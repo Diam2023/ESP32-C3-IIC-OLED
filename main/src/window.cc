@@ -110,8 +110,7 @@ void oled::Window::eventDispatch()
         m_eventQueue.pop();
         auto page = this->pages().at(this->m_nowPage);
 
-
-        for (auto &layout : page->layouts())
+        for (auto& layout : page->layouts())
         {
             layout->sendEvent(event);
         }

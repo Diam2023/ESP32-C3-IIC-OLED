@@ -17,7 +17,6 @@ class Window : public Object
     OLED_OBJECT
 
 private:
-
     // 目前两种方案
     /**
      * 1.传入指针 使用智能指针传入
@@ -36,7 +35,6 @@ private:
     uint8_t m_nowPage{0};
 
 public:
-
     /**
      * Push Event To Queue For Widget handler.
      * @param event
@@ -52,7 +50,7 @@ public:
      * 获取page的副本
      * @return
      */
-    std::vector<Page*> &pages()
+    std::vector<Page*>& pages()
     {
         return this->m_pages;
     }

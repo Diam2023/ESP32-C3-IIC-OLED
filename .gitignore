@@ -6,3 +6,4 @@ sdkconfig.old
 .devcontainer
 .idea
 *build*
+.cache

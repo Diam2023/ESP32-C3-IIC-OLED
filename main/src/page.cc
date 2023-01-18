@@ -104,10 +104,10 @@ void oled::Page::update()
     this->window()->flash(this);
 }
 
-//std::pair<oled::Layout *, oled::Position> oled::Page::getPosition(oled::Widget *pWidget)
+// std::pair<oled::Layout *, oled::Position>
+// oled::Page::getPosition(oled::Widget *pWidget)
 //{
-////    std::find_if(m_layouts.begin(), m_layouts.end(), [&](Layout *layout) -> bool{
-////        return (pWidget == layout->getPosition())
-////    });
-////    return std::make_pair()
+////    std::find_if(m_layouts.begin(), m_layouts.end(), [&](Layout *layout) ->
+///bool{ /        return (pWidget == layout->getPosition()) /    }); /    return
+///std::make_pair()
 //}

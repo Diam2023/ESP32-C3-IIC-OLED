@@ -5,14 +5,14 @@
 #include "model.h"
 
 oled::ListWidget::ListWidget(oled::Page *pPage,
-                                 oled::Direction direction,
-                                 oled::Position position,
-                                 oled::Size size)
+                             oled::Direction direction,
+                             oled::Position position,
+                             oled::Size size)
     : ListLayout(pPage, direction, std::move(position), size)
 {
     Widget::setPage(pPage);
 
-    auto *model_ = new oled::Model<ListWidget*>(this);
+    auto *model_ = new oled::Model<ListWidget *>(this);
     model_->bindWidget(this);
     model_->setData(this);
     this->bindModel(reinterpret_cast<Model<Object> *>(model_));

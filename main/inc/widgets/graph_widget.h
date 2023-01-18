@@ -29,7 +29,7 @@ public:
 
     void setFunction(Func &&function);
 
-//    void modelUpdated() override;
+    //    void modelUpdated() override;
 
     void flash(DataMap *, const Point &) override;
 
