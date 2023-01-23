@@ -100,6 +100,65 @@ public:
         ly->addWidget(m_pImage2TextWidget);
 
         addLayout(ly);
+        m_pImage2TextWidget->bindAnimation(
+            Animation([](Animation *pAnimation) -> void {
+                static int counter = 0;
+                counter++;
+                if (counter >= 20)
+                {
+                    pAnimation->end();
+                }
+                auto imageWidget =
+                    dynamic_cast<ImageWidget *>(pAnimation->widget());
+                if (imageWidget->model()->data() == 4)
+                {
+                    imageWidget->updateIndex(3);
+                }
+                else
+                {
+                    imageWidget->updateIndex(4);
+                }
+            }));
+        m_pTestTextWidget->bindAnimation(
+            Animation([](Animation *pAnimation) -> void {
+                auto pTextWidget =
+                    dynamic_cast<TextWidget *>(pAnimation->widget());
+                static bool sync = true;
+                if (sync)
+                {
+                    pTextWidget->setText("Test Test ");
+                }
+                else
+                {
+                    pTextWidget->setText("Just For Test");
+                }
+                sync = !sync;
+            }));
+
+        //        auto slightFire = new Animation(
+        //            [](Animation *pAnimation) -> void {
+        //                static int counter = 0;
+        //                counter++;
+        //                if (counter >= 4)
+        //                {
+        //                    pAnimation->end();
+        //                }
+        //                auto imageWidget =
+        //                    dynamic_cast<ImageWidget *>(pAnimation->widget());
+        //                if (imageWidget->model()->data() == 4)
+        //                {
+        //                    imageWidget->updateIndex(3);
+        //                }
+        //                else
+        //                {
+        //                    imageWidget->updateIndex(4);
+        //                }
+        //            },
+        //            m_pImage2TextWidget);
+        //        slightFire->go();
+        //        pushAnimation(slightFire);
+        //        pushAnimation(Animation(
+        //            ));
     };
 
     MyPage(OledDevice *pDevice) : Page(pDevice){};
@@ -222,7 +281,7 @@ auto a = [](oled::DataMap *a, const oled::Point &b) -> void {
     }
 }
 
-[[noreturn]] void oled_test()
+void oled_test()
 {
     auto i2c_oled = new oled::OledDevice(5, 6, true);
 
@@ -313,9 +372,10 @@ auto a = [](oled::DataMap *a, const oled::Point &b) -> void {
             //            vTaskDelay(20);
             vTaskDelay(10);
 
-            myPage->slightFire();
+            //            myPage->slightFire();
 
-            myPage->update();
+            //            myPage->update();
+            myPage->flash();
         }
 
         // printf("%s buffer get: %d\n", __func__, esp_get_free_heap_size());

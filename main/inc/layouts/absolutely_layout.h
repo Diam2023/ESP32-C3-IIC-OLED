@@ -26,6 +26,9 @@ public:
      */
     void setPage(Page* pPage) override;
 
+    std::vector<std::pair<oled::Point, oled::Widget*>> getCheckedAreaWidget()
+        override;
+
     /**
      * Flash Widgets Data For Page
      */

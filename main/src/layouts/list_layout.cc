@@ -92,6 +92,23 @@ std::pair<oled::Position, oled::Widget *> oled::ListLayout::getWidget(
     return m_objects[index];
 }
 
+std::vector<std::pair<oled::Point, oled::Widget *>>
+    oled::ListLayout::getCheckedAreaWidget()
+{
+    std::vector<std::pair<oled::Point, oled::Widget *>> result;
+
+    for (auto &object : this->m_objects)
+    {
+        if (checkInArea(object.first, object.second))
+        {
+            result.push_back(object);
+        }
+    }
+
+    // expiring value
+    return result;
+};
+
 void oled::ListLayout::flash()
 {
     for (auto object : this->m_objects)

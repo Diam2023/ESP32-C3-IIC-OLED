@@ -12,6 +12,7 @@ namespace oled
 
 class Layout;
 class Page;
+class Animation;
 
 template <typename M>
 class Model;
@@ -66,6 +67,20 @@ public:
 
     //    template <typename T>
     //    void bindModel(Model<T>* const);
+
+    void bindAnimation(oled::Animation* animation);
+
+    /**
+     * Bind Animaiton To Widget And Add To Page
+     * @param animation Animation For Page
+     */
+    void bindAnimation(oled::Animation&& animation);
+
+    /**
+     * bind Animation To Page
+     * @param animation Animation Argument
+     */
+    void bindAnimation(const oled::Animation& animation);
 
     //    template <typename T>
     //    void bindModel(Model<T>*);

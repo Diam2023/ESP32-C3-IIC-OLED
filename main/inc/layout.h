@@ -90,10 +90,13 @@ public:
         return {};
     };
 
+    virtual std::vector<std::pair<Point, Widget*>> getCheckedAreaWidget() = 0;
+
     virtual void flash(){};
 
     virtual void flash(const Widget* pWidget){};
 
+    // TODO sync to flash run Animation
     virtual void update(){};
 
     virtual void sendEvent(Event event){};

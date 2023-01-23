@@ -50,9 +50,67 @@ void oled::Page::clear()
 
 void oled::Page::flash()
 {
+    // TODO Version Fix, 2.0
+    // To Separate Layout From Page Flash, As a Independence Feature
     for (auto layout : this->m_layouts)
     {
-        layout->flash();
+        auto widgets = layout->getCheckedAreaWidget();
+        auto &animationQueue = this->getAnimationQueue();
+        std::queue<Animation *> tempQueue;
+
+        for (auto &widget : widgets)
+        {
+            while (!animationQueue.empty())
+            {
+                auto animation = animationQueue.front();
+                animationQueue.pop_front();
+
+                if (animation->widget() == widget.second)
+                {
+                    if (animation->status() == AnimationStatus::RUNNING)
+                    {
+                        // run Animation
+                        animation->run();
+                    }
+                }
+                else
+                {
+                    // Run Next Time Flash
+                    if (animation->status() == AnimationStatus::READY)
+                    {
+                        animation->go();
+                    }
+                }
+
+                if (animation->status() != AnimationStatus::TERMINATED)
+                {
+                    tempQueue.push(animation);
+                }
+                else
+                {
+                    // GC
+                    if (animation->status() == AnimationStatus::TERMINATED)
+                    {
+                        delete animation;
+                    }
+                }
+            }
+            //     Add None Running Animation To Last
+            while (!tempQueue.empty())
+            {
+                auto animation = tempQueue.front();
+
+                tempQueue.pop();
+                animationQueue.push_front(animation);
+            }
+        }
+
+        for (auto &widget : widgets)
+        {
+            // Deep Flash
+            widget.second->flash(this->dataMap(), widget.first);
+        }
+        //        layout->flash();
     }
 
     this->window()->flash(this);
@@ -60,6 +118,7 @@ void oled::Page::flash()
 
 void oled::Page::flash(oled::Widget *pWidget)
 {
+    // TODO Add flash logic To Hear
     for (auto layout : this->m_layouts)
     {
         layout->flash(pWidget);
@@ -108,6 +167,16 @@ void oled::Page::update()
 // oled::Page::getPosition(oled::Widget *pWidget)
 //{
 ////    std::find_if(m_layouts.begin(), m_layouts.end(), [&](Layout *layout) ->
-///bool{ /        return (pWidget == layout->getPosition()) /    }); /    return
-///std::make_pair()
+/// bool{ /        return (pWidget == layout->getPosition()) /    }); / return
+/// std::make_pair()
 //}
+
+void oled::Page::pushAnimation(oled::Animation *pAnimation)
+{
+    this->m_animationQueue.push_front(pAnimation);
+}
+
+// void oled::Page::pushAnimation(const oled::Animation &animation)
+//{
+//     this->m_animationQueue.emplace_front(animation);
+// }

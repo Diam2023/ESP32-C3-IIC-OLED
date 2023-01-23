@@ -8,6 +8,7 @@
 
 #include <utility>
 #include "object.h"
+#include <functional>
 
 namespace oled
 {
@@ -41,7 +42,7 @@ protected:
     /**
      * Status Flag For Animation
      */
-    AnimationStatus m_animationStatus;
+    volatile AnimationStatus m_animationStatus;
 
     /**
      * Run One Timer Based On Flash Task
@@ -64,15 +65,28 @@ protected:
     std::function<void(Animation *)> m_callback;
 
 public:
-    Animation()
-    = default;
+    Animation() = delete;
+
+    /**
+     * Move Construction
+     * @param animation
+     */
+    Animation(Animation &&animation) noexcept : Object(animation)
+    {
+        m_callback = animation.m_callback;
+        m_animationStatus = animation.m_animationStatus;
+        m_runTimeRate = animation.m_runTimeRate;
+        m_counter = animation.m_counter;
+        m_pWidget = animation.m_pWidget;
+    };
 
     /**
      * Copy Construction
      * @param Another animation
      */
-    Animation(const Animation &animation)
-     : Object(animation) {
+    Animation(const Animation &animation) : Object(animation)
+    {
+        m_callback = animation.m_callback;
         m_animationStatus = animation.m_animationStatus;
         m_runTimeRate = animation.m_runTimeRate;
         m_counter = animation.m_counter;
@@ -85,9 +99,9 @@ public:
      * @param callback Move construct for lambda expression
      * @param runTimeRate Run every flash()
      */
-    Animation(Widget *pWidget,
-              std::function<void(Animation *)> &&callback,
-              int16_t runTimeRate = 1)
+    explicit Animation(std::function<void(Animation *)> &&callback,
+                       Widget *pWidget,
+                       int16_t runTimeRate = 1)
         : m_runTimeRate(runTimeRate), m_pWidget(pWidget), m_callback(callback)
     {
         m_animationStatus = AnimationStatus::READY;
@@ -106,11 +120,6 @@ public:
     {
         m_animationStatus = AnimationStatus::READY;
     };
-
-    friend bool operator<(const oled::Animation& a, const oled::Animation& b)
-    {
-        return a.m_animationStatus >= b.m_animationStatus;
-    }
 
     /**
      * Set Widget For Animation
@@ -169,7 +178,7 @@ public:
      */
     void run()
     {
-        OLED_D("Timer Running!");
+        OLED_D("Animation Timer Running!");
         m_counter++;
 
         /**
@@ -178,18 +187,20 @@ public:
         if (m_counter >= m_runTimeRate)
         {
             // Run CallBack
-            m_callback(this);
-
-            OLED_D("Run Animation!");
-        }
-        else
-        {
+            if (m_callback)
+            {
+                OLED_D("Run Animation!");
+                m_callback(this);
+            }
+            else
+            {
+                OLED_W("Animation Empty!");
+            }
             // Clear Timer
             m_counter = 0;
         }
     };
 };
-
 };    // namespace oled
 
 #endif    // ESP32_C3_IIC_OLED_ANIMATION_H

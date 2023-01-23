@@ -38,6 +38,8 @@ public:
 
     std::pair<Position, Widget*> getWidget(uint16_t);
 
+    std::vector<std::pair<oled::Point, oled::Widget*>> getCheckedAreaWidget() override;
+
     void flash() override;
     void flash(const Widget*) override;
 

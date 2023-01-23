@@ -3,6 +3,8 @@
 //
 
 #include "widget.h"
+#include "animation.h"
+#include "page.h"
 
 using namespace oled;
 
@@ -48,6 +50,7 @@ void Widget::bindModel(Model<Object>* pModel)
     this->m_pModel = reinterpret_cast<Model<Object>*>(pModel);
 }
 
+// TODO Change To register event listener.
 void Widget::addEventListener(const EventListener& eventListener)
 {
     m_eventListener = eventListener;
@@ -59,4 +62,25 @@ void Widget::sendEvent(oled::Event event)
     {
         m_eventListener.handler(event);
     }
+}
+
+void Widget::bindAnimation(Animation* animation)
+{
+    animation->setWidget(this);
+    // push Animation TO Page
+    page()->pushAnimation(animation);
+}
+
+void Widget::bindAnimation(Animation&& animation)
+{
+    animation.setWidget(this);
+    // push Animation TO Page
+    page()->pushAnimation(new Animation(animation));
+}
+
+void Widget::bindAnimation(const Animation& animation)
+{
+    (const_cast<Animation&>(animation)).setWidget(this);
+    // push Animation TO Page
+    page()->pushAnimation(new Animation(animation));
 }
