@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-
+#include <cstddef>
 #include <functional>
 
 #define MODEL_MEMBERS private:
@@ -92,6 +92,12 @@ private:
     uint8_t m_height;
 
 public:
+
+    Size(const oled::Size& size) : m_width(size.m_width), m_height(size.m_height)
+    {
+    }
+
+
     Size() : m_width(0), m_height(0)
     {
     }
@@ -112,7 +118,7 @@ public:
         return m_height;
     };
 
-    Size& operator=(const Size& size)
+    Size& operator=(const oled::Size& size)
     {
         this->m_height = size.getHeight();
         this->m_width = size.getWidth();
@@ -182,6 +188,14 @@ public:
     {
         m_eventId = 0;
     };
+
+    /**
+     * use 0 to initialize event id.
+     */
+    Event(const Event &event) : m_eventId(event.m_eventId)
+    {
+    };
+    
 
     /**
      * add Event id for construction class
