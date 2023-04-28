@@ -110,10 +110,9 @@ void oled::Window::deletePage(const uint8_t index)
 //         m_eventQueue.pop();
 //         auto page = this->pages().at(this->m_nowPage);
 
-
-//         for (auto &layout : page->layouts())
-//         {
-//             layout->sendEvent(event);
-//         }
-//     }
-// }
+        for (auto& layout : page->layouts())
+        {
+            layout->sendEvent(event);
+        }
+    }
+}

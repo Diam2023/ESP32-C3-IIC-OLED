@@ -13,9 +13,8 @@
 namespace oled
 {
 
-
 #define OLED_W(format, ...)                          \
-    ESP_LOG_LEVEL_LOCAL(ESP_LOG_WARN,               \
+    ESP_LOG_LEVEL_LOCAL(ESP_LOG_WARN,                \
                         this->getObjectNameCStyle(), \
                         format,                      \
                         ##__VA_ARGS__);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstddef>
 #include <functional>
 
 #define MODEL_MEMBERS private:
@@ -91,11 +92,6 @@ private:
     uint8_t m_height;
 
 public:
-
-    Size(const oled::Size &size_) : m_width(size_.m_width), m_height(size_.m_height)
-    {
-    }
-
     Size() : m_width(0), m_height(0)
     {
     }
@@ -179,13 +175,13 @@ struct DeviceInfo
 //         return *this;
 //     };
 
-//     /**
-//      * use 0 to initialize event id.
-//      */
-//     Event()
-//     {
-//         m_eventId = 0;
-//     };
+    /**
+     * use 0 to initialize event id.
+     */
+    Event()
+    {
+        m_eventId = 0;
+    };
 
 //     /**
 //      * add Event id for construction class

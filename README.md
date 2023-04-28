@@ -10,13 +10,8 @@ cd components # if not exist, you should create it
 ```
 
 ```
-git clone https://github.com/monoliths-uni/ESP32-C3-IIC-OLED.git
+git clone https://github.com/monoliths-uni/ESP32-C3-IIC-OLED.git -b components
 ```
-
-```
-git checkout components
-```
-
 
 ---
 
@@ -36,4 +31,4 @@ git checkout components
 * Toolchannel: ESP-IDF V4.4.1
 * Board: ESP32-C3-12F
 
-### Using C++14 standard library
+### Using C++17 standard library

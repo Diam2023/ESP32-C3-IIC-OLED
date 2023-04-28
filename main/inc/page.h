@@ -7,6 +7,10 @@
 #include "data_map.h"
 #include "esp_log.h"
 #include "layout.h"
+#include "animation.h"
+
+#include <queue>
+#include <functional>
 
 namespace oled
 {
@@ -24,7 +28,36 @@ private:
 
     Window *m_pWindow{};
 
+    /**
+     * Priority AnimationQueue For Window
+     */
+    std::deque<oled::Animation *> m_animationQueue{};
+
 public:
+    /**
+     * Push Animation To Animation Queue
+     * @param animation Animation For Push Move Version
+     */
+    void pushAnimation(oled::Animation *pAnimation);
+
+    /**
+     * Push Animation To Animation Queue
+     * @param animation Animation For Push Copy Version
+     */
+//    void pushAnimation(const oled::Animation &animation);
+
+    /**
+     * Get AnimationQueue For This Page
+     * @return typeOf m_animationQueue Animation Queue Refer
+     */
+    std::deque<oled::Animation *>& getAnimationQueue()
+    {
+        return this->m_animationQueue;
+    };
+
+    // TODO Resolve Position!
+    //    std::pair<Layout *, Position> getPosition(Widget *pWidget);
+
     void bindWindow(const Window *);
 
     Window *window();

@@ -1,46 +1,18 @@
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
-set(
-        WIDGET_FOLDER
-        "./src/widgets/"
-)
+set(WIDGET_SRC "./src/widgets")
+set(WIDGET_HEADER "./inc/widgets")
 
-set(
-        LAYOUT_FOLDER
-        "./src/layouts/"
-)
+set(LAYOUT_SRC "./src/layouts")
+set(LAYOUT_HEADER "./inc/layouts")
 
+file(GLOB_RECURSE COMPONENT_SRCS "./main.cc" "./src/*.cc" ${LAYOUT_SRC}/*.cc ${WIDGET_SRC}/*.cc)
 
-set(
-        WIDGETS
-        ${WIDGET_FOLDER}list_widget.cc
-        ${WIDGET_FOLDER}text_widget.cc
-        ${WIDGET_FOLDER}image_widget.cc
-        ${WIDGET_FOLDER}graph_widget.cc
-)
+set(COMPONENT_ADD_INCLUDEDIRS 
+    "./inc"
+    ${LAYOUT_HEADER}
+    ${WIDGET_HEADER}
+    )
 
-set(
-        LAYOUTS
-        ${LAYOUT_FOLDER}absolutely_layout.cc
-        ${LAYOUT_FOLDER}list_layout.cc
-)
-
-idf_component_register(
-        SRCS
-        "main.cc"
-        "./src/oled_device.cc"
-        # "./src/event_listener.cc"
-        "./src/object.cc"
-        "./src/paint.cc"
-        "./src/page.cc"
-        "./src/window.cc"
-        "./src/layout.cc"
-        "./src/widget.cc"
-        ${LAYOUTS}
-        ${WIDGETS}
-        INCLUDE_DIRS
-        "./inc"
-        "./inc/widgets"
-        "./inc/layouts"
-)
+register_component()

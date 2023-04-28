@@ -21,7 +21,7 @@ protected:
 public:
     uint8_t getWidth() override;
     uint8_t getHeight() override;
-//    Rectangle getArea() override;
+    //    Rectangle getArea() override;
 
     explicit ListWidget(Page* pPage,
                         Direction direction,

@@ -26,6 +26,9 @@ public:
      */
     void setPage(Page* pPage) override;
 
+    std::vector<std::pair<oled::Point, oled::Widget*>> getCheckedAreaWidget()
+        override;
+
     /**
      * Flash Widgets Data For Page
      */
@@ -41,12 +44,15 @@ public:
 
     // void sendEvent(oled::Event event) override;
 
+    Position getPosition(const Widget* pWidget) override;
+
     /**
      * Add The Widget In Position pPoint
      * @param pWidget widget
      * @param pPoint position
      */
-    std::pair<Widget*, Position> addWidget(Widget* pWidget, Position&& position);
+    std::pair<Widget*, Position> addWidget(Widget* pWidget,
+                                           Position&& position);
 
     /**
      * Remove Widget From Layout Container.
@@ -58,7 +64,7 @@ public:
     explicit AbsolutelyLayout(Page* pPage) : Layout(pPage), m_objects(){};
 
     explicit AbsolutelyLayout(Page* pPage, Position position, Size size)
-        : Layout(pPage, std::move(position), size) {};
+        : Layout(pPage, std::move(position), size){};
 
     ~AbsolutelyLayout() override = default;
     ;

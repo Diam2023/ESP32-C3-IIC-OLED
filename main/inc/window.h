@@ -8,6 +8,7 @@
 #include "types.h"
 #include "oled_device.h"
 #include "object.h"
+#include "animation.h"
 
 namespace oled
 {
@@ -16,8 +17,7 @@ class Window : public Object
 {
     OLED_OBJECT
 
-private:
-
+protected:
     // 目前两种方案
     /**
      * 1.传入指针 使用智能指针传入
@@ -33,15 +33,17 @@ private:
     //  */
     // std::queue<Event> m_eventQueue;
 
+    /**
+     * Page Index
+     */
     uint8_t m_nowPage{0};
 
 public:
-
-    // /**
-    //  * Push Event To Queue For Widget handler.
-    //  * @param event
-    //  */
-    // void pushEvent(const Event& event);
+    /**
+     * Push Event To Queue For Widget handler.
+     * @param event
+     */
+    void pushEvent(const Event& event);
 
     // /**
     //  * New Task For Dispatch Event.
@@ -52,7 +54,7 @@ public:
      * 获取page的副本
      * @return
      */
-    std::vector<Page*> &pages()
+    std::vector<Page*>& pages()
     {
         return this->m_pages;
     }
@@ -84,7 +86,7 @@ public:
 
     void deletePage(uint8_t index);
 
-    // uint8_t indexOfPage(const Page&&);
+    // uint8_t indexOfPage(const Page&);
 
     Page* createPage();
 
@@ -94,7 +96,7 @@ public:
 
     explicit Window(OledDevice*);
 
-    ~Window() = default;
+    ~Window() override = default;
 
     void addPage(Page* pPage);
     void flash(const Page* page);

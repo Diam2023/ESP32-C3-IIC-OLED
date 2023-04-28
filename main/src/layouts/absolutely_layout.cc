@@ -44,6 +44,22 @@ void oled::AbsolutelyLayout::setPage(oled::Page *pPage)
     }
 }
 
+std::vector<std::pair<oled::Point, oled::Widget *>>
+    oled::AbsolutelyLayout::getCheckedAreaWidget()
+{
+    std::vector<std::pair<oled::Point, oled::Widget *>> result;
+
+    for (auto &object : this->m_objects)
+    {
+        if (checkInArea(object.first, object.second))
+        {
+            result.push_back(object);
+        }
+    }
+
+    // expiring value
+    return result;
+};
 void oled::AbsolutelyLayout::flash()
 {
     for (auto object : this->m_objects)
@@ -86,6 +102,22 @@ void oled::AbsolutelyLayout::update()
 //         object.second->sendEvent(event);
 //     }
 // }
+
+oled::Position oled::AbsolutelyLayout::getPosition(const oled::Widget *pWidget)
+{
+    if (pWidget == m_objects.end()->second)
+    {
+        return m_objects.end()->first;
+    }
+    else
+    {
+        return std::find_if(m_objects.begin(),
+                            m_objects.end(),
+                            [&](const std::pair<const Position, Widget *> &data)
+                                -> bool { return (data.second == pWidget); })
+            ->first;
+    }
+}
 
 // void oled::Layout::flash()
 //{
