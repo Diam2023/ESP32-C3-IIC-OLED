@@ -151,7 +151,7 @@ private:
         i2c_master_stop(cmd);
         esp_err_t ret = i2c_master_cmd_begin(this->m_I2C_Port,
                                              cmd,
-                                             1000 / portTICK_RATE_MS);
+                                             1000 / portTICK_PERIOD_MS);
         i2c_cmd_link_delete(cmd);
         return ret;
     }

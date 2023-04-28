@@ -28,25 +28,25 @@ private:
     // pages
     std::vector<Page*> m_pages;
 
-    /**
-     * Event QueueFor Data
-     */
-    std::queue<Event> m_eventQueue;
+    // /**
+    //  * Event QueueFor Data
+    //  */
+    // std::queue<Event> m_eventQueue;
 
     uint8_t m_nowPage{0};
 
 public:
 
-    /**
-     * Push Event To Queue For Widget handler.
-     * @param event
-     */
-    void pushEvent(const Event& event);
+    // /**
+    //  * Push Event To Queue For Widget handler.
+    //  * @param event
+    //  */
+    // void pushEvent(const Event& event);
 
-    /**
-     * New Task For Dispatch Event.
-     */
-    void eventDispatch();
+    // /**
+    //  * New Task For Dispatch Event.
+    //  */
+    // void eventDispatch();
 
     /**
      * 获取page的副本

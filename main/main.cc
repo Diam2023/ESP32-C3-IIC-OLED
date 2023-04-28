@@ -77,15 +77,15 @@ public:
         m_pImage2TextWidget =
             new ImageWidget(4, this, OLED_IMAGE_SIZE::OLED_IMAGE_SIZE_32);
 
-        m_pTestTextWidget->addEventListener(
-            EventListener([](const Event &event) -> void {
-                ESP_LOGI("event", "Text1 event Handler %d", event.getEventId());
-            }));
+        // m_pTestTextWidget->addEventListener(
+        //     EventListener([](const Event &event) -> void {
+        //         ESP_LOGI("event", "Text1 event Handler %d", event.getEventId());
+        //     }));
 
-        m_pTest2TextWidget->addEventListener(
-            EventListener([](const Event &event) -> void {
-                ESP_LOGI("event", "Text2 event Handler %d", event.getEventId());
-            }));
+        // m_pTest2TextWidget->addEventListener(
+        //     EventListener([](const Event &event) -> void {
+        //         ESP_LOGI("event", "Text2 event Handler %d", event.getEventId());
+        //     }));
 
         //        ly->addWidget(m_pTestTextWidget, Point(0, 0));
         //        ly->addWidget(m_pTest2TextWidget, Point(60, 3));
@@ -211,17 +211,17 @@ auto a = [](oled::DataMap *a, const oled::Point &b) -> void {
     Paint::drawLine(a, b, Point(0, 6), Point(127, 0), b);
 };
 
-[[noreturn]] void eventLoopTask(void *arg)
-{
-    auto window = reinterpret_cast<Window *>(arg);
-    for (;;)
-    {
-        window->eventDispatch();
-        vTaskDelay(100);
-    }
-}
+// [[noreturn]] void eventLoopTask(void *arg)
+// {
+//     auto window = reinterpret_cast<Window *>(arg);
+//     for (;;)
+//     {
+//         window->eventDispatch();
+//         vTaskDelay(100);
+//     }
+// }
 
-[[noreturn]] void oled_test()
+void oled_test()
 {
     auto i2c_oled = new oled::OledDevice(5, 6, true);
 
@@ -301,11 +301,11 @@ auto a = [](oled::DataMap *a, const oled::Point &b) -> void {
         myPage->init();
 
         window->show();
-        xTaskCreate(eventLoopTask, "eventLoopTask", 4096, window, 4, nullptr);
+        // xTaskCreate(eventLoopTask, "eventLoopTask", 4096, window, 4, nullptr);
 
-        window->pushEvent(Event(10));
-        window->pushEvent(Event(2));
-        window->pushEvent(Event(5));
+        // window->pushEvent(Event(10));
+        // window->pushEvent(Event(2));
+        // window->pushEvent(Event(5));
 
         while (true)
         {

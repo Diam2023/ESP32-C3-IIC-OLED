@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-
 #include <functional>
 
 #define MODEL_MEMBERS private:
@@ -92,6 +91,11 @@ private:
     uint8_t m_height;
 
 public:
+
+    Size(const oled::Size &size_) : m_width(size_.m_width), m_height(size_.m_height)
+    {
+    }
+
     Size() : m_width(0), m_height(0)
     {
     }
@@ -112,7 +116,7 @@ public:
         return m_height;
     };
 
-    Size& operator=(const Size& size)
+    Size& operator=(const oled::Size& size)
     {
         this->m_height = size.getHeight();
         this->m_width = size.getWidth();
@@ -125,77 +129,77 @@ struct DeviceInfo
     uint8_t max_page;
     uint8_t max_line_seg;
 
-    size_t init_size;
+    unsigned int init_size;
     uint8_t init_cmd[];
 };
 
-/**
- * Event For something happen.
- */
-class Event
-{
-protected:
-    /**
-     * Event Id for Event Class to find Event Type.
-     */
-    uint16_t m_eventId;
+// /**
+//  * Event For something happen.
+//  */
+// class Event
+// {
+// protected:
+//     /**
+//      * Event Id for Event Class to find Event Type.
+//      */
+//     uint16_t m_eventId;
 
-public:
-    /**
-     * Get Event Unique Id
-     * @return unique id
-     */
-    uint16_t getEventId() const
-    {
-        return m_eventId;
-    }
+// public:
+//     /**
+//      * Get Event Unique Id
+//      * @return unique id
+//      */
+//     uint16_t getEventId() const
+//     {
+//         return m_eventId;
+//     }
 
-    /**
-     * set EventID
-     * @param eventId
-     */
-    void setEventId(uint16_t eventId)
-    {
-        m_eventId = eventId;
-    };
+//     /**
+//      * set EventID
+//      * @param eventId
+//      */
+//     void setEventId(uint16_t eventId)
+//     {
+//         m_eventId = eventId;
+//     };
 
-    /**
-     * Use Event Id to compare
-     * @param event event data
-     * @return true for eventId Equ
-     */
-    bool operator==(const Event& event) const
-    {
-        return (event.m_eventId == m_eventId);
-    };
+//     /**
+//      * Use Event Id to compare
+//      * @param event event data
+//      * @return true for eventId Equ
+//      */
+//     bool operator==(const Event& event) const
+//     {
+//         return (event.m_eventId == m_eventId);
+//     };
 
-    Event& operator=(const Event& event)
-    {
-        m_eventId = event.getEventId();
-        return *this;
-    };
+//     Event& operator=(const Event& event)
+//     {
+//         m_eventId = event.getEventId();
+//         return *this;
+//     };
 
-    /**
-     * use 0 to initialize event id.
-     */
-    Event()
-    {
-        m_eventId = 0;
-    };
+//     /**
+//      * use 0 to initialize event id.
+//      */
+//     Event()
+//     {
+//         m_eventId = 0;
+//     };
 
-    /**
-     * add Event id for construction class
-     * @param eventId
-     */
-    explicit Event(uint16_t eventId)
-    {
-        m_eventId = eventId;
-    };
+//     /**
+//      * add Event id for construction class
+//      * @param eventId
+//      */
+//     explicit Event(uint16_t eventId)
+//     {
+//         m_eventId = eventId;
+//     };
 
-    ~Event() = default;
-};
+//     ~Event() = default;
+// };
 
-using EventHandler = std::function<void(Event)>;
+// using EventHandler = std::function<void(Event)>;
 
 // Define Position And MicroPoint
 using Position = Point;

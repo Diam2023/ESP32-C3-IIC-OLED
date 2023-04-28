@@ -32,7 +32,7 @@ private:
 
 public:
 
-    void sendEvent(oled::Event event) override;
+    // void sendEvent(oled::Event event) override;
 
     std::pair<Widget*, oled::Position> addWidget(Widget* pWidget, uint16_t space = 0);
 

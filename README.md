@@ -30,7 +30,7 @@ git checkout components
 * Added Custon initialize screen.
 * Draw Line And Offset For Screen.
 * Absolutely Layout And List Layout To Display Widgets
-* Event System For Window.
+* ~~Event System For Window.~~
 
 ## Env
 * Toolchannel: ESP-IDF V4.4.1

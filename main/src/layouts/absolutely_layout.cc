@@ -79,13 +79,13 @@ void oled::AbsolutelyLayout::update()
     }
 }
 
-void oled::AbsolutelyLayout::sendEvent(oled::Event event)
-{
-    for (auto object : this->m_objects)
-    {
-        object.second->sendEvent(event);
-    }
-}
+// void oled::AbsolutelyLayout::sendEvent(oled::Event event)
+// {
+//     for (auto object : this->m_objects)
+//     {
+//         object.second->sendEvent(event);
+//     }
+// }
 
 // void oled::Layout::flash()
 //{
